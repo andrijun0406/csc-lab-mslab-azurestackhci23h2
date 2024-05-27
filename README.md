@@ -12,7 +12,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 * I'm also using Windows Server 2022 Datacenter Edition. This Hyper-V hosts will run a nested VM for azure stack HCI cluster nodes
 * This Hyper-V host VM also has two VHDX one is for OS (127GB) and another one is for MSLAB (5TB)
 
-  ### Task 2 - Download all neccessary files
+### Task 2 - Download all neccessary files
 
 * MSLab scripts : [MSLab](https://aka.ms/mslab)
 * latest Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads) requires Visual Studio users.
