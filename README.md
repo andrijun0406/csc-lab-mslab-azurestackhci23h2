@@ -22,7 +22,6 @@ Please note that the Domain controller here is unique to this Lab and can not be
 
 * Unzip files from MSLab zip folder into D:\MSLAB (volume from MSLAB VHDX where you have enough space here ~5TB)
 * Replace content of LabConfig.ps1 with the following:
-
 ```
-
+$LabConfig=@{ DomainAdminName='LabAdmin'; AdminPassword='LS1setup!'; Prefix = 'scoffee-' ; DCEdition='4'; Internet=$true ; AdditionalNetworksConfig=@(); VMs=@(); DomainNetbiosName="th"; DomainName="th.scoffee.com";}
 ```
