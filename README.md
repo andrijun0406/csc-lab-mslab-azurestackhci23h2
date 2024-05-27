@@ -10,4 +10,9 @@ Please note that the Domain controller here is unique to this Lab and can not be
 
 * I'm using a large Hyper-V host VM with 48 vCPU and 384 GB of RAM. Just to make sure I can run all services like AKS and SQL-MI with ease
 * I'm also using Windows Server 2022 Datacenter Edition. This Hyper-V hosts will run a nested VM for azure stack HCI cluster nodes
-* This Hyper-V host VM also has two VHDX one is for OS (127GB) and another one is for MSLAB (5TB) 
+* This Hyper-V host VM also has two VHDX one is for OS (127GB) and another one is for MSLAB (5TB)
+
+  ### Task 2 - Download all neccessary files
+
+* MSLab scripts : [MSLab](https://aka.ms/mslab)
+* lates Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads)
