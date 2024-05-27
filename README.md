@@ -1,5 +1,5 @@
 # csc-lab-mslab-azurestackhci23h2
-My Hands-on Lab on Azure Stack HCI version 23H2 using MSLab
+My hands-on Lab on Azure Stack HCI version 23H2 using MSLab
 
 ## 1. Hydrating MSLab Files
 
