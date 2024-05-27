@@ -23,5 +23,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 * Unzip files from MSLab zip folder into D:\MSLAB (volume from MSLAB VHDX where you have enough space here ~5TB)
 * Replace content of LabConfig.ps1 with the following:
 ```
-$LabConfig=@{ DomainAdminName='LabAdmin'; AdminPassword='LS1setup!'; Prefix = 'scoffee-' ; DCEdition='4'; Internet=$true ; AdditionalNetworksConfig=@(); VMs=@(); DomainNetbiosName="th"; DomainName="th.scoffee.com";}
+$LabConfig=@{ DomainAdminName='LabAdmin'; AdminPassword='LS1setup!'; Prefix = 'adani-' ; DCEdition='4'; Internet=$true ; AdditionalNetworksConfig=@(); VMs=@(); DomainNetbiosName="ports"; DomainName="ports.adani.com";}
 ```
+> this will create custom Domain Controller built on top of Windows Server Datacenter with GUI
+* Right-click 1_Prereq.ps1 and select *Run with PowerShell*_
