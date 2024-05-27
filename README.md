@@ -16,4 +16,4 @@ Please note that the Domain controller here is unique to this Lab and can not be
 
 * MSLab scripts : [MSLab](https://aka.ms/mslab)
 * latest Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads) requires Visual Studio users.
-* latest Azure Stack HCI ISO: [23h2] (https://azure.microsoft.com/en-us/products/azure-stack/hci/hci-download/)
+* latest Azure Stack HCI ISO: [23H2](https://azure.microsoft.com/en-us/products/azure-stack/hci/hci-download/)
