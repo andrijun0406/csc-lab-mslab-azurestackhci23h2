@@ -26,4 +26,4 @@ Please note that the Domain controller here is unique to this Lab and can not be
 $LabConfig=@{ DomainAdminName='LabAdmin'; AdminPassword='LS1setup!'; Prefix = 'adani-' ; DCEdition='4'; Internet=$true ; AdditionalNetworksConfig=@(); VMs=@(); DomainNetbiosName="ports"; DomainName="ports.adani.com";}
 ```
 > this will create custom Domain Controller built on top of Windows Server Datacenter with GUI
-* Right-click 1_Prereq.ps1 and select *Run with PowerShell*_
+* Right-click 1_Prereq.ps1 and select **Run with PowerShell**
