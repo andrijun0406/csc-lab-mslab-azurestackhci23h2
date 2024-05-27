@@ -8,7 +8,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 
 ### Task 1 - Check hardware requirement
 
-* I'm using a large Hyper-V host VM with 48 vCPU and 384 GB of RAM. Just to make sure I can run all services like AKS and SQL-MI with ease
+* I'm using a large Hyper-V host VM with 48 vCPU and 384 GB of RAM. Just to make sure I can run all services like AKS and Azure Arc Enabled Data/App Services with ease
 * I'm also using Windows Server 2022 Datacenter Edition. This Hyper-V hosts will run a nested VM for azure stack HCI cluster nodes
 * This Hyper-V host VM also has two VHDX one is for OS (127GB) and another one is for MSLAB (5TB)
 
@@ -17,3 +17,12 @@ Please note that the Domain controller here is unique to this Lab and can not be
 * MSLab scripts : [MSLab](https://aka.ms/mslab)
 * latest Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads) requires Visual Studio users.
 * latest Azure Stack HCI ISO: [23H2](https://azure.microsoft.com/en-us/products/azure-stack/hci/hci-download/)
+
+### Task 3 - Hydrate Lab
+
+* Unzip files from MSLab zip folder into D:\MSLAB (volume from MSLAB VHDX where you have enough space here ~5TB)
+* Replace content of LabConfig.ps1 with the following:
+
+```
+
+```
