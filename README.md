@@ -15,4 +15,5 @@ Please note that the Domain controller here is unique to this Lab and can not be
   ### Task 2 - Download all neccessary files
 
 * MSLab scripts : [MSLab](https://aka.ms/mslab)
-* lates Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads)
+* latest Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads) requires Visual Studio users.
+* latest Azure Stack HCI ISO: [23h2] (https://azure.microsoft.com/en-us/products/azure-stack/hci/hci-download/)
