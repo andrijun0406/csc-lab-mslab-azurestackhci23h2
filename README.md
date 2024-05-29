@@ -87,7 +87,7 @@ Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clu
 ```powershell
 $LabConfig=@{
     AllowedVLANs="1-10,711-719"; 
-    ManagementSubnetIDs=0..1; 
+    ManagementSubnetIDs=0..4; 
     DomainAdminName='LabAdmin'; 
     AdminPassword='LS1setup!'; 
     Prefix = 'dcoffee-' ; 
@@ -111,8 +111,8 @@ $LabConfig=@{
         HDDNumber = 4; 
         HDDSize= 2TB ; 
         MemoryStartupBytes= 96GB; 
-        VMProcessorCount="Max"; 
-        MGMTNICs=2 ; 
+        VMProcessorCount="24"; 
+        MGMTNICs=5; 
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"

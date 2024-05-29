@@ -1,6 +1,6 @@
 $LabConfig=@{
     AllowedVLANs="1-10,711-719"; 
-    ManagementSubnetIDs=0..1; 
+    ManagementSubnetIDs=0..4; 
     DomainAdminName='LabAdmin'; 
     AdminPassword='LS1setup!'; 
     Prefix = 'dcoffee-' ; 
@@ -18,14 +18,14 @@ $LabConfig=@{
 1..2 | ForEach-Object {
     $VMNames="th-mc660-" ; 
     $LABConfig.VMs += @{ 
-        VMName = "$VMNames$_" ; 
+        VMName = "$VMNames$_" ;
         Configuration = 'S2D' ; 
         ParentVHD = 'azshci23h2_g2.vhdx' ; 
         HDDNumber = 4; 
         HDDSize= 2TB ; 
         MemoryStartupBytes= 96GB; 
-        VMProcessorCount="Max"; 
-        MGMTNICs=2 ; 
+        VMProcessorCount="24"; 
+        MGMTNICs=5; 
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"
