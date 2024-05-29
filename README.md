@@ -26,7 +26,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 2. Replace content of LabConfig.ps1 with the following:
 ```powershell
 $LabConfig=@{ 
-    DomainAdminName='LabAdmin'; 
+    DomainAdminName=''; 
     AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
@@ -89,7 +89,7 @@ Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clu
 $LabConfig=@{
     AllowedVLANs="1-10,711-723"; 
     ManagementSubnetIDs=0..4; 
-    DomainAdminName='LabAdmin'; 
+    DomainAdminName=''; 
     AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
@@ -155,7 +155,7 @@ These steps are inspired from Microsoft Documentation [here](https://learn.micro
 Adjust the script if necessary:
 ```powershell
 $AsHCIOUName="OU=clus01,DC=th,DC=dcoffee,DC=com"
-$LCMUserName="clus01-LCMUser"
+$LCMUserName=""
 $LCMPassword=""
 $SecuredPassword = ConvertTo-SecureString $LCMpassword -AsPlainText -Force
 $LCMCredentials= New-Object System.Management.Automation.PSCredential ($LCMUserName,$SecuredPassword)

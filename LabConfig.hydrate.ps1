@@ -1,6 +1,6 @@
 $LabConfig=@{ 
-    DomainAdminName='LabAdmin'; 
-    AdminPassword='LS1setup!'; 
+    DomainAdminName=''; 
+    AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
     Internet=$true ;

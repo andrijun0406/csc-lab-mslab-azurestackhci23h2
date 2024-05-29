@@ -1,8 +1,8 @@
 $LabConfig=@{
     AllowedVLANs="1-10,711-723"; 
     ManagementSubnetIDs=0..4; 
-    DomainAdminName='LabAdmin'; 
-    AdminPassword='LS1setup!'; 
+    DomainAdminName=''; 
+    AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
     Internet=$true ;
