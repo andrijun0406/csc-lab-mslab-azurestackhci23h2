@@ -41,7 +41,11 @@ $LabConfig=@{
 - **AdminPassword** : used 2_CreateParentDisks. If changed after, it will break the functionality of 3_Deploy.ps1
 - **Prefix** : All VMs and vSwitch are created with this prefix, so you can identify the lab. If not specified, Lab folder name is use
 - **DCEdition** : 4 for DataCenter or 3 for DataCenterCore. We want a full GUI for DC so we choose 4.
-- **Internet** : if $true it will use External vSwitch from MSLAB Hyper-V hosts and create vNIC to the DC and configure NAT with some Open DNS servers in DNS forwarder
-> Note: Make sure you enable MAC address spoofing in MSLAB Hyper-V hosts, and you might want to setup static IP address for your DC if you are using static in your environment otherwise DHCP would work.
-- 
+- **Internet** : if $true it will use External vSwitch from MSLAB Hyper-V hosts and create vNIC to the DC and configure NAT with some Open DNS servers in DNS forwarder (8.8.8.8 and 1.1.1.1)
+> Note: Make sure you enable MAC address spoofing in MSLAB Hyper-V hosts, and you might want to setup static IP address for your DC if you are using static in your environment otherwise DHCP would also work. You also might need to add DNS forwarders using your environment DNS servers. 
+- **AdditionalNetworksConfig** : empty array for additional network config later (not used in this step)
+- **VMs** : empty array for specifying Lab VMs (not used in this step)
+- **DomainNetbiosName** : custom NetBios will be used instead default "Corp"
+- **DomainName** : custom DomainName will be used instead of default "Corp.Contoso.Com"
+
 * Right-click 1_Prereq.ps1 and select *Run with PowerShell*
