@@ -16,7 +16,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 
 * MSLab scripts : [MSLab](https://aka.ms/mslab)
 * latest Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads) requires Visual Studio users.
-* latest Azure Stack HCI ISO: [23H2](https://azure.microsoft.com/en-us/products/azure-stack/hci/hci-download/)
+* latest Azure Stack HCI ISO: [23H2](https://azure.microsoft.com/en-us/products/azure-stack/hci/hci-download/) requires login to azure portal.
 
 ### Task 3 - Hydrate Lab
 
@@ -49,10 +49,16 @@ $LabConfig=@{
 - **AdditionalNetworksConfig** : empty array for additional network config later (not used in this step)
 - **VMs** : empty array for specifying Lab VMs (not used in this step)
 3. Right-click 1_Prereq.ps1 and select **Run with PowerShell**, the script will automatically elevate and run as administrator
-4. The script will finish. it will download necessary files and create folders. it will create DC VMs and shut it down ready for use later. Close PowerShell Window by pressing enter.
+4. The script will finish. it will download necessary files and create folders. Close PowerShell Window by pressing enter.
 ![1_Prereq.ps1 Result](images/1_Prereq.ps1-result.png)
 5. Save as LabConfig.ps1 as [LabConfig.hydrate.ps1](LabConfig.hydrate.ps1) for documentation as we are going to use another version of LabConfig.ps1 in later step.
 6. Right-click 2_CreateParentDisks.ps1 and select **Run with PowerShell**.
 7. When asked for ISO image, choose Windows Server 2022 image.
 8. When asked for Windows Server Update (msu), click **cancel**
 > Script will now create Domain Controller and Windows Server 2022 parent disks. It will take 15-30 minutes to finish. Once Finished, press Enter to close window (it will cleanup unnecessary files and folders).
+
+### Expected Result
+
+in MSLAB folder you should see LAB and ParentDisks folder along with three PowerShell scripts and log files.
+![MSLAB folder hydrated](images/MSLAB-folder-hydrate.png)
+
