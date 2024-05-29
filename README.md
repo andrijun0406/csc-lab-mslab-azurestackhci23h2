@@ -232,6 +232,14 @@ Now, we are going to prepare the nodes for Cloud Deployment.
 
 #### Step 1 - Test Connectivity
 
+Test name Resolution using simple ping from Management machine to the azure stack HCI nodes
+> Time out is OK since Windows Firewall does not allow ping by default, most important is the name resolution works. Please also ignore the IPv6 we will fix this later.
+Test WINRM works
+
+#### Expected Result
+
+![Test Connectivity Result](images/TestConnectivityResult.png)
+
 
 
 
