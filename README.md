@@ -144,10 +144,37 @@ $LabConfig.VMs += @{ VMName = 'Management' ; ParentVHD = 'Win2022_G2.vhdx'; MGMT
 ### Expected Result
 
 Here are screenshot of successfull powershell script and view on Hyper-V Manager
-![Deploy.ps1 Result](images/Deploy.ps1-result-1.png)
-![Deploy.ps1 Result](images/Deploy.ps1-result-2.png)
+![Deploy.ps1 Result1](images/Deploy.ps1-result-1.png)
+![Deploy.ps1 Result2](images/Deploy.ps1-result-2.png)
+> Make sure to start all VMs before going to the next task.
 
 ### Task 2 - Prepare Active Directory
 
 These steps are inspired from Microsoft Documentation [here](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-prep-active-directory). Please run the following PowerShell Script [PrepareAd.ps1](PrepareAD.ps1) from Management VM's PowerShell in elevated mode (Run As Administrator).
+Adjust the script if necessary:
+```powershell
+$AsHCIOUName="OU=clus01,DC=th,DC=dcoffee,DC=com"
+$LCMUserName="clus01-LCMUser"
+$LCMPassword="LS1setup!LS1setup!"
+$SecuredPassword = ConvertTo-SecureString $LCMpassword -AsPlainText -Force
+$LCMCredentials= New-Object System.Management.Automation.PSCredential ($LCMUserName,$SecuredPassword)
+
+#install posh module for prestaging Active Directory
+Install-PackageProvider -Name NuGet -Force
+Install-Module AsHciADArtifactsPreCreationTool -Repository PSGallery -Force
+
+#make sure active directory module and GPMC is installed
+Install-WindowsFeature -Name RSAT-AD-PowerShell,GPMC
+
+#populate objects
+New-HciAdObjectsPreCreation -AzureStackLCMUserCredential  $LCMCredentials -AsHciOUName $AsHCIOUName
+
+#install management features to explore cluster,settings...
+Install-WindowsFeature -Name "RSAT-ADDS","RSAT-Clustering"
+```
+### Expected Result
+
+![PrepareAD.ps1 Result1](images/PrepareAD.ps1-result-1.png)
+![PrepareAD.ps1 Result2](images/PrepareAD.ps1-result-2.png)
+
 
