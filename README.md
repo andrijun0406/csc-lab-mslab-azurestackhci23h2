@@ -37,7 +37,11 @@ $LabConfig=@{
 ```
 > This will create custom Domain Controller (AD) built on top of Windows Server Datacenter with GUI. Some explanation of the parameters are the following:
 
-**DomainAdminName** is used during 2_CreateParentDisks (no affect if changed after this step)
-**AdminPassword** is used 2_CreateParentDisks. If changed after, it will break the functionality of 3_Deploy.ps1
-
+- **DomainAdminName** : used during 2_CreateParentDisks (no affect if changed after this step)
+- **AdminPassword** : used 2_CreateParentDisks. If changed after, it will break the functionality of 3_Deploy.ps1
+- **Prefix** : All VMs and vSwitch are created with this prefix, so you can identify the lab. If not specified, Lab folder name is use
+- **DCEdition** : 4 for DataCenter or 3 for DataCenterCore. We want a full GUI for DC so we choose 4.
+- **Internet** : if $true it will use External vSwitch from MSLAB Hyper-V hosts and create vNIC to the DC and configure NAT with some Open DNS servers in DNS forwarder
+> Note: Make sure you enable MAC address spoofing in MSLAB Hyper-V hosts, and you might want to setup static IP address for your DC if you are using static in your environment otherwise DHCP would work.
+- 
 * Right-click 1_Prereq.ps1 and select *Run with PowerShell*
