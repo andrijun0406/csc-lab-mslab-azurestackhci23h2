@@ -50,4 +50,4 @@ $LabConfig=@{
 
 * Right-click 1_Prereq.ps1 and select **Run with PowerShell**, the script will automatically elevate and run as administrator
 * The script will finish. it will download necessary files and create folders. it will create DC VMs and shut it down ready for use later. Close PowerShell Window by pressing enter.
-* Save as LabConfig.ps1 as [LabConfig.hydrate.ps1](LabConfig.Hydrate.ps1) for documentation as we are going to use another version of LabConfig.ps1 in later step.
+* Save as LabConfig.ps1 as [LabConfig.hydrate.ps1](LabConfig.hydrate.ps1) for documentation as we are going to use another version of LabConfig.ps1 in later step.
