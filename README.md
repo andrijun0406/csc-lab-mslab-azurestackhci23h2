@@ -52,3 +52,7 @@ $LabConfig=@{
 4. The script will finish. it will download necessary files and create folders. it will create DC VMs and shut it down ready for use later. Close PowerShell Window by pressing enter.
 ![1_Prereq.ps1 Result](images/1_Prereq.ps1-result.png)
 5. Save as LabConfig.ps1 as [LabConfig.hydrate.ps1](LabConfig.hydrate.ps1) for documentation as we are going to use another version of LabConfig.ps1 in later step.
+6. Right-click 2_CreateParentDisks.ps1 and select **Run with PowerShell**.
+7. When asked for ISO image, choose Windows Server 2022 image.
+8. When asked for Windows Server Update (msu), click **cancel**
+> Script will now create Domain Controller and Windows Server 2022 parent disks. It will take 15-30 minutes to finish. Once Finished, press Enter to close window (it will cleanup unnecessary files and folders).
