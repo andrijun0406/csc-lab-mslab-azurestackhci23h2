@@ -130,4 +130,5 @@ $LabConfig.VMs += @{ VMName = 'Management' ; ParentVHD = 'Win2022_G2.vhdx'; MGMT
 ### Expected Result
 
 Here are screenshot of successfull powershell script and view on Hyper-V Manager
-![Deploy.ps1 Result](images/Deploy.ps1-result.png)
+![Deploy.ps1 Result](images/Deploy.ps1-result-1.png)
+![Deploy.ps1 Result](images/Deploy.ps1-result-2.png)
