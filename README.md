@@ -226,6 +226,14 @@ if (-not(Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction Ignore)){
 
 ![PrepareAzure.ps1 Result](images/PrepareAzure.ps1-result.png)
 
+### Task 4 - Prepare Azure Stack HCI Nodes for Cloud Deployment
+
+Now, we are going to prepare the nodes for Cloud Deployment.
+
+#### Step 1 - Test Connectivity
+
+
+
 
 
 
