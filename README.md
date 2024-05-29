@@ -48,4 +48,5 @@ $LabConfig=@{
 - **DomainNetbiosName** : custom NetBios will be used instead default "Corp"
 - **DomainName** : custom DomainName will be used instead of default "Corp.Contoso.Com"
 
-* Right-click 1_Prereq.ps1 and select *Run with PowerShell*
+* Right-click 1_Prereq.ps1 and select **Run with PowerShell**, the script will automatically elevate and run as administrator
+* The script will finish. it will download necessary files and create folders. it will create DC VMs and shut it down ready for use later. Close PowerShell Window by pressing enter.
