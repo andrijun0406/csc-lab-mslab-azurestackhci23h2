@@ -149,5 +149,5 @@ Here are screenshot of successfull powershell script and view on Hyper-V Manager
 
 ### Task 2 - Prepare Active Directory
 
-These steps are inspired from Microsoft Documentation [here](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-prep-active-directory). Please run the following steps from Management VM's PowerShell in elevated mode (Run As Administrator).
+These steps are inspired from Microsoft Documentation [here](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-prep-active-directory). Please run the following PowerShell Script [PrepareAd.ps1](PrepareAD.ps1) from Management VM's PowerShell in elevated mode (Run As Administrator).
 
