@@ -1,5 +1,6 @@
 # csc-lab-mslab-azurestackhci23h2
 My hands-on Lab on Azure Stack HCI version 23H2 using MSLab
+> Note: Password and Secrets are removed from scripts
 
 ## 1. Hydrating MSLab Files
 
@@ -26,7 +27,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 ```powershell
 $LabConfig=@{ 
     DomainAdminName='LabAdmin'; 
-    AdminPassword='LS1setup!'; 
+    AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
     Internet=$true ;
@@ -89,7 +90,7 @@ $LabConfig=@{
     AllowedVLANs="1-10,711-723"; 
     ManagementSubnetIDs=0..4; 
     DomainAdminName='LabAdmin'; 
-    AdminPassword='LS1setup!'; 
+    AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
     Internet=$true ;
@@ -155,7 +156,7 @@ Adjust the script if necessary:
 ```powershell
 $AsHCIOUName="OU=clus01,DC=th,DC=dcoffee,DC=com"
 $LCMUserName="clus01-LCMUser"
-$LCMPassword="LS1setup!LS1setup!"
+$LCMPassword=""
 $SecuredPassword = ConvertTo-SecureString $LCMpassword -AsPlainText -Force
 $LCMCredentials= New-Object System.Management.Automation.PSCredential ($LCMUserName,$SecuredPassword)
 

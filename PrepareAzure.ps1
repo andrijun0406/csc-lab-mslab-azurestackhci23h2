@@ -6,7 +6,7 @@ $Location="eastus" #make sure location is lowercase
 # We are using SPN here:
 $tenantID = "2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b"
 $AdminSPNAppID="d329535d-0cf4-473a-8646-8c612949142a"
-$AdminPlainSecret="-WO8Q~P_CQVmZROiLSLptFaIuTxVXCf51hq5scLL"
+$AdminPlainSecret=""
 $AdminSecuredSecret = ConvertTo-SecureString $AdminPlainSecret -AsPlainText -Force
 $AdminSPNCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $AdminSPNAppID, $AdminSecuredSecret
 
