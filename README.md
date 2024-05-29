@@ -74,3 +74,54 @@ in MSLAB folder you should see LAB and ParentDisks folder along with three Power
 ### Expected Result
 
 Azure Stack HCI 23H2 image will be created in ParentDisks folder. Hydrating is done
+
+
+## 2. Deploy Azure Stack HCI Cluster 23H2 using Cloud Based Deployment (Azure Portal)
+
+Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clusters 23H2 (in nested VM) using cloud based deployment (Azure Portal). Read the microsoft document [here](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deploy-via-portal) for more detail.
+> Note: Cloud Deployment is not yet supported from any OEM. Here we can get away to work with disabling bitlocker for OS and disabling WDAC (WDAC policy is distributed as part of Solution Builder Extensions)
+
+### LabConfig
+
+Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic we will use 711-719, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
+```
+$LabConfig=@{
+    AllowedVLANs="1-10,711-719"; 
+    ManagementSubnetIDs=0..1; 
+    DomainAdminName='LabAdmin'; 
+    AdminPassword='LS1setup!'; 
+    Prefix = 'dcoffee-' ; 
+    DCEdition='4'; 
+    Internet=$true ; 
+    AdditionalNetworksConfig=@(); 
+    VMs=@(); 
+    DomainNetbiosName="th";
+    DomainName="th.dcoffee.com";
+    TelemetryLevel='Full' ; 
+    TelemetryNickname='csc'
+}
+
+#pre-domain joined
+1..2 | ForEach-Object {
+    $VMNames="th-mc660-" ; 
+    $LABConfig.VMs += @{ 
+        VMName = "$VMNames$_" ; 
+        Configuration = 'S2D' ; 
+        ParentVHD = 'azshci23h2_g2.vhdx' ; 
+        HDDNumber = 4; 
+        HDDSize= 2TB ; 
+        MemoryStartupBytes= 96GB; 
+        VMProcessorCount="Max"; 
+        MGMTNICs=2 ; 
+        NestedVirt=$true; 
+        vTPM=$true;
+        Unattend="NoDjoin"
+    }
+} 
+
+#Windows Admin Center gateway
+$LabConfig.VMs += @{ VMName = 'WACGW' ; ParentVHD = 'Win2022Core_G2.vhdx' ; MGMTNICs=1 }
+
+#Management machine
+$LabConfig.VMs += @{ VMName = 'Management' ; ParentVHD = 'Win2022_G2.vhdx'; MGMTNICs=1 ; AddToolsVHD=$True }
+```
