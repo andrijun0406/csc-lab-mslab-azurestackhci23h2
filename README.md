@@ -67,5 +67,6 @@ in MSLAB folder you should see LAB and ParentDisks folder along with three Power
 1. Navigate to MSLAB folder and open ParentDisks folder
 2. Right-click on CreateParentDisk.ps1 and select **Run with PowerShell**
 3. When asked for ISO image, choose Azure Stack HCI 23H2 image. Hit Cancel when asked for MSU package.
-1. 
-
+4. When asked for VHD name and size, just hit enter (it will use default AzSHCI23H2_G2.vhdx and 127GB size) 
+> Script will finish in few minutes. When done, press enter to close PowerShell window. Azure Stack HCI image will be created.
+![Azure Stack HCI Parent Disk](images/AzureStackHCI-ParentDisk.png)
