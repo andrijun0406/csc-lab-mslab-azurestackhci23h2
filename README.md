@@ -21,6 +21,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 ### Task 3 - Hydrate Lab
 
 * Unzip files from MSLab zip folder into D:\MSLAB (volume from MSLAB VHDX where you have enough space here ~5TB)
+![Initial MSLAB folder](images/MSLAB-folder-initial.png)
 * Replace content of LabConfig.ps1 with the following:
 ```
 $LabConfig=@{ 

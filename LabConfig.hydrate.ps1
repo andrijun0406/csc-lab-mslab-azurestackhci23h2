@@ -8,5 +8,4 @@ $LabConfig=@{
     DomainName="th.dcoffee.com";
     AdditionalNetworksConfig=@(); 
     VMs=@()
-
 }
