@@ -62,3 +62,10 @@ $LabConfig=@{
 in MSLAB folder you should see LAB and ParentDisks folder along with three PowerShell scripts and log files.
 ![MSLAB folder hydrated](images/MSLAB-folder-hydrate.png)
 
+### Task 4 - Create Azure Stack HCI parent disk
+
+1. Navigate to MSLAB folder and open ParentDisks folder
+2. Right-click on CreateParentDisk.ps1 and select **Run with PowerShell**
+3. When asked for ISO image, choose Azure Stack HCI 23H2 image. Hit Cancel when asked for MSU package.
+1. 
+
