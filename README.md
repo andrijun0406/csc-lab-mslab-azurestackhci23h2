@@ -86,13 +86,16 @@ Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clu
 1. Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic we will use 711-719, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
 ```powershell
 $LabConfig=@{
-    AllowedVLANs="1-10,711-719"; 
+    AllowedVLANs="1-10,711-723"; 
     ManagementSubnetIDs=0..4; 
     DomainAdminName='LabAdmin'; 
     AdminPassword='LS1setup!'; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
-    Internet=$true ; 
+    Internet=$true ;
+    UseHostDnsAsForwarder=$true; 
+    #MGMTNICsInDC=4;
+    AdditionalNetworksInDC=$true; 
     AdditionalNetworksConfig=@(); 
     VMs=@(); 
     DomainNetbiosName="th";
@@ -112,12 +115,23 @@ $LabConfig=@{
         HDDSize= 2TB ; 
         MemoryStartupBytes= 96GB; 
         VMProcessorCount="24"; 
-        MGMTNICs=5; 
+        MGMTNICs=5 ; 
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"
     }
-} 
+}
+
+#add subnet 1-3
+
+$LABConfig.AdditionalNetworksConfig += @{ 
+        NetName = 'subnet1';                        # Network Name
+        NetAddress='10.0.1.';                      # Network Addresses prefix. (starts with 1), therefore first VM with Additional network config will have IP 172.16.1.1
+        NetVLAN='721';                                 # VLAN tagging
+        Subnet='255.255.255.0'                       # Subnet Mask
+    }
+    $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='722'; Subnet='255.255.255.0'}
+    $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet3'; NetAddress='10.0.3.'; NetVLAN='723'; Subnet='255.255.255.0'}
 
 #Windows Admin Center gateway
 $LabConfig.VMs += @{ VMName = 'WACGW' ; ParentVHD = 'Win2022Core_G2.vhdx' ; MGMTNICs=1 }
