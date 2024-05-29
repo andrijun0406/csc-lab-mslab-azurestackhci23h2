@@ -83,7 +83,7 @@ Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clu
 
 ### Task 1 - Customize deployment LabConfig and Deploy
 
-1. Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic we will use 711-719, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
+1. Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic, Network ATC will use 711-712, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
 ```powershell
 $LabConfig=@{
     AllowedVLANs="1-10,711-723"; 
@@ -176,5 +176,18 @@ Install-WindowsFeature -Name "RSAT-ADDS","RSAT-Clustering"
 
 ![PrepareAD.ps1 Result1](images/PrepareAD.ps1-result-1.png)
 ![PrepareAD.ps1 Result2](images/PrepareAD.ps1-result-2.png)
+
+### Task 3 - Prepare Azure
+
+At this step make sure you have Azure Subscription and you have user that are a user access administrator and a contributor role, since we are going to create some resources like resource group.
+Here I'm using ServicePrincipal because it's convinient to code and from security perspective you can use time limited secrets or certificates. If you use regular user, you need to interactively login with browser and finish the MFA (MultiFactorAuthentication) step.
+Basically we are going to create a Resource Group to hold all the resources.
+
+### Expected Result
+
+![PrepareAzure.ps1 Result](images/PrepareAzure.ps1-result.png)
+
+
+
 
 
