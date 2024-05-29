@@ -146,3 +146,8 @@ $LabConfig.VMs += @{ VMName = 'Management' ; ParentVHD = 'Win2022_G2.vhdx'; MGMT
 Here are screenshot of successfull powershell script and view on Hyper-V Manager
 ![Deploy.ps1 Result](images/Deploy.ps1-result-1.png)
 ![Deploy.ps1 Result](images/Deploy.ps1-result-2.png)
+
+### Task 2 - Prepare Active Directory
+
+These steps are inspired from Microsoft Documentation [here](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-prep-active-directory). Please run the following steps from Management VM's PowerShell in elevated mode (Run As Administrator).
+
