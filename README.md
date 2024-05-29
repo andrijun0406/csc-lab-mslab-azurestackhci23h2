@@ -182,7 +182,45 @@ Install-WindowsFeature -Name "RSAT-ADDS","RSAT-Clustering"
 
 At this step make sure you have Azure Subscription and you have user that are a user access administrator and a contributor role, since we are going to create some resources like resource group.
 Here I'm using ServicePrincipal because it's convinient to code and from security perspective you can use time limited secrets or certificates. If you use regular user, you need to interactively login with browser and finish the MFA (MultiFactorAuthentication) step.
-Basically we are going to create a Resource Group to hold all the resources.
+Basically we are going to create a Resource Group to hold all the resources. Please run the following PowerShell Script [PrepareAzure.ps1](PrepareAzure.ps1) from Management VM's PowerShell in elevated mode (Run As Administrator).
+Adjust the script if necessary:
+```powershell
+# Setup some variables
+$ResourceGroupName="dcoffee-rg"
+$Location="eastus" #make sure location is lowercase
+
+# Make sure User or SPN is contributor and user access administrator in Azure Subscriptions
+# We are using SPN here:
+# fill out the following variable to your environment
+$tenantID = ""
+$AdminSPNAppID=""
+$AdminPlainSecret=""
+$AdminSecuredSecret = ConvertTo-SecureString $AdminPlainSecret -AsPlainText -Force
+$AdminSPNCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $AdminSPNAppID, $AdminSecuredSecret
+
+#login to azure
+#download and install Azure module
+
+#Set PSGallery as a trusted repo
+Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+
+if (!(Get-InstalledModule -Name az.accounts -ErrorAction Ignore)){
+	Install-Module -Name Az.Accounts -Force
+}
+if (-not (Get-AzContext)){
+	Connect-AzAccount -ServicePrincipal -TenantId $tenantID -Credential $AdminSPNCred
+}
+
+#install az resources module
+if (!(Get-InstalledModule -Name "az.resources" -ErrorAction Ignore)){
+	Install-Module -Name "az.resources" -Force
+}
+
+#create resource group
+if (-not(Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction Ignore)){
+	New-AzResourceGroup -Name $ResourceGroupName -Location $location
+}
+```
 
 ### Expected Result
 
