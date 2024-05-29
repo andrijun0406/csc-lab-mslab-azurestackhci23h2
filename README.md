@@ -28,11 +28,11 @@ $LabConfig=@{
     AdminPassword='LS1setup!'; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
-    Internet=$true ; 
-    AdditionalNetworksConfig=@(); 
-    VMs=@(); 
+    Internet=$true ;
     DomainNetbiosName="th"; 
-    DomainName="th.dcoffee.com"
+    DomainName="th.dcoffee.com";
+    AdditionalNetworksConfig=@(); 
+    VMs=@()
 }
 ```
 > This will create custom Domain Controller (AD) built on top of Windows Server Datacenter with GUI. Some explanation of the parameters are the following:
@@ -42,7 +42,7 @@ $LabConfig=@{
 - **Prefix** : All VMs and vSwitch are created with this prefix, so you can identify the lab. If not specified, Lab folder name is use
 - **DCEdition** : 4 for DataCenter or 3 for DataCenterCore. We want a full GUI for DC so we choose 4.
 - **Internet** : if $true it will use External vSwitch from MSLAB Hyper-V hosts and create vNIC to the DC and configure NAT with some Open DNS servers in DNS forwarder (8.8.8.8 and 1.1.1.1)
-> Note: Make sure you enable MAC address spoofing in MSLAB Hyper-V hosts, and you might want to setup static IP address for your DC if you are using static in your environment otherwise DHCP would also work. You also might need to add DNS forwarders using your environment DNS servers. 
+> Note: Make sure you enable MAC address spoofing in MSLAB Hyper-V hosts, and you might want to setup static IP address for your DC if you are using static in your environment otherwise DHCP would also work. You also might need to add DNS forwarders using your environment DNS servers.
 - **AdditionalNetworksConfig** : empty array for additional network config later (not used in this step)
 - **VMs** : empty array for specifying Lab VMs (not used in this step)
 - **DomainNetbiosName** : custom NetBios will be used instead default "Corp"
