@@ -320,5 +320,70 @@ Invoke-Command -ComputerName $servers -ScriptBlock {
 } -Credential $Credentials
 ```
 
-### Task 4 - Perform Azure Stack HCI deployment from Azure Portal
+### Task 5 - Perform Azure Stack HCI deployment from Azure Portal
+
+#### Step 1 - Navigate to Azure Portal and in Azure Stack HCI clusters, click on Create button
+![CreateClusterFromPortal Result](images/CreateClusterFromPortal.png)
+
+#### Step 2 - Continue with setup with following values:
+> In Security settings I removed Bitlocker for data volumes as it would expand VHDs when encrypting volumes.
+```
+Basics:
+    Resource Group: dcoffee-rg
+    ClusterName:    clus01
+    Keyvaultname:   <Just generate new>
+
+Configuration:
+    New Configuration
+
+Networking
+    Network Switch for storage
+    Group All traffic
+
+    Network adapter 1:          Ethernet
+    Network adapter 1 VLAN ID:  711 (default)
+    Network adapter 2:          Ethernet 2
+    Network adapter 2 VLAN ID:  712 (default)
+
+    Starting IP:                10.0.0.111
+    ENding IP:                  10.0.0.116
+    Subnet mask:                255.255.255.0
+    Default Gateway:            10.0.0.1
+    DNS Server:                 10.0.0.1
+
+Management
+    Custom location name:       dcoffee-clus01-cl
+    Azure storage account name: <just generate new> dcoffeeclus01sa
+
+    Domain:                     th.dcoffee.com
+    Computer name prefix:       clus01
+    OU:                         OU=clus01,DC=th,DC=dcoffee,DC=com
+
+    Deployment account:
+        Username:               clus01-LCMUser
+        Password:               LS1setup!LS1setup!
+
+    Local Administrator
+        Username:               Administrator
+    Password:                   LS1setup!LS1setup!
+
+Security:
+    Customized security settings
+        Unselect Bitlocker for data volumes (would consume too much space)
+
+Advanced:
+    Create workload volumes (Default)
+
+Tags:
+    <keep default>
+```
+![Deploy-Basics](images/Deploy-Basics.png)
+![Deploy-Configuration](images/Deploy-Configuration.png)
+![Deploy-Networking](images/Deploy-Networking.png)
+![Deploy-Management](images/Deploy-Management.png)
+![Deploy-Security](images/Deploy-Security.png)
+![Deploy-Advanced](images/Deploy-Advanced.png)
+![Deploy-Validation](images/Deploy-Validation.png)
+
+#### Step 3 - Validation process will take some time. And if all goes OK, it will succesfully validate cluster
 
