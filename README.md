@@ -304,5 +304,21 @@ Invoke-Command -ComputerName $servers -ScriptBlock {
     w32tm /query /source
 } -Credential $Credentials
 ```
+* Configure current user to be Key Vault Administrator on dcoffee-rg resource group
+```powershell
+#add key vault admin of current user to Resource Group (It can be also done in Deploy Azure Stack HCI wizard)
+#$objectId = (Get-AzADUser -SignedIn).Id
+# Since we are using SPN
+$objectId =(Get-AzADServicePrincipal -DisplayName "cscapj-adm-spn").id
+New-AzRoleAssignment -ObjectId $ObjectId -ResourceGroupName $ResourceGroupName -RoleDefinitionName "Key Vault Administrator"
+```
+* Configure new admin password on nodes (as Cloud Deployment requires at least 12chars)
+```powershell
+#change password of local admin to be at least 12 chars
+Invoke-Command -ComputerName $servers -ScriptBlock {
+    Set-LocalUser -Name Administrator -AccountNeverExpires -Password (ConvertTo-SecureString "LS1setup!LS1setup!" -AsPlainText -Force)
+} -Credential $Credentials
+```
 
+### Task 4 - Perform Azure Stack HCI deployment from Azure Portal
 
