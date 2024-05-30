@@ -388,3 +388,34 @@ Tags:
 #### Step 3 - Validation process will take some time. And if all goes OK, it will succesfully validate cluster
 
 ![Validation-Result](images/Validation-Result.png)
+
+### Task 6 - Monitor Deployment Progress
+
+#### Step 1 - Monitor from Management Machine
+
+Paste following PowerShell to update credentials and pull information about the deployment progress
+> Run this before domain join step
+```powershell
+    #Create new password credentials
+    $UserName="Administrator"
+    $Password="LS1setup!LS1setup!"
+    $SecuredPassword = ConvertTo-SecureString $password -AsPlainText -Force
+    $Credentials= New-Object System.Management.Automation.PSCredential ($UserName,$SecuredPassword)
+
+    #before domain join
+    Invoke-Command -ComputerName $Servers[0] -ScriptBlock {
+        ([xml](Get-Content C:\ecestore\efb61d70-47ed-8f44-5d63-bed6adc0fb0f\086a22e3-ef1a-7b3a-dc9d-f407953b0f84)) | Select-Xml -XPath "//Action/Steps/Step" | ForEach-Object { $_.Node } | Select-Object FullStepIndex, Status, Name, StartTimeUtc, EndTimeUtc, @{Name="Duration";Expression={new-timespan -Start $_.StartTimeUtc -End $_.EndTimeUtc } } | Format-Table -AutoSize
+    } -Credential $Credentials
+```
+
+![Deployment-Progress1](images/Deployment-Progress1.png)
+
+> Run this after domain join
+```powershell
+    #after domain join
+    Invoke-Command -ComputerName $Servers[0] -ScriptBlock {
+        ([xml](Get-Content C:\ecestore\efb61d70-47ed-8f44-5d63-bed6adc0fb0f\086a22e3-ef1a-7b3a-dc9d-f407953b0f84)) | Select-Xml -XPath "//Action/Steps/Step" | ForEach-Object { $_.Node } | Select-Object FullStepIndex, Status, Name, StartTimeUtc, EndTimeUtc, @{Name="Duration";Expression={new-timespan -Start $_.StartTimeUtc -End $_.EndTimeUtc } } | Format-Table -AutoSize
+    }
+```
+![Deployment-Progress2](images/Deployment-Progress2.png)
+
