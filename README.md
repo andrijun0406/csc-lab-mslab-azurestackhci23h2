@@ -417,7 +417,7 @@ Paste following PowerShell to update credentials and pull information about the 
         ([xml](Get-Content C:\ecestore\efb61d70-47ed-8f44-5d63-bed6adc0fb0f\086a22e3-ef1a-7b3a-dc9d-f407953b0f84)) | Select-Xml -XPath "//Action/Steps/Step" | ForEach-Object { $_.Node } | Select-Object FullStepIndex, Status, Name, StartTimeUtc, EndTimeUtc, @{Name="Duration";Expression={new-timespan -Start $_.StartTimeUtc -End $_.EndTimeUtc } } | Format-Table -AutoSize
     }
 ```
-![Deployment-Progress1](images/Deployment-Progress1.png)
+![Deployment-Progress2](images/Deployment-Progress1.png)
 
 #### Step 2 - Monitor from Azure Portal
 
