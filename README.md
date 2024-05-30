@@ -387,3 +387,4 @@ Tags:
 
 #### Step 3 - Validation process will take some time. And if all goes OK, it will succesfully validate cluster
 
+![Validation-Result](images/Validation-Result.png)
