@@ -240,6 +240,26 @@ Now, we are going to prepare the nodes for Cloud Deployment.
 
 ![Test Connectivity Result](images/TestConnectivityResult.png)
 
+#### Step 2 - Deploy Arc Agent
+
+* In this step we will install Arc agent, Arc extensions and will set RBAC roles to Arc objects. It will also install Environmental Checker, so cloud deployment will be able to kick validations
+* Please run the following PowerShell Script [PrepareNodes.ps1](PrepareNodes.ps1) from Management VM's PowerShell in elevated mode (Run As Administrator).
+
+**The script will do the following:**
+* Since all the nodes are not domain joined yet, we will need to enable trusted hosts
+* Install required features and cumulative updates
+* Restart the servers to finalize features/updates
+* Install required PowerShell modules on all nodes
+* Deploy arc agent and extensions
+
+#### Expected Result
+
+![PrepareNodes.ps1 Result1](images/PrepareNodes.ps1-result-1.png)
+![PrepareNodes.ps1 Result2](images/PrepareNodes.ps1-result-2.png)
+
+> Check if all arc extensions were installed. If one failed (sometimes LCM fails), it needs to be uninstalled (in azure portal) and rerun code above to attempt to redeploy extension.
+Wait for extensions to be installed before continuing with lab! If you will connect to remote session, it might interrupt installing LCM extension and it will fail.
+
 
 
 
