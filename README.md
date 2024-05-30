@@ -275,8 +275,34 @@ New-AzConnectedMachineExtension -Name "AzureEdgeLifecycleManager" -ResourceGroup
 New-AzConnectedMachineExtension -Name "AzureEdgeRemoteSupport" -ResourceGroupName $ResourceGroupName -MachineName $Server -Location $Location -Publisher "Microsoft.AzureStack.Observability" -ExtensionType "EdgeRemoteSupport" -NoWait
 ```
 
+#### Step 3 - Add final touches
 
+* Make sure there is only one NIC with gateway configured:
+```powershell
+#make sure there is only one management NIC with IP address (setup is complaining about multiple gateways)
+    Invoke-Command -ComputerName $servers -ScriptBlock {
+        Get-NetIPConfiguration | Where-Object IPV4defaultGateway | Get-NetAdapter | Sort-Object Name | Select-Object -Skip 1 | Set-NetIPInterface -Dhcp Disabled
+    } -Credential $Credentials
+```
+* Configure NTP Servers
+First you need to disable Timesync from Hyper-V. Run following command on Hyper-V Host! (applies to nested environment only)
+```powershell
+Get-VM *ASNode* | Disable-VMIntegrationService -Name "Time Synchronization"
+```
+And after that you can run following command from management machine to configure NTP Server
+```powershell
+$NTPServer="th.dcoffee.com"
+Invoke-Command -ComputerName $servers -ScriptBlock {
+    w32tm /config /manualpeerlist:$using:NTPServer /syncfromflags:manual /update
+    Restart-Service w32time
+} -Credential $Credentials
 
+Start-Sleep 20
 
+#check if source is NTP Server
+Invoke-Command -ComputerName $servers -ScriptBlock {
+    w32tm /query /source
+} -Credential $Credentials
+```
 
 
