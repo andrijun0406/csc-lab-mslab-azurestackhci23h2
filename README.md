@@ -248,6 +248,7 @@ Now, we are going to prepare the nodes for Cloud Deployment.
 **The script will do the following:**
 * Since all the nodes are not domain joined yet, we will need to enable trusted hosts
 * Install required features and cumulative updates
+* Set the timezone to UTC (known issue using baseline builds 10.2310.0.30 (25398.469))
 * Restart the servers to finalize features/updates
 * Install required PowerShell modules on all nodes
 * Deploy arc agent and extensions

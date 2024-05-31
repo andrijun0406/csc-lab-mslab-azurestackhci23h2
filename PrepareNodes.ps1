@@ -33,11 +33,12 @@ Set-Item WSMan:\localhost\Client\TrustedHosts -Value $($TrustedHosts -join ',') 
 # Step 2 - Wipe Existing data
 # MSLab deploys clean disk so this step is unnecessary for now.
 
-# Step 3 - Install features
+# Step 3 - Install features and set Timezone to UTC (known issue for 2309 baseline release)
 
 Invoke-Command -ComputerName $servers -ScriptBlock {
     Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -NoRestart
     Install-WindowsFeature -Name Failover-Clustering
+    Set-TimeZone -Id "UTC"
 } -Credential $Credentials
 
 # Step 4 - Install Cumulative Updates (optionals)
