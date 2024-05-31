@@ -252,7 +252,8 @@ Test-NetConnection -ComputerName tch-mc660-2 -CommonTCPPort WINRM
 **The script will do the following:**
 * Since all the nodes are not domain joined yet, we will need to enable trusted hosts
 * Install required features and cumulative updates
-* Set the timezone to UTC (known issue using baseline builds 10.2310.0.30 (25398.469))
+* Set the timezone to UTC
+> this is [known issue](https://learn.microsoft.com/en-us/azure-stack/hci/known-issues-2310) using preview baseline builds 10.2310.0.30 (25398.469)
 * Restart the servers to finalize features/updates
 * Install required PowerShell modules on all nodes
 * Deploy arc agent and extensions
