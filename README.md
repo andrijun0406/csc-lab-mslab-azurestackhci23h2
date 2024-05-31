@@ -417,13 +417,13 @@ Paste following PowerShell to update credentials and pull information about the 
         ([xml](Get-Content C:\ecestore\efb61d70-47ed-8f44-5d63-bed6adc0fb0f\086a22e3-ef1a-7b3a-dc9d-f407953b0f84)) | Select-Xml -XPath "//Action/Steps/Step" | ForEach-Object { $_.Node } | Select-Object FullStepIndex, Status, Name, StartTimeUtc, EndTimeUtc, @{Name="Duration";Expression={new-timespan -Start $_.StartTimeUtc -End $_.EndTimeUtc } } | Format-Table -AutoSize
     }
 ```
-![Deployment-Progress2](images/Deployment-Progress1.png)
+![Deployment-Progress2](images/Deployment-Progress2.png)
 
 #### Step 2 - Monitor from Azure Portal
 
 In Azure Portal, navigate to your Azure Stack Cluster and you should see deployment progress there:
 
-![Deployment-Progress3](images/Deployment-Progress2.png)
+![Deployment-Progress3](images/Deployment-Progress3.png)
 
 #### Step 3 - Troubleshoot using Deployment logs
 
