@@ -15,7 +15,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 
 ### Task 2 - Download all neccessary files
 
-* MSLab scripts : [MSLab](https://aka.ms/mslab)
+* MSLab scripts : [MSLab](https://aka.ms/mslab) make sure you are using the latest (currently its v24.05.1)
 * latest Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads) requires Visual Studio users.
 * latest Azure Stack HCI ISO: [23H2](https://azure.microsoft.com/en-us/products/azure-stack/hci/hci-download/) requires login to azure portal.
 
@@ -87,15 +87,13 @@ Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clu
 1. Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic, Network ATC will use 711-712, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
 ```powershell
 $LabConfig=@{
-    AllowedVLANs="1-10,711-723"; 
-    ManagementSubnetIDs=0..4; 
+    AllowedVLANs="1-10,711-719";
     DomainAdminName=''; 
     AdminPassword=''; 
-    Prefix = 'dcoffee-' ; 
+    Prefix='dcoffee-' ; 
     DCEdition='4'; 
     Internet=$true ;
-    UseHostDnsAsForwarder=$true; 
-    #MGMTNICsInDC=4;
+    UseHostDnsAsForwarder=$true;
     AdditionalNetworksInDC=$true; 
     AdditionalNetworksConfig=@(); 
     VMs=@(); 
@@ -123,16 +121,12 @@ $LabConfig=@{
     }
 }
 
-#add subnet 1-3
+#add subnet 1-4
 
-$LABConfig.AdditionalNetworksConfig += @{ 
-        NetName = 'subnet1';                        # Network Name
-        NetAddress='10.0.1.';                      # Network Addresses prefix. (starts with 1), therefore first VM with Additional network config will have IP 172.16.1.1
-        NetVLAN='721';                                 # VLAN tagging
-        Subnet='255.255.255.0'                       # Subnet Mask
-    }
-    $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='722'; Subnet='255.255.255.0'}
-    $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet3'; NetAddress='10.0.3.'; NetVLAN='723'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet1'; NetAddress='10.0.1.'; NetVLAN='1'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='2'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet3'; NetAddress='10.0.3.'; NetVLAN='3'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet4'; NetAddress='10.0.4.'; NetVLAN='4'; Subnet='255.255.255.0'}
 
 #Windows Admin Center gateway
 $LabConfig.VMs += @{ VMName = 'WACGW' ; ParentVHD = 'Win2022Core_G2.vhdx' ; MGMTNICs=1 }
@@ -283,7 +277,7 @@ New-AzConnectedMachineExtension -Name "AzureEdgeRemoteSupport" -ResourceGroupNam
 
 #### Step 3 - Add final touches
 
-* Make sure there is only one NIC with gateway configured:
+* Make sure there is only one NIC with gateway configured, and disabled all unused adapters (in this deployment we only use 2 adapters (Ethernet and Ethernet 2))
 ```powershell
 #make sure there is only one management NIC with IP address (setup is complaining about multiple gateways)
     Invoke-Command -ComputerName $servers -ScriptBlock {
