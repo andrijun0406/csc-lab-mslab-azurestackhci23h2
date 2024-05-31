@@ -24,6 +24,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 1. Unzip files from MSLab zip folder into D:\MSLAB (volume from MSLAB VHDX where you have enough space here ~5TB)
 ![Initial MSLAB folder](images/MSLAB-folder-initial.png)
 2. Replace content of LabConfig.ps1 with the following:
+> Don't forget to add Admin and Password, we deliberately empty here for security purposes.
 ```powershell
 $LabConfig=@{ 
     DomainAdminName=''; 
