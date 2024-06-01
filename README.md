@@ -217,7 +217,7 @@ if (-not(Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction Ignore)){
 	New-AzResourceGroup -Name $ResourceGroupName -Location $location
 }
 ```
-
+> Note: if installing module failed, you may need to re-try again.
 ### Expected Result
 
 ![PrepareAzure.ps1 Result](images/PrepareAzure.ps1-result.png)
@@ -243,7 +243,7 @@ Test-NetConnection -ComputerName th-mc660-2 -CommonTCPPort WINRM
 #### Step 2 - Deploy Arc Agent
 
 * In this step we will install Arc agent, Arc extensions and will set RBAC roles to Arc objects. It will also install Environmental Checker, so cloud deployment will be able to kick validations
-* Please run the following PowerShell Script [PrepareNodes.ps1](PrepareNodes.ps1) from Management VM's PowerShell in elevated mode (Run As Administrator).
+* Please run the following PowerShell Script [PrepareNodes.ps1](PrepareNodes.ps1) from Management VM's PowerShell in elevated mode (Run As Administrator). Adjust the script to your environment.
 
 **The script will do the following:**
 * Since all the nodes are not domain joined yet, we will need to enable trusted hosts

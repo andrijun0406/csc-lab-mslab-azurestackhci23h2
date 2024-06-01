@@ -1,4 +1,4 @@
-$AsHCIOUName=""
+$AsHCIOUName="OU=clus01,DC=th,DC=dcoffee,DC=com"
 $LCMUserName=""
 $LCMPassword=""
 $SecuredPassword = ConvertTo-SecureString $LCMpassword -AsPlainText -Force
