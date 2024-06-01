@@ -88,20 +88,20 @@ Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clu
 2. Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic, Network ATC will use 711-712, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
 ```powershell
 $LabConfig=@{
-    AllowedVLANs="1-10,711-719";
+    AllowedVLANs="1-10,711-723"; 
     DomainAdminName=''; 
     AdminPassword=''; 
-    Prefix='dcoffee-' ; 
+    Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
     Internet=$true ;
-    UseHostDnsAsForwarder=$true;
+    UseHostDnsAsForwarder=$true; 
     AdditionalNetworksInDC=$true; 
     AdditionalNetworksConfig=@(); 
     VMs=@(); 
     DomainNetbiosName="th";
     DomainName="th.dcoffee.com";
     TelemetryLevel='Full' ; 
-    TelemetryNickname='csc'
+    TelemetryNickname='dcoffee'
 }
 
 #pre-domain joined
@@ -119,10 +119,11 @@ $LabConfig=@{
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"
+        AdditionalNetworks = $true
     }
 }
 
-#add subnet 1-4
+#add subnet 1-4 (for arc VM/AKS logical networks)
 
 $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet1'; NetAddress='10.0.1.'; NetVLAN='1'; Subnet='255.255.255.0'}
 $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='2'; Subnet='255.255.255.0'}
@@ -231,8 +232,8 @@ Now, we are going to prepare the nodes for Cloud Deployment.
 > Time out is OK since Windows Firewall does not allow ping by default, most important is the name resolution works. Please also ignore the IPv6 we will fix this later.
 * Test WINRM works from Management machine to the azure stack HCI nodes
 ```powershell
-Test-NetConnection -ComputerName tch-mc660-1 -CommonTCPPort WINRM
-Test-NetConnection -ComputerName tch-mc660-2 -CommonTCPPort WINRM
+Test-NetConnection -ComputerName th-mc660-1 -CommonTCPPort WINRM
+Test-NetConnection -ComputerName th-mc660-2 -CommonTCPPort WINRM
 ```
 
 #### Expected Result

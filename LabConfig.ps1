@@ -30,19 +30,16 @@ $LabConfig=@{
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"
+        AdditionalNetworks = $true
     }
 }
 
-#add subnet 1-3
+#add subnet 1-4 (for arc VM/AKS logical networks)
 
-$LABConfig.AdditionalNetworksConfig += @{ 
-        NetName = 'subnet1';                        # Network Name
-        NetAddress='10.0.1.';                      # Network Addresses prefix. (starts with 1), therefore first VM with Additional network config will have IP 172.16.1.1
-        NetVLAN='721';                                 # VLAN tagging
-        Subnet='255.255.255.0'                       # Subnet Mask
-    }
-    $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='722'; Subnet='255.255.255.0'}
-    $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet3'; NetAddress='10.0.3.'; NetVLAN='723'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet1'; NetAddress='10.0.1.'; NetVLAN='1'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='2'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet3'; NetAddress='10.0.3.'; NetVLAN='3'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet4'; NetAddress='10.0.4.'; NetVLAN='4'; Subnet='255.255.255.0'}
 
 #Windows Admin Center gateway
 $LabConfig.VMs += @{ VMName = 'WACGW' ; ParentVHD = 'Win2022Core_G2.vhdx' ; MGMTNICs=1 }
