@@ -1,20 +1,18 @@
 $LabConfig=@{
     AllowedVLANs="1-10,711-723"; 
-    ManagementSubnetIDs=0..4; 
     DomainAdminName=''; 
     AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
     DCEdition='4'; 
     Internet=$true ;
     UseHostDnsAsForwarder=$true; 
-    #MGMTNICsInDC=4;
     AdditionalNetworksInDC=$true; 
     AdditionalNetworksConfig=@(); 
     VMs=@(); 
     DomainNetbiosName="th";
     DomainName="th.dcoffee.com";
     TelemetryLevel='Full' ; 
-    TelemetryNickname='csc'
+    TelemetryNickname='dcoffee'
 }
 
 #pre-domain joined

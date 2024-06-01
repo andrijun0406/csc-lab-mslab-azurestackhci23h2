@@ -24,7 +24,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 1. Unzip files from MSLab zip folder into D:\MSLAB (volume from MSLAB VHDX where you have enough space here ~5TB)
 ![Initial MSLAB folder](images/MSLAB-folder-initial.png)
 2. Replace content of LabConfig.ps1 with the following:
-> Don't forget to add Admin and Password, we deliberately empty here for security purposes.
+> Don't forget to add Admin and Password, we deliberately empty here for security purposes. Customize according to your environment.
 ```powershell
 $LabConfig=@{ 
     DomainAdminName=''; 
@@ -53,10 +53,9 @@ $LabConfig=@{
 3. Right-click 1_Prereq.ps1 and select **Run with PowerShell**, the script will automatically elevate and run as administrator
 4. The script will finish. it will download necessary files and create folders. Close PowerShell Window by pressing enter.
 ![1_Prereq.ps1 Result](images/1_Prereq.ps1-result.png)
-5. Save as LabConfig.ps1 as [LabConfig.hydrate.ps1](LabConfig.hydrate.ps1) for documentation as we are going to use another version of LabConfig.ps1 in later step.
-6. Right-click 2_CreateParentDisks.ps1 and select **Run with PowerShell**.
-7. When asked for ISO image, choose Windows Server 2022 image.
-8. When asked for Windows Server Update (msu), click **cancel**
+5. Right-click 2_CreateParentDisks.ps1 and select **Run with PowerShell**.
+6. When asked for ISO image, choose Windows Server 2022 image.
+7. When asked for Windows Server Update (msu), click **cancel**
 > Script will now create Domain Controller and Windows Server 2022 parent disks. It will take 15-30 minutes to finish. Once Finished, press Enter to close window (it will cleanup unnecessary files and folders).
 
 ### Expected Result
@@ -85,7 +84,8 @@ Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clu
 
 ### Task 1 - Customize deployment LabConfig and Deploy
 
-1. Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic, Network ATC will use 711-712, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
+1. Save current LabConfig.ps1 as [LabConfig.hydrate.ps1](LabConfig.hydrate.ps1) for documentation as we are going to use another version of LabConfig.ps1 in this step.
+2. Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic, Network ATC will use 711-712, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
 ```powershell
 $LabConfig=@{
     AllowedVLANs="1-10,711-719";
