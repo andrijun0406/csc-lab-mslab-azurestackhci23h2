@@ -38,7 +38,6 @@ Set-Item WSMan:\localhost\Client\TrustedHosts -Value $($TrustedHosts -join ',') 
 Invoke-Command -ComputerName $servers -ScriptBlock {
     Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -NoRestart
     Install-WindowsFeature -Name Failover-Clustering
-    Set-TimeZone -Id "UTC"
 } -Credential $Credentials
 
 # Step 4 - Install Cumulative Updates (optionals)

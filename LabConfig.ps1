@@ -30,7 +30,7 @@ $LabConfig=@{
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"
-        AdditionalNetworks = $true
+        #AdditionalNetworks = $true
     }
 }
 

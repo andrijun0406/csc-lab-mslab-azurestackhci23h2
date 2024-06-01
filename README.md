@@ -119,7 +119,7 @@ $LabConfig=@{
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"
-        AdditionalNetworks = $true
+        #AdditionalNetworks = $true
     }
 }
 
@@ -248,8 +248,6 @@ Test-NetConnection -ComputerName th-mc660-2 -CommonTCPPort WINRM
 **The script will do the following:**
 * Since all the nodes are not domain joined yet, we will need to enable trusted hosts
 * Install required features and cumulative updates
-* Set the timezone to UTC
-> this is [known issue](https://learn.microsoft.com/en-us/azure-stack/hci/known-issues-2310) using preview baseline builds 10.2310.0.30 (25398.469)
 * Restart the servers to finalize features/updates
 * Install required PowerShell modules on all nodes
 * Deploy arc agent and extensions
@@ -286,12 +284,13 @@ New-AzConnectedMachineExtension -Name "AzureEdgeRemoteSupport" -ResourceGroupNam
         Get-NetIPConfiguration | Where-Object IPV4defaultGateway | Get-NetAdapter | Sort-Object Name | Select-Object -Skip 1 | Set-NetIPInterface -Dhcp Disabled
     } -Credential $Credentials
 ```
-* Configure NTP Servers
+* Configure NTP Servers and Set the time zone to UTC
 First you need to disable Timesync from Hyper-V. Run following command on Hyper-V Host! (applies to nested environment only)
 ```powershell
-Get-VM *ASNode* | Disable-VMIntegrationService -Name "Time Synchronization"
+Get-VM *dcoffee-th-mc660* | Disable-VMIntegrationService -Name "Time Synchronization"
 ```
 And after that you can run following command from management machine to configure NTP Server
+> Set timezone back to UTC. This is [known issue](https://learn.microsoft.com/en-us/azure-stack/hci/known-issues-2310) using preview baseline builds 10.2310.0.30 (25398.469)
 ```powershell
 $NTPServer="th.dcoffee.com"
 Invoke-Command -ComputerName $servers -ScriptBlock {
@@ -304,6 +303,12 @@ Start-Sleep 20
 #check if source is NTP Server
 Invoke-Command -ComputerName $servers -ScriptBlock {
     w32tm /query /source
+} -Credential $Credentials
+
+# workaround on baseline release - deployment will fail if not setup to UTC
+Invoke-Command -ComputerName $servers -ScriptBlock {
+    Set-TimeZone -Id "UTC"
+    Get-TimeZone
 } -Credential $Credentials
 ```
 * Configure current user to be Key Vault Administrator on dcoffee-rg resource group
