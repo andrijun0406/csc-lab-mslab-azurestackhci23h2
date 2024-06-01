@@ -115,15 +115,13 @@ $LabConfig=@{
         HDDSize= 2TB ; 
         MemoryStartupBytes= 96GB; 
         VMProcessorCount="24"; 
-        MGMTNICs=5 ; 
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"
-        #AdditionalNetworks = $true
     }
 }
 
-#add subnet 1-4 (for arc VM/AKS logical networks)
+#add subnet 1-4 in DC (for arc VM/AKS logical networks)
 
 $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet1'; NetAddress='10.0.1.'; NetVLAN='1'; Subnet='255.255.255.0'}
 $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='2'; Subnet='255.255.255.0'}
@@ -284,7 +282,8 @@ New-AzConnectedMachineExtension -Name "AzureEdgeRemoteSupport" -ResourceGroupNam
         Get-NetIPConfiguration | Where-Object IPV4defaultGateway | Get-NetAdapter | Sort-Object Name | Select-Object -Skip 1 | Set-NetIPInterface -Dhcp Disabled
     } -Credential $Credentials
 ```
-* Configure NTP Servers and Set the time zone to UTC
+> Make sure also management NIC has the same consistent name accross the whole cluster nodes
+* Configure NTP Servers and Set the time zone to UTC.
 First you need to disable Timesync from Hyper-V. Run following command on Hyper-V Host! (applies to nested environment only)
 ```powershell
 Get-VM *dcoffee-th-mc660* | Disable-VMIntegrationService -Name "Time Synchronization"
@@ -312,6 +311,7 @@ Invoke-Command -ComputerName $servers -ScriptBlock {
 } -Credential $Credentials
 ```
 * Configure current user to be Key Vault Administrator on dcoffee-rg resource group
+> No need if you deploying second cluster in the same resource group
 ```powershell
 #add key vault admin of current user to Resource Group (It can be also done in Deploy Azure Stack HCI wizard)
 #$objectId = (Get-AzADUser -SignedIn).Id
@@ -320,6 +320,7 @@ $objectId =(Get-AzADServicePrincipal -DisplayName "cscapj-adm-spn").id
 New-AzRoleAssignment -ObjectId $ObjectId -ResourceGroupName $ResourceGroupName -RoleDefinitionName "Key Vault Administrator"
 ```
 * Configure new admin password on nodes (as Cloud Deployment requires at least 12chars)
+> if failed, you might need to set trusted host again
 ```powershell
 #change password of local admin to be at least 12 chars
 Invoke-Command -ComputerName $servers -ScriptBlock {

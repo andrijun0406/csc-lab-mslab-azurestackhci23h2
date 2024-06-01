@@ -25,16 +25,14 @@ $LabConfig=@{
         HDDNumber = 4; 
         HDDSize= 2TB ; 
         MemoryStartupBytes= 96GB; 
-        VMProcessorCount="24"; 
-        MGMTNICs=5 ; 
+        VMProcessorCount="24";
         NestedVirt=$true; 
         vTPM=$true;
         Unattend="NoDjoin"
-        #AdditionalNetworks = $true
     }
 }
 
-#add subnet 1-4 (for arc VM/AKS logical networks)
+#add subnet 1-4 in DC (for arc VM/AKS logical networks)
 
 $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet1'; NetAddress='10.0.1.'; NetVLAN='1'; Subnet='255.255.255.0'}
 $LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='2'; Subnet='255.255.255.0'}
