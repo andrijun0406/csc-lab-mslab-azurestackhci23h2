@@ -88,7 +88,7 @@ Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clu
 2. Below LabConfig will deploy a large 2 virtual nodes (with 24 vCPU and 96GB RAM each) and also DC VM, Windows Admin Center Gateway (WAC GW) VM and Management VM. We will use range of VLAN for different subnets later on (for Storage traffic, Network ATC will use 711-712, for VM and AKS logical networks we can use Vlan 1-10),these VLANs are all internal, if require connection to Azure it will be routed and NATed from DC VM as the gateway.
 ```powershell
 $LabConfig=@{
-    AllowedVLANs="1-10,711-723"; 
+    AllowedVLANs="1-10,711-719"; 
     DomainAdminName=''; 
     AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
@@ -358,6 +358,8 @@ Networking
     Subnet mask:                255.255.255.0
     Default Gateway:            10.0.0.1
     DNS Server:                 10.0.0.1
+
+    RDMA Protocol:              Disabled (in case you are running lab in VMs)
 
 Management
     Custom location name:       dcoffee-clus01-cl

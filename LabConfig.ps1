@@ -1,5 +1,5 @@
 $LabConfig=@{
-    AllowedVLANs="1-10,711-723"; 
+    AllowedVLANs="1-10,711-719"; 
     DomainAdminName=''; 
     AdminPassword=''; 
     Prefix = 'dcoffee-' ; 
