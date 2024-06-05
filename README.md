@@ -391,6 +391,7 @@ Tags:
 ![Deploy-Configuration](images/Deploy-Configuration.png)
 ![Deploy-Networking](images/Deploy-Networking.png)
 > Don't forget to Disabled RDMA Protocol as we are using VM network adapter also set jumbo framesize to 1514
+
 ![Deploy-Management](images/Deploy-Management.png)
 ![Deploy-Security](images/Deploy-Security.png)
 ![Deploy-Advanced](images/Deploy-Advanced.png)
@@ -442,7 +443,7 @@ To troubleshoot deployment you can explore deployment logs by navigating into fi
 
 ![Troubleshoot-logs](images/Troubleshoot-logs.png)
 
-#### Issues
+### Known Issues
 
 1. The deployment stops when there is error related to validate ATC service.
 
