@@ -450,7 +450,7 @@ To troubleshoot deployment you can explore deployment logs by navigating into fi
 The Network ATC seems to be allowing untagged vlan in storage adapter and since the default DHCP client is enabled it picks up DHCP address from native vlan 0 (untagged) which is used by Management traffic. Test-Cluster then failed because the subnet are wrong it should be storage subnet but instead using management subnet from DHCP.
 
 Here are the VMNetwork Adapter Isolation (vlan) configuration looks like:
-![Network ATC Issues-1](ATC-issues-1.png)
+![Network ATC Issues-1](images/ATC-issues-1.png)
 
 let's run the same script when we remove gateway and disabled DHCP:
 ```powershell
