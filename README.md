@@ -462,3 +462,15 @@ let's run the same script when we remove gateway and disabled DHCP:
 
 Wait for awhile, so NetworkATC will try to fix the IP Addresses now using 10.71.1.X and 10.71.2.X. Check using IPConfig /All in each node:
 ![Network ATC Issues-2](images/ATC-issues-2.png)
+
+Wait again for awhile, then test ping from each node to each storage interfaces:
+![Network ATC Issues-3](images/ATC-issues-3.png)
+
+Then do Test-Cluster with the following command:
+
+```powershell
+#run this from Management machine
+    Invoke-Command -ComputerName $servers -ScriptBlock {
+        Test-Cluster $using:servers -Include "Network"
+    } -Credential $Credentials
+```
