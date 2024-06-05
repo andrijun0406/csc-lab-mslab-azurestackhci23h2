@@ -466,11 +466,13 @@ Wait for awhile, so NetworkATC will try to fix the IP Addresses now using 10.71.
 Wait again for awhile, then test ping from each node to each storage interfaces:
 ![Network ATC Issues-3](images/ATC-issues-3.png)
 
-Then do Test-Cluster with the following command:
+Then do Test-Cluster from one of the node with the following command:
 
 ```powershell
-#run this from Management machine
-    Invoke-Command -ComputerName $servers -ScriptBlock {
-        Test-Cluster $using:servers -Include "Network"
-    } -Credential $Credentials
+Test-Cluster "th-mc660-1","th-mc660-2" -Include "Network"
 ```
+![Network ATC Issues-4](images/ATC-issues-4.png)
+
+Ignore the warning for now, and resume the deployment from portal. It should now progressing again.
+
+![Network ATC Issues-5](images/ATC-issues-5.png)
