@@ -445,8 +445,8 @@ To troubleshoot deployment you can explore deployment logs by navigating into fi
 
 ### Expected Result
 
-Here how it looked when deployment is successful.
-![Successful Deployment](images/Deployment-Success.png)
+Here is how it looked when deployment is successful.
+![Successful Deployment](images/Deployment-Success1.png)
 
 ### Known Issues
 
