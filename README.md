@@ -445,7 +445,7 @@ To troubleshoot deployment you can explore deployment logs by navigating into fi
 
 ### Known Issues
 
-1. The deployment stops when there is error related to validate ATC service.
+*1. The deployment stops when there is error related to validate ATC service.*
 
 The Network ATC seems to be allowing untagged vlan in storage adapter and since the default DHCP client is enabled it picks up DHCP address from native vlan 0 (untagged) which is used by Management traffic. Test-Cluster then failed because the subnet are wrong it should be storage subnet but instead using management subnet from DHCP.
 
@@ -454,5 +454,11 @@ Here are the VMNetwork Adapter Isolation (vlan) configuration looks like:
 
 let's run the same script when we remove gateway and disabled DHCP:
 ```powershell
-Get-NetIPConfiguration | Where-Object IPV4defaultGateway | Get-NetAdapter | Sort-Object Name | Select-Object -Skip 1 | Set-NetIPInterface -Dhcp Disabled
+#run this from Management machine
+    Invoke-Command -ComputerName $servers -ScriptBlock {
+        Get-NetIPConfiguration | Where-Object IPV4defaultGateway | Get-NetAdapter | Sort-Object Name | Select-Object -Skip 1 | Set-NetIPInterface -Dhcp Disabled
+    } -Credential $Credentials
 ```
+
+Wait for awhile, so NetworkATC will try to fix the IP Addresses now using 10.71.1.X and 10.71.2.X. Check using IPConfig /All in each node:
+![Network ATC Issues-2](images/ATC-issues-2.png)
