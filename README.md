@@ -443,6 +443,11 @@ To troubleshoot deployment you can explore deployment logs by navigating into fi
 
 ![Troubleshoot-logs](images/Troubleshoot-logs.png)
 
+### Expected Result
+
+Here how it looked when deployment is successful.
+![Successful Deployment](images/Deployment-Success.png)
+
 ### Known Issues
 
 *1. The deployment stops when there is error related to validate ATC service.*
