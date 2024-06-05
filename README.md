@@ -149,7 +149,7 @@ These steps are inspired from Microsoft Documentation [here](https://learn.micro
 Adjust the script if necessary:
 ```powershell
 $AsHCIOUName="OU=clus01,DC=th,DC=dcoffee,DC=com"
-$LCMUserName=""
+$LCMUserName="clus01-LCMUser"
 $LCMPassword=""
 $SecuredPassword = ConvertTo-SecureString $LCMpassword -AsPlainText -Force
 $LCMCredentials= New-Object System.Management.Automation.PSCredential ($LCMUserName,$SecuredPassword)
@@ -339,7 +339,7 @@ Invoke-Command -ComputerName $servers -ScriptBlock {
 Basics:
     Resource Group: dcoffee-rg
     ClusterName:    clus01
-    Keyvaultname:   <Just generate new>
+    Keyvaultname:   <Just generate new> (e.g. dcoffeeclus01-hcikv)
 
 Configuration:
     New Configuration
@@ -390,6 +390,7 @@ Tags:
 ![Deploy-Basics](images/Deploy-Basics.png)
 ![Deploy-Configuration](images/Deploy-Configuration.png)
 ![Deploy-Networking](images/Deploy-Networking.png)
+> Don't forget to Disabled RDMA Protocol as we are using VM network adapter also set jumbo framesize to 1514
 ![Deploy-Management](images/Deploy-Management.png)
 ![Deploy-Security](images/Deploy-Security.png)
 ![Deploy-Advanced](images/Deploy-Advanced.png)
@@ -440,3 +441,17 @@ In Azure Portal, navigate to your Azure Stack Cluster and you should see deploym
 To troubleshoot deployment you can explore deployment logs by navigating into first cluster node to c:\CloudDeployment\Logs
 
 ![Troubleshoot-logs](images/Troubleshoot-logs.png)
+
+#### Issues
+
+1. The deployment stops when there is error related to validate ATC service.
+
+The Network ATC seems to be allowing untagged vlan in storage adapter and since the default DHCP client is enabled it picks up DHCP address from native vlan 0 (untagged) which is used by Management traffic. Test-Cluster then failed because the subnet are wrong it should be storage subnet but instead using management subnet from DHCP.
+
+Here are the VMNetwork Adapter Isolation (vlan) configuration looks like:
+![Network ATC Issues-1](ATC-issues-1.png)
+
+let's run the same script when we remove gateway and disabled DHCP:
+```powershell
+Get-NetIPConfiguration | Where-Object IPV4defaultGateway | Get-NetAdapter | Sort-Object Name | Select-Object -Skip 1 | Set-NetIPInterface -Dhcp Disabled
+```

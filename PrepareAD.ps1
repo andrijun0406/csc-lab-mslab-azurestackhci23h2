@@ -1,5 +1,5 @@
 $AsHCIOUName="OU=clus01,DC=th,DC=dcoffee,DC=com"
-$LCMUserName=""
+$LCMUserName="clus01-LCMUser"
 $LCMPassword=""
 $SecuredPassword = ConvertTo-SecureString $LCMpassword -AsPlainText -Force
 $LCMCredentials= New-Object System.Management.Automation.PSCredential ($LCMUserName,$SecuredPassword)

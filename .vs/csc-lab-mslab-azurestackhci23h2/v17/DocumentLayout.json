@@ -5,6 +5,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ahmada8\\Source\\Repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\PrepareNodes.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:PrepareNodes.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\LabConfig.hydrate.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:LabConfig.hydrate.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,15 +22,36 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PrepareNodes.ps1",
+              "DocumentMoniker": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\PrepareNodes.ps1",
+              "RelativeDocumentMoniker": "PrepareNodes.ps1",
+              "ToolTip": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\PrepareNodes.ps1",
+              "RelativeToolTip": "PrepareNodes.ps1",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-06-04T13:11:44.812Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LabConfig.hydrate.ps1",
+              "DocumentMoniker": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\LabConfig.hydrate.ps1",
+              "RelativeDocumentMoniker": "LabConfig.hydrate.ps1",
+              "ToolTip": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\LabConfig.hydrate.ps1",
+              "RelativeToolTip": "LabConfig.hydrate.ps1",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-05-29T03:55:21.323Z"
             },
             {
               "$type": "Document",
@@ -32,7 +61,7 @@
               "RelativeDocumentMoniker": "README.md",
               "ToolTip": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\README.md",
               "RelativeToolTip": "README.md",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAC8AAAACAAAA",
+              "ViewState": "AQIAAP0AAAAAAAAAAAAAADQBAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
               "WhenOpened": "2024-05-27T15:36:05.929Z",
               "EditorCaption": ""
