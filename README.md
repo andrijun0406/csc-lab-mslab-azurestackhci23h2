@@ -4,11 +4,11 @@ My hands-on Lab on Deploying Azure Stack HCI version 23H2 using MSLab
 
 This Lab consists of few Lab Scenarios here:
 
-1. [1. Hydrating MSlab Files](01-HydrateMSLAB/)
-2. [2. Deploy Azure Stack HCI Cluster 23H2 using Cloud Based Deployment (Azure Portal)](02-Deploy23H2/
-3. [3. Installing Windows Admin Center](03-InstallWAC/)
-4. [4. Azure Arc VM Management](04-AzArcVM-Management/)
-5. [5. Azure Arc AKS Management](05-AzArcAKS-Management/)
+1. [Hydrating MSlab Files](01-HydrateMSLAB/)
+2. [Deploy Azure Stack HCI Cluster 23H2 using Cloud Based Deployment (Azure Portal)](02-Deploy23H2/)
+3. [Installing Windows Admin Center](03-InstallWAC/)
+4. [Azure Arc VM Management](04-AzArcVM-Management/)
+5. [Azure Arc AKS Management](05-AzArcAKS-Management/)
 
 ## 1. Hydrating MSLab Files
 
