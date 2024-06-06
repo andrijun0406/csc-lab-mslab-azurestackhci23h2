@@ -9,6 +9,10 @@ This Lab consists of few Lab Scenarios here:
 3. [Installing Windows Admin Center](03-InstallWAC/)
 4. [Azure Arc VM Management](04-AzArcVM-Management/)
 5. [Azure Arc AKS Management](05-AzArcAKS-Management/)
+6. [Test Azure Stack HCI High-Availability](06-AzureStackHCI-HA)
+7. [Test Azure Stack HCI Performance](07-AzureStackHCI-Perf)
+
+More scenarios to come, please check regularly.
 
 ## 1. Hydrating MSLab Files
 
