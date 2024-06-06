@@ -1,6 +1,14 @@
 # csc-lab-mslab-azurestackhci23h2
-My hands-on Lab on Azure Stack HCI version 23H2 using MSLab
+My hands-on Lab on Deploying Azure Stack HCI version 23H2 using MSLab
 > Note: Password and Secrets are removed from scripts
+
+This Lab consists of few Lab Scenarios here:
+
+[1. Hydrating MSlab Files](01-HydrateMSLAB/README.md)
+[2. Deploy Azure Stack HCI Cluster 23H2 using Cloud Based Deployment (Azure Portal)](02-Deploy23H2/README.md)
+[3. Installing Windows Admin Center](03-InstallWAC/README.md)
+[4. Azure Arc VM Management](04-AzArcVM-Management/README.md)
+[5. Azure Arc AKS Management](05-AzArcAKS-Management/README.md)
 
 ## 1. Hydrating MSLab Files
 
@@ -24,7 +32,7 @@ Please note that the Domain controller here is unique to this Lab and can not be
 1. Unzip files from MSLab zip folder into D:\MSLAB (volume from MSLAB VHDX where you have enough space here ~5TB)
 ![Initial MSLAB folder](images/MSLAB-folder-initial.png)
 2. Replace content of LabConfig.ps1 with the following:
-> Don't forget to add Admin and Password, we deliberately empty here for security purposes. Customize according to your environment.
+> Don't forget to add Admin and Password, We deliberately leave empty here for security purposes. Customize according to your environment.
 ```powershell
 $LabConfig=@{ 
     DomainAdminName=''; 
