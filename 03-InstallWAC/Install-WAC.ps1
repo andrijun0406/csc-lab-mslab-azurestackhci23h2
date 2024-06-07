@@ -35,4 +35,27 @@ foreach ($computer in $computers){
 	Set-ADComputer -Identity $computerObject -PrincipalsAllowedToDelegateToAccount $gatewayObject
 }
 
+#update installed extensions
+#https://docs.microsoft.com/en-us/windows-server/manage/windows-admin-center/configure/use-powershell
+#Copy Posh Modules from wacgw
+$Session=New-PSSession -ComputerName $GatewayServerName
+Copy-Item -Path "C:\Program Files\Windows Admin Center\PowerShell\" -Destination "C:\Program Files\Windows Admin Center\PowerShell\" -Recurse -FromSession $Session
+$Session | Remove-PSSession
+
+#Import Posh Modules
+$Items=Get-ChildItem -Path "C:\Program Files\Windows Admin Center\PowerShell\Modules" -Recurse | Where-Object Extension -eq ".psm1"
+foreach ($Item in $Items){
+    Import-Module $Item.fullName
+}
+
+#list commands
+Get-Command -Module ExtensionTools
+
+#grab installed extensions
+$InstalledExtensions=Get-Extension -GatewayEndpoint https://$GatewayServerName | Where-Object status -eq Installed
+$ExtensionsToUpdate=$InstalledExtensions | Where-Object IsLatestVersion -eq $False
+
+foreach ($Extension in $ExtensionsToUpdate){
+    Update-Extension -GatewayEndpoint https://$GatewayServerName -ExtensionId $Extension.ID
+}
  
