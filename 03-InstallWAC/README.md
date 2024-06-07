@@ -1,7 +1,7 @@
 ## 3. Installing Windows Admin Center
 
 For official documentation you can go here: [Install Windows Admin Center](https://learn.microsoft.com/en-us/windows-server/manage/windows-admin-center/deploy/install)
-In this Lab we are going to install Windwos Admin Center on Server Core (WACGW machine)
+In this Lab we are going to install Windows Admin Center on Server Core (WACGW machine). All the script here are included in [Install-WAC.ps1](Install-WAC.ps1)
 >This example is demonstration of Windows Admin Center deployed with self-signed certificate on port 443 (HTTPS). Self-signed cert will be valid for limited time, therefore you should use signed certificate in production, or use Windows Admin Center on Windows Client machine
 
 
