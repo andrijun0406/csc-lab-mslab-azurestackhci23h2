@@ -79,3 +79,9 @@ foreach ($Extension in $ExtensionsToUpdate){
     Update-Extension -GatewayEndpoint https://$GatewayServerName -ExtensionId $Extension.ID
 }
 ```
+
+### Expected Result
+
+Open using Microsoft Edge on Management Machine and point out to https://wacgw.th.dcoffee.com (or using your own domain name)
+
+![WAC Result](image/WAC-Result.png)
