@@ -86,7 +86,16 @@ Open using Microsoft Edge on Management Machine and point out to https://wacgw.t
 
 ![WAC Login](images/WAC-Login.png)
 > Login using your Domain admin which is also local admin to the managed nodes
+
 ![WAC Result](images/WAC-Result.png)
 
 Check on the Settings > extensions, all installed extensions are up to date.
 ![WAC Extensions](images/WAC-Extensions.png)
+
+Now add the cluster by click add button in Server Clusters
+![WAC Add-Cluster-1](images/WAC-Add-Cluster-1.png)
+![WAC Add-Cluster-2](images/WAC-Add-Cluster-2.png)
+![WAC Add-Cluster-3](images/WAC-Add-Cluster-3.png)
+> This will automatically add individual nodes as well
+
+![WAC Add-Cluster-4](images/WAC-Add-Cluster-4.png)
