@@ -1,4 +1,4 @@
-## 1. Installing Windows Admin Center
+## 3. Installing Windows Admin Center
 
 For official documentation you can go here: [Install Windows Admin Center](https://learn.microsoft.com/en-us/windows-server/manage/windows-admin-center/deploy/install)
 In this Lab we are going to install Windwos Admin Center on Server Core (WACGW machine)
@@ -41,3 +41,14 @@ Run the following script fom Management machine
 ### Step 2 Configure Resource-Based constrained delegation
 
 >to trust delegated credentials, you must configure nodes to trust delegated credentials from windows admin center. Following code will do that for all Azure Stack HCI servers in domain. If not configured, you would see constant pop-ups for password when connecting to servers.
+```powershell
+#Configure Resource-Based constrained delegation
+Install-WindowsFeature -Name RSAT-AD-PowerShell
+$gatewayObject = Get-ADComputer -Identity $GatewayServerName
+$computers = (Get-ADComputer -Filter {OperatingSystem -eq "Azure Stack HCI"}).Name
+
+foreach ($computer in $computers){
+	$computerObject = Get-ADComputer -Identity $computer
+	Set-ADComputer -Identity $computerObject -PrincipalsAllowedToDelegateToAccount $gatewayObject
+}
+```
