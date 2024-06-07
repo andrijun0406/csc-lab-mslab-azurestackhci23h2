@@ -84,4 +84,9 @@ foreach ($Extension in $ExtensionsToUpdate){
 
 Open using Microsoft Edge on Management Machine and point out to https://wacgw.th.dcoffee.com (or using your own domain name)
 
+![WAC Login](image/WAC-Login.png)
+> Login using your Domain admin which is also local admin to the managed nodes
 ![WAC Result](image/WAC-Result.png)
+
+Check on the Settings > extensions, all installed extensions are up to date.
+![WAC Extensions](image/WAC-Extensions.png)
