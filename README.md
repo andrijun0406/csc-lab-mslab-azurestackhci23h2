@@ -11,5 +11,8 @@ This Lab consists of few Lab Scenarios here:
 5. [Azure Arc AKS Management](05-AzArcAKS-Management/)
 6. [Test Azure Stack HCI High-Availability](06-AzureStackHCI-HA)
 7. [Test Azure Stack HCI Performance](07-AzureStackHCI-Perf)
+8. [Azure Devops + GitOps + AKS on Azure Stack HCI](08-AzDevops-GitOps-AKSHCI)
+9. [Azure API Gateway on Azure Stack HCI](09-APIGW)
+8. [Cleanup MSLAB](10-Cleanup-MSLAB)
 
 More scenarios to come, please check regularly.

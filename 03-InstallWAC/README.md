@@ -99,3 +99,19 @@ Now add the cluster by click add button in Server Clusters
 > This will automatically add individual nodes as well
 
 ![WAC Add-Cluster-4](images/WAC-Add-Cluster-4.png)
+
+### Step 4 Register Windows Admin Center to Azure
+
+Before you can use any Azure Integration feature from Windows Admin Center, you need to register it. Check the documentation [here](https://learn.microsoft.com/en-us/windows-server/manage/windows-admin-center/azure/azure-integration)
+You can first create Azure Entra app registration or let the Windows Admin Center Registration process do it for you as what we will do in next steps.
+
+#### Click Register
+![WAC Register 1](images/WAC-Register-1.png)
+#### Copy and Login use the code
+You need entra account who has permission to register app.
+![WAC Register2](images/WAC-Register-2.png)
+> you need to grant consent for WAC to register the app.
+![WAC Register3](images/WAC-Register-3.png)
+#### Expected Result
+![WAC Register4](images/WAC-Register-4.png)
+
