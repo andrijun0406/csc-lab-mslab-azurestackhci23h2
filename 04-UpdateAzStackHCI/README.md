@@ -58,6 +58,10 @@ Get-SolutionUpdate | ft Version,State,UpdateStateProperties,HealthState
 ```
 ![Track Update1](images/Track-Update1.png)
 ![Track Update2](images/Track-Update2.png)
+![Track Update3](images/Track-Update3.png)
+
+> Once the installation is complete, the **State** changes to **Installed**
+
 #### Step 3 - Verify the installation
 ```powershell
 Get-SolutionUpdateEnvironment | ft State, CurrentVersion
