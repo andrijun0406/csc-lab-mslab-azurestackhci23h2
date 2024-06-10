@@ -17,3 +17,15 @@ Get-StampInformation
 ```
 
 ![Current Version](images/Current-Version.png)
+Compare to the [release notes](https://learn.microsoft.com/en-us/azure-stack/hci/known-issues-2402) and see known issues.
+
+
+### Task 3 - Validate System Health
+
+Run the following command to validate system health via the Environment Checker.
+```powershell
+$result = Test-EnvironmentReadiness
+$result | ft Name,Status,Severity
+```
+![Validate System health](images/Validate-Health.png)
+> In this release, the informational failures for **Test-CauSetup** are expected and will not impact the updates.
