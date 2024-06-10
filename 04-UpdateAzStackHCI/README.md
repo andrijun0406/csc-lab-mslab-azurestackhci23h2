@@ -67,5 +67,10 @@ Get-SolutionUpdate | ft Version,State,UpdateStateProperties,HealthState
 Get-SolutionUpdateEnvironment | ft State, CurrentVersion
 cmd /c ver
 ```
-![Verify Installation](images/Verify-Installation.png)
+![Verify Installation1](images/Verify-Installation1.png)
+![Verify Installation2](images/Verify-Installation2.png)
+> note on the portal we still see available updates. This is because we just updated to the same release train, and there are another available baseline release.
+Check on the release information [here](https://learn.microsoft.com/en-us/azure-stack/hci/release-information-23h2).
+
+
 ### Task 6 - Troubleshoot Updates
