@@ -3,6 +3,8 @@
 Now that you have deployed your 23H2 cluster you realize the cluster is a little bit outdated.
 ![Cluster status](images/Cluster-Status.png)
 
+Check detail documentation [here](https://learn.microsoft.com/en-us/azure-stack/hci/update/update-via-powershell-23h2).
+
 ### Task 1 - Connect to one of your Azure Stack HCI Cluster Node
 
 ```powershell
@@ -39,3 +41,28 @@ $Update = Get-SolutionUpdate
 $Update.ComponentVersions
 ```
 ![Discover Updates](images/Discover-Updates.png)
+
+### Task 5 - Download, check readiness and install updates
+
+#### Step 1 - Download and install the update
+
+```powershell
+Get-SolutionUpdate | Start-SolutionUpdate
+```
+![Start Update](images/Start-Update.png)
+
+#### Step 2 - Track the update progress
+
+```powershell
+Get-SolutionUpdate | ft Version,State,UpdateStateProperties,HealthState
+```
+![Track Update1](images/Track-Update1.png)
+![Track Update2](images/Track-Update2.png)
+![Track Update3](images/Track-Update3.png)
+#### Step 3 - Verify the installation
+```powershell
+Get-SolutionUpdateEnvironment | ft State, CurrentVersion
+cmd /c ver
+```
+![Verify Installation](images/Verify-Installation.png)
+### Task 6 - Troubleshoot Updates
