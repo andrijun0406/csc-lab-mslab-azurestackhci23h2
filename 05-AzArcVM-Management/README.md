@@ -35,3 +35,5 @@ Tags:
     <keep default>
 ```
 ![Add VM Images from Marketplace - Validate](images/AddVMImages-Marketplace-Validate.png)
+![Add VM Images from Marketplace - Deploy](images/AddVMImages-Marketplace-Deploy.png)
+
