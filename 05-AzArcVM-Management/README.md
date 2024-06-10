@@ -12,7 +12,7 @@ For more detail please check documentation [here](https://learn.microsoft.com/en
 
 ### Task 1 - Create VM Images from Azure Marketplace
 
-This step will focus more on creating VM Images from Azure Marketplace. 
+This task will focus more on creating VM Images from Azure Marketplace. 
 There are other way to create VM Images though: 1) using existing Image in Azure Storage Account or 2) using existing image in local share on your cluster.
 > make sure you have storage path already created (deployment on Lab 02 already created 2 storage path)
 
@@ -37,3 +37,10 @@ Tags:
 ![Add VM Images from Marketplace - Validate](images/AddVMImages-Marketplace-Validate.png)
 ![Add VM Images from Marketplace - Deploy](images/AddVMImages-Marketplace-Deploy.png)
 
+#### Step 2 - Go to Resources > VM Images and List VM Images
+![List VM Images](images/ListVMImages.png)
+> When image download is complete, the VM image shows up in the list of images and the **Status** shows as **Available**.
+
+### Task 2 - Create Logical Networks
+
+This task will 
