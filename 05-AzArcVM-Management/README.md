@@ -20,6 +20,7 @@ There are other way to create VM Images though: 1) using existing Image in Azure
 ![Add VM Images from Marketplace](images/AddVMImages-Marketplace.png)
 We are going to add Windows 2022 Data Center Azure Edition Hotpatch images
 > remember your cluster custom location from cluster overview
+
 use the following options:
 ```
 Basics:
@@ -33,4 +34,4 @@ Basics:
 Tags:
     <keep default>
 ```
-
+![Add VM Images from Marketplace - Validate](images/AddVMImages-Marketplace-Validate.png)
