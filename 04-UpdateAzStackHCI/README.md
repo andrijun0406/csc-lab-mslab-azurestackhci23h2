@@ -74,3 +74,24 @@ Check on the release information [here](https://learn.microsoft.com/en-us/azure-
 
 
 ### Task 6 - Troubleshoot Updates
+#### Step 1 - Collect update logs
+```powershell
+$cred = Get-Credential
+Enter-PSSession -ComputerName th-mc660-2 -Credential $cred
+$Update = Get-SolutionUpdate | ? version -eq "<Version string>" -verbose
+$Failure = $update | Get-SolutionUpdateRun
+$Failure
+```
+> Note the ResourceID GUID. This GUID corresponds to the ActionPlanInstanceID.
+Copy the logs for the **ActionPlanInstanceID** that you noted earlier, to a text file named log.txt. Use Notepad to open.
+```powershell
+Get-ActionplanInstance -ActionplanInstanceId <Action Plan Instance ID> >log.txt
+notepad log.txt
+```
+#### Step 2 - Resume an update
+
+```powershell
+get-solutionupdate | start-solutionupdate
+# To resume a previously failed update due to update health checks in a Warning state
+#get-solutionUpdate | start-solutionUpdate -IgnoreWarnings
+```
