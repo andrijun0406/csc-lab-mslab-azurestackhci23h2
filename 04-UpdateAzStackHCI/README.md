@@ -29,3 +29,13 @@ $result | ft Name,Status,Severity
 ```
 ![Validate System health](images/Validate-Health.png)
 > In this release, the informational failures for **Test-CauSetup** are expected and will not impact the updates.
+
+### Task 4 - Discover the updates online
+
+Verify the update service discovers the update package
+```powershell
+Get-SolutionUpdate | ft DisplayName, State
+$Update = Get-SolutionUpdate 
+$Update.ComponentVersions
+```
+![Discover Updates](images/Discover-Updates.png)
