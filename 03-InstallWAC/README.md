@@ -114,6 +114,6 @@ You need entra account who has permission to register app.
 ![WAC Register3](images/WAC-Register-3.png)
 #### Expected Result
 ![WAC Register4](images/WAC-Register-4.png)
-Now you can go back to the cluster and see the warning related to Windows Admin Center note being registered has gone.
+Now you can go back to the cluster and see the warning related to Windows Admin Center not being registered has gone.
 ![WAC Cluster](images/WAC-Cluster.png)
 
