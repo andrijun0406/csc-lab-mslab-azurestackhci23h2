@@ -107,5 +107,6 @@ get-solutionupdate | start-solutionupdate
 ![Update Readiness](images/Update-Readiness.png)
 * Click **Next**
 #### Step 3 - Select updates
+![Select Updates](images/Select-Updates.png)
 
 
