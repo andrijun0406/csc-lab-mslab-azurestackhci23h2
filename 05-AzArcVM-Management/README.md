@@ -36,7 +36,7 @@ Tags:
 ```
 ![Add VM Images from Marketplace - Validate](images/AddVMImages-Marketplace-Validate.png)
 ![Add VM Images from Marketplace - Deploy](images/AddVMImages-Marketplace-Deploy.png)
-
+![Add VM Images from Marketplace - Complete](images/AddVMImages-Marketplace-Complete.png)
 #### Step 2 - Go to Resources > VM Images and List VM Images
 ![List VM Images](images/ListVMImages.png)
 > When image download is complete, the VM image shows up in the list of images and the **Status** shows as **Available**.
