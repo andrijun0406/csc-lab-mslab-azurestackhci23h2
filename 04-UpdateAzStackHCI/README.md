@@ -104,5 +104,8 @@ get-solutionupdate | start-solutionupdate
 ![Azure Update Manager](images/Update-Manager1.png)
 #### Step 2 - On the Check readiness page, review the list of readiness checks and their results.
 * You can select the links under Affected systems to view more details and individual cluster results.
+![Update Readiness](images/Update-Readiness.png)
+* Click **Next**
 #### Step 3 - Select updates
+
 
