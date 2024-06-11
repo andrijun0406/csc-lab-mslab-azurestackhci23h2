@@ -1,4 +1,4 @@
-## 4. Update Azure Stack HCI 23H2 via PowerShell
+## 4a. Update Azure Stack HCI 23H2 via PowerShell
 
 Now that you have deployed your 23H2 cluster you realize the cluster is a little bit outdated.
 ![Cluster status](images/Cluster-Status.png)
@@ -95,3 +95,14 @@ get-solutionupdate | start-solutionupdate
 # To resume a previously failed update due to update health checks in a Warning state
 #get-solutionUpdate | start-solutionUpdate -IgnoreWarnings
 ```
+
+## 4b. Update Azure Stack HCI 23H2 via Azure Portal
+
+### Task 1 - Browse for cluster updates
+
+#### Step 1 - Go to Azure Update Manager > Manage Azure Stack HCI. Choose the cluster that you want to update and click one-time update
+![Azure Update Manager](images/Update-Manager1.png)
+#### Step 2 - On the Check readiness page, review the list of readiness checks and their results.
+* You can select the links under Affected systems to view more details and individual cluster results.
+#### Step 3 - Select updates
+
