@@ -21,7 +21,7 @@ There are other way to create VM Images though: 1) using existing Image in Azure
 We are going to add Windows 2022 Data Center Azure Edition Hotpatch images
 > remember your cluster custom location from cluster overview
 
-use the following options:
+Use the following options:
 ```
 Basics:
     Subscription:       <use-your-subscription>
@@ -40,6 +40,44 @@ Tags:
 #### Step 2 - Go to Resources > VM Images and List VM Images
 ![List VM Images](images/ListVMImages.png)
 > When image download is complete, the VM image shows up in the list of images and the **Status** shows as **Available**.
+
+#### Step 3 (optional) - Create Linux Image from Azure CLI
+On this step we are going to create linux Image from Azure CLI. Linux images are not yet available from Marketplace for Azure Stack HCI
+* Download the latest supported Ubuntu server image [here](https://ubuntu.com/download/server).  
+* The supported OS versions are Ubuntu 18.04, 20.04, and 22.04 LTS
+* Prepare VM image from Ubuntu Image from your azure stack cluster (using powershell)
+> This will enable guest management on the VMs
+Run the following script from Management Machine
+```powershell
+# Copy downloaded Ubuntu file to ClusterSharedVolume
+copy-item -path .\ubuntu-24.04-live-server-amd64.iso -Destination '\\th-mc660-1\c$\ClusterStorage\UserStorage_1\'
+
+# Create new Ubuntu VM
+$server = "th-mc660-1"
+
+Invoke-Command -ComputerName $servers -ScriptBlock {
+    $vmname = "ubuntu-vm"
+    $vmram = [int64]4GB
+    $vmboot = "CD"
+    $isopath="C:\ClusterStorage\UserStorage_1\ubuntu-24.04-live-server-amd64.iso"
+    $vmvhdpath= "C:\ClusterStorage\UserStorage_1\$vmname\$vmname.vhdx"
+    $vmpath="C:\ClusterStorage\UserStorage_1\$vmname"
+    $vmswitch="ConvergedSwitch(compute_management_storage)"
+
+    New-VM -Name $vmname -MemoryStartupBytes $vmram -NewVHDPath $vmvhdpath -NewVHDSizeBytes 40GB -Path $vmpath -Generation 2 -SwitchName $vmswitch
+    Add-VMDvdDrive -VMName $vmname -Path $isopath
+    Set-VMFirmware –VMName $vmname –EnableSecureBoot On -SecureBootTemplate "MicrosoftUEFICertificateAuthority"
+    $vmfirmware = Get-VMFirmware -VMname $vmname
+    Set-VMFirmware -VMName $vmname -BootOrder $vmfirmware.BootOrder[2],$vmfirmware.BootOrder[1],$vmfirmware.BootOrder[0]
+    Set-VMProcessor $vmname -Count 2
+    Start-VM $vmname
+}
+```
+* Go to Windows admin center and connect to single hosts "th-mc660-1" using RDP (Choose download RDP file)
+> the VM is not part of clustergroup yet so you can not use cluster view in Windows Admin Center
+* Setup the Ubuntu OS and enter your admin username and password
+* Don't install OPenSSH Server yet as we are going to do it in the next step
+![Setup Ubuntu OS](images/setup-ubuntuOS.png)
 
 ### Task 2 - Create Logical Networks
 
