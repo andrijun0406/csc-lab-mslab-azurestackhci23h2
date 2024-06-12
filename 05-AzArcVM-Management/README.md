@@ -107,25 +107,18 @@ Invoke-Command -ComputerName $servers -ScriptBlock {
 Stop-VM $vmname
 }
 ```
-* Create the VM Image using Azure CLI
+* Create the VM Image using Azure CLI on one of the cluster node
 
 ```powershell
 $ResourceGroupName="dcoffee-rg"
-$Location="eastus" #make sure location is lowercase
-$CustomLocation = "dcoffee-clus01-cl"
+$Location="eastus"
+$CustomLocation = "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl"
 $OsType = "Linux"
-$tenantID = "2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b"
-$AdminSPNAppID="d329535d-0cf4-473a-8646-8c612949142a"
-$AdminPlainSecret="-WO8Q~P_CQVmZROiLSLptFaIuTxVXCf51hq5scLL"
-$AdminSecuredSecret = ConvertTo-SecureString $AdminPlainSecret -AsPlainText -Force
-$AdminSPNCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $AdminSPNAppID, $AdminSecuredSecret
-if (-not (Get-AzContext)){
-	Connect-AzAccount -ServicePrincipal -TenantId $tenantID -Credential $AdminSPNCred
-}
-$SubscriptionID=(Get-AzContext).Subscription.ID
+$SubscriptionID="368ac09c-01c9-4b47-9142-a7581c6694a3"
 $ImagePath ="C:\ClusterStorage\UserStorage_1\ubuntu-vm\ubuntu-vm.vhdx"
 $ImageName="Ubuntu-VM"
-az stack-hci-vm image create --subscription $subscription -g $resource_group --custom-location $CustomLocation --location $location --image-path $ImagePath --name $ImageName --debug --os-type 'Linux'
+az login --use-device-code
+    az stack-hci-vm image create --subscription $SubscriptionID -g $ResourceGroupName --custom-location $CustomLocation --location $Location --image-path $ImagePath --name $ImageName --debug --os-type $OsType
 ```
 ![Ubuntu VM list](images/UbuntuVM-List.png)
 ### Task 2 - Create Logical Networks
