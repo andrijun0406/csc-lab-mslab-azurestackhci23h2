@@ -102,7 +102,7 @@ logout
 * Shutdown the VM
 ```powershell
 $server = "th-mc660-1"
- $vmname = "ubuntu-vm"
+$vmname = "ubuntu-vm"
 Invoke-Command -ComputerName $servers -ScriptBlock {
 Stop-VM $vmname
 }
@@ -110,8 +110,24 @@ Stop-VM $vmname
 * Create the VM Image using Azure CLI
 
 ```powershell
+$ResourceGroupName="dcoffee-rg"
+$Location="eastus" #make sure location is lowercase
+$CustomLocation = "dcoffee-clus01-cl"
+$OsType = "Linux"
+$tenantID = "2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b"
+$AdminSPNAppID="d329535d-0cf4-473a-8646-8c612949142a"
+$AdminPlainSecret="-WO8Q~P_CQVmZROiLSLptFaIuTxVXCf51hq5scLL"
+$AdminSecuredSecret = ConvertTo-SecureString $AdminPlainSecret -AsPlainText -Force
+$AdminSPNCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $AdminSPNAppID, $AdminSecuredSecret
+if (-not (Get-AzContext)){
+	Connect-AzAccount -ServicePrincipal -TenantId $tenantID -Credential $AdminSPNCred
+}
+$SubscriptionID=(Get-AzContext).Subscription.ID
+$ImagePath ="C:\ClusterStorage\UserStorage_1\ubuntu-vm\ubuntu-vm.vhdx"
+$ImageName="Ubuntu-VM"
+az stack-hci-vm image create --subscription $subscription -g $resource_group --custom-location $CustomLocation --location $location --image-path $ImagePath --name $ImageName --debug --os-type 'Linux'
 ```
-
+![Ubuntu VM list](images/UbuntuVM-List.png)
 ### Task 2 - Create Logical Networks
 
 This task will 
