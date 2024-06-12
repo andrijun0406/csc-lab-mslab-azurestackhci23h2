@@ -76,8 +76,41 @@ Invoke-Command -ComputerName $servers -ScriptBlock {
 * Go to Windows admin center and connect to single hosts "th-mc660-1" using RDP (Choose download RDP file)
 > the VM is not part of clustergroup yet so you can not use cluster view in Windows Admin Center
 * Setup the Ubuntu OS and enter your admin username and password
-* Don't install OPenSSH Server yet as we are going to do it in the next step
 ![Setup Ubuntu OS](images/setup-ubuntuOS.png)
+* Configure and clean up the VM
+
+```bash
+sudo apt update && sudo apt upgrade
+sudo apt install linux-azure -y
+sudo apt install openssh-server openssh-client -y
+# configure passwordless sudo. add the following command at the end of /etc/sudoers file by using visudo
+# sudo visudo
+# ALL ALL=(ALL) NOPASSWD:ALL
+
+sudo rm -f /etc/cloud/cloud.cfg.d/50-curtin-networking.cfg /etc/cloud/cloud.cfg.d/curtin-preserve-sources.cfg /etc/cloud/cloud.cfg.d/99-installer.cfg /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
+sudo rm -f /etc/cloud/ds-identify.cfg
+sudo rm -f /etc/netplan/*.yaml
+
+sudo cloud-init clean --logs --seed
+sudo rm -rf /var/lib/cloud/ /var/log/* /tmp/*
+sudo apt-get clean
+
+rm -f ~/.bash_history 
+export HISTSIZE=0 
+logout
+```
+* Shutdown the VM
+```powershell
+$server = "th-mc660-1"
+ $vmname = "ubuntu-vm"
+Invoke-Command -ComputerName $servers -ScriptBlock {
+Stop-VM $vmname
+}
+```
+* Create the VM Image using Azure CLI
+
+```powershell
+```
 
 ### Task 2 - Create Logical Networks
 
