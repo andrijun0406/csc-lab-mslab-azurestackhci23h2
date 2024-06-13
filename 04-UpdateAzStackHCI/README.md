@@ -108,5 +108,6 @@ get-solutionupdate | start-solutionupdate
 * Click **Next**
 #### Step 3 - Select updates
 ![Select Updates](images/Select-Updates.png)
+> 2024.05 is just released I will wait it to be stable yet since I've heard Microsoft has some known issues with the release.
 
 
