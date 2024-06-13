@@ -153,12 +153,7 @@ $Networks=@()
     }
     $Networks+= @{ Name="subnet$_"; VLANID=$_; NICIP="10.0.$_.1"; PrefixLength=24; ScopeID = "10.0.$_.0"; StartRange="10.0.$_.10"; EndRange="10.0.$_.254"; SubnetMask='255.255.255.0'; DomainName=$domain; DHCPEnabled=$dhcp }  
 }
-# add static IP address in subnet 1 DC --> this is just for MSLAB01 other should be configured in LabConfig 
-#configure Static IP
-$adapterName="Ethernet 6"
-if ((Get-NetIPAddress -CimSession $Server -InterfaceAlias $adapterName -AddressFamily IPv4).IPAddress -ne $Networks[3].NicIP){
-    New-NetIPAddress -CimSession $Server -InterfaceAlias $adapterName -IPAddress $Networks[3].NICIP -PrefixLength $Networks[3].PrefixLength
-}
+
 # add dhcp scope for all networks
 foreach ($Network in $Networks){
     #Add DHCP Scope
