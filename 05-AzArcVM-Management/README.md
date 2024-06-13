@@ -466,3 +466,18 @@ Remove-Item $templateFileDynamic.FullName
 
 #### Expected Result
 ![Logical Networks Result](images/Logical-Networks-Result.png)
+
+### Task 2 - Create Arc VMs (Windows) using DHCP from Portal
+
+Now that you have all Azure resources created (VM Images and Logical Networks) you are ready to create Azure Arc VMs.
+In this task, I will create Windows 2022 DC Azure Edition from Images that is created from Azure Marketplace and use Dynamic Network Interface using Dynamic Logical Networks (DHCP assigned).
+
+#### Step 1 - Go to your Azure Stack HCI cluster in the portal and click Resources > Virtual Machines
+
+![Create WinVM 1](images/Create-WinVM-1.png)
+![Create WinVM 2](images/Create-WinVM-2.png)
+![Create WinVM 3](images/Create-WinVM-3.png)
+
+#### Expected Result
+### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
+#### Expected Result
