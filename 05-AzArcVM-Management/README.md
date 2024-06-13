@@ -182,3 +182,6 @@ Invoke-Command -ComputerName $Server -ScriptBlock {
     Restart-Service RemoteAccess
 }
 ```
+#### Expected Result
+
+![DHCP Scope](images/DHCP-Scope.png)
