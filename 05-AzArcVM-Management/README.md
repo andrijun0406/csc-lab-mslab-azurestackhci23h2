@@ -519,53 +519,13 @@ Basics:
 ```
 Disks:
 
-    Network Switch for storage
-    Group All traffic
-
-    Network adapter 1:          Ethernet
-    Network adapter 1 VLAN ID:  711 (default)
-    Network adapter 2:          Ethernet 2
-    Network adapter 2 VLAN ID:  712 (default)
-
-    Starting IP:                10.0.0.111
-    ENding IP:                  10.0.0.116
-    Subnet mask:                255.255.255.0
-    Default Gateway:            10.0.0.1
-    DNS Server:                 10.0.0.1
-
-    RDMA Protocol:              Disabled (in case you are running lab in VMs)
-
-Management
-    Custom location name:       dcoffee-clus01-cl
-    Azure storage account name: <just generate new> dcoffeeclus01sa
-
-    Domain:                     th.dcoffee.com
-    Computer name prefix:       clus01
-    OU:                         OU=clus01,DC=th,DC=dcoffee,DC=com
-
-    Deployment account:
-        Username:               <LCM user>
-        Password:               <LCM user password>
-
-    Local Administrator
-        Username:               <Local Administrator>
-        Password:               <Local Administrator Pasword>
-
-Security:
-    Customized security settings
-        Unselect Bitlocker for data volumes (would consume too much space)
-
-Advanced:
-    Create workload volumes (Default)
-
-Tags:
-    <keep default>
+    Add new disk
+    
+    <skip this step as we do not require data disk for now>
 ```
+* Click next
 
-
-
-
-![Create WinVM 3](images/Create-WinVM-3.png)
+![Create WinVM Disks](images/Create-WinVM-Disks.png)
 
 #### Expected Result
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
