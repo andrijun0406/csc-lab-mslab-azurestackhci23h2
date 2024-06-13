@@ -293,12 +293,12 @@ Management
     OU:                         OU=clus01,DC=th,DC=dcoffee,DC=com
 
     Deployment account:
-        Username:               clus01-LCMUser
-        Password:               LS1setup!LS1setup!
+        Username:               <LCM user>
+        Password:               <LCM user password>
 
     Local Administrator
-        Username:               Administrator
-    Password:                   LS1setup!LS1setup!
+        Username:               <Local Administrator>
+        Password:               <Local Administrator Pasword>
 
 Security:
     Customized security settings
