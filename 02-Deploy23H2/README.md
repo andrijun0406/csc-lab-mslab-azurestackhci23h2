@@ -70,7 +70,7 @@ These steps are inspired from Microsoft Documentation [here](https://learn.micro
 Adjust the script if necessary:
 ```powershell
 $AsHCIOUName="OU=clus01,DC=th,DC=dcoffee,DC=com"
-$LCMUserName="clus01-LCMUser"
+$LCMUserName=""
 $LCMPassword=""
 $SecuredPassword = ConvertTo-SecureString $LCMpassword -AsPlainText -Force
 $LCMCredentials= New-Object System.Management.Automation.PSCredential ($LCMUserName,$SecuredPassword)
@@ -237,15 +237,17 @@ Invoke-Command -ComputerName $servers -ScriptBlock {
 #add key vault admin of current user to Resource Group (It can be also done in Deploy Azure Stack HCI wizard)
 #$objectId = (Get-AzADUser -SignedIn).Id
 # Since we are using SPN
-$objectId =(Get-AzADServicePrincipal -DisplayName "cscapj-adm-spn").id
+$adminSPNName=""
+$objectId =(Get-AzADServicePrincipal -DisplayName $adminSPNName).id
 New-AzRoleAssignment -ObjectId $ObjectId -ResourceGroupName $ResourceGroupName -RoleDefinitionName "Key Vault Administrator"
 ```
 * Configure new admin password on nodes (as Cloud Deployment requires at least 12chars)
 > if failed, you might need to set trusted host again
 ```powershell
 #change password of local admin to be at least 12 chars
+$plainAdminPassword=""
 Invoke-Command -ComputerName $servers -ScriptBlock {
-    Set-LocalUser -Name Administrator -AccountNeverExpires -Password (ConvertTo-SecureString "LS1setup!LS1setup!" -AsPlainText -Force)
+    Set-LocalUser -Name Administrator -AccountNeverExpires -Password (ConvertTo-SecureString $plainAdminPassword -AsPlainText -Force)
 } -Credential $Credentials
 ```
 
@@ -330,9 +332,9 @@ Paste following PowerShell to update credentials and pull information about the 
 > Run this before domain join step
 ```powershell
     #Create new password credentials
-    $UserName="Administrator"
-    $Password="LS1setup!LS1setup!"
-    $SecuredPassword = ConvertTo-SecureString $password -AsPlainText -Force
+    $UserName=""
+    $Password=""
+    $SecuredPassword = ConvertTo-SecureString $Password -AsPlainText -Force
     $Credentials= New-Object System.Management.Automation.PSCredential ($UserName,$SecuredPassword)
 
     #before domain join
