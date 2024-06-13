@@ -1,12 +1,12 @@
 # Step 1 - Populate Variables and trusted hosts
-$ResourceGroupName="dcoffee-rg"
-$Location="eastus" #make sure location is lowercase
+$ResourceGroupName=""
+$Location="" #make sure location is lowercase
 
 # Make sure User or SPN is contributor and user access administrator in Azure Subscriptions
 # We are using SPN here:
-$tenantID = "2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b"
-$AdminSPNAppID="d329535d-0cf4-473a-8646-8c612949142a"
-$AdminPlainSecret="-WO8Q~P_CQVmZROiLSLptFaIuTxVXCf51hq5scLL"
+$tenantID = ""
+$AdminSPNAppID=""
+$AdminPlainSecret=""
 $AdminSecuredSecret = ConvertTo-SecureString $AdminPlainSecret -AsPlainText -Force
 $AdminSPNCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $AdminSPNAppID, $AdminSecuredSecret
 
@@ -20,8 +20,8 @@ $SubscriptionID=(Get-AzContext).Subscription.ID
 $Cloud="AzureCloud"
 
 #Since machines are not domain joined, let's do some preparation
-$UserName="Administrator"
-$Password="LS1setup!"
+$UserName=""
+$Password=""
 $SecuredPassword = ConvertTo-SecureString $password -AsPlainText -Force
 $Credentials= New-Object System.Management.Automation.PSCredential ($UserName,$SecuredPassword)
 
