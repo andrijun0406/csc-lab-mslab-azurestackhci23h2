@@ -77,7 +77,7 @@ Invoke-Command -ComputerName $servers -ScriptBlock {
 > the VM is not part of clustergroup yet so you can not use cluster view in Windows Admin Center
 * Setup the Ubuntu OS and enter your admin username and password
 ![Setup Ubuntu OS](images/setup-ubuntuOS.png)
-* Configure and clean up the VM
+* Configure and clean up the VM (you can ssh or RDP)
 
 ```bash
 sudo apt update && sudo apt upgrade
@@ -99,7 +99,7 @@ rm -f ~/.bash_history
 export HISTSIZE=0 
 logout
 ```
-* Shutdown the VM
+* Shutdown the VM (run from Management Machine)
 ```powershell
 $server = "th-mc660-1"
 $vmname = "ubuntu-vm"
@@ -118,9 +118,72 @@ $SubscriptionID="368ac09c-01c9-4b47-9142-a7581c6694a3"
 $ImagePath ="C:\ClusterStorage\UserStorage_1\ubuntu-vm\ubuntu-vm.vhdx"
 $ImageName="Ubuntu-VM"
 az login --use-device-code
-    az stack-hci-vm image create --subscription $SubscriptionID -g $ResourceGroupName --custom-location $CustomLocation --location $Location --image-path $ImagePath --name $ImageName --debug --os-type $OsType
+az stack-hci-vm image create --subscription $SubscriptionID -g $ResourceGroupName --custom-location $CustomLocation --location $Location --image-path $ImagePath --name $ImageName --debug --os-type $OsType
 ```
+#### Expected Result
 ![Ubuntu VM list](images/UbuntuVM-List.png)
+
 ### Task 2 - Create Logical Networks
 
-This task will 
+This task will create multiple subnet that you can add as logical networks via portal to the clusters.
+Please check detail documentation [here](https://learn.microsoft.com/en-us/azure-stack/hci/manage/create-logical-networks?tabs=azurecli).
+
+#### Step - 1 Add New DHCP Scope in DHCP server (DC machine) 
+
+Remember that in the Labconfig we have created Additional 4 networks in DC with corresponding VLAN 1-4
+```powershell
+# Additional Networks configuration in DC
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet1'; NetAddress='10.0.1.'; NetVLAN='1'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet2'; NetAddress='10.0.2.'; NetVLAN='2'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet3'; NetAddress='10.0.3.'; NetVLAN='3'; Subnet='255.255.255.0'}
+$LABConfig.AdditionalNetworksConfig += @{ NetName = 'subnet4'; NetAddress='10.0.4.'; NetVLAN='4'; Subnet='255.255.255.0'}
+```
+We need to add the DHCP scopes to provide DHCP for those networks (I will activate DHCP for only Even Number networks, the Odd one should be inactive, hence client IP address will use static )
+Run the following script on Management machine:
+```powershell
+#define networks, Odd number DHCP True, Even Number DHCP false
+$domain="th.dcoffee.com"
+$Server="DC"
+$Networks=@()
+1..4 | ForEach-Object{
+    If ($_ % 2 -eq 0) {
+        $dhcp=$True
+    } else {
+        $dhcp=$False
+    }
+    $Networks+= @{ Name="subnet$_"; VLANID=$_; NICIP="10.0.$_.1"; PrefixLength=24; ScopeID = "10.0.$_.0"; StartRange="10.0.$_.10"; EndRange="10.0.$_.254"; SubnetMask='255.255.255.0'; DomainName=$domain; DHCPEnabled=$dhcp }  
+}
+# add static IP address in subnet 1 DC --> this is just for MSLAB01 other should be configured in LabConfig 
+#configure Static IP
+$adapterName="Ethernet 6"
+if ((Get-NetIPAddress -CimSession $Server -InterfaceAlias $adapterName -AddressFamily IPv4).IPAddress -ne $Networks[3].NicIP){
+    New-NetIPAddress -CimSession $Server -InterfaceAlias $adapterName -IPAddress $Networks[3].NICIP -PrefixLength $Networks[3].PrefixLength
+}
+# add dhcp scope for all networks
+foreach ($Network in $Networks){
+    #Add DHCP Scope
+    if (-not (Get-DhcpServerv4Scope -CimSession $Server -ScopeId $network.ScopeID -ErrorAction Ignore)){
+        Add-DhcpServerv4Scope -CimSession $Server -StartRange $Network.StartRange -EndRange $Network.EndRange -Name $Network.Name -State Active -SubnetMask $Network.SubnetMask
+    }
+    #disable/enable
+    if ($Network.DHCPEnabled){
+        Set-DhcpServerv4Scope -CimSession $Server -ScopeId $Network.ScopeID -State Active
+    }else{
+        Set-DhcpServerv4Scope -CimSession $Server -ScopeId $Network.ScopeID -State InActive
+    }
+
+    #Configure dhcp options
+    #6 - Domain Name Server
+    Set-DhcpServerv4OptionValue -CimSession $Server -OptionId 6 -Value $Network.NICIP -ScopeId $Network.ScopeID
+    #3 - Gateway
+    Set-DhcpServerv4OptionValue -CimSession $Server -OptionId 3 -Value $Network.NICIP -ScopeId $Network.ScopeID
+    #15 - Domain Name
+    Set-DhcpServerv4OptionValue -CimSession $Server -OptionId 15 -Value $Network.DomainName -ScopeId $Network.ScopeID
+}
+
+#make sure routing is enabled on DC
+Invoke-Command -ComputerName $Server -ScriptBlock {
+    #restart routing... just to make sure
+    Restart-Service RemoteAccess
+}
+```
