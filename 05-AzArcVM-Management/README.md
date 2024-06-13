@@ -475,7 +475,96 @@ In this task, I will create Windows 2022 DC Azure Edition from Images that is cr
 #### Step 1 - Go to your Azure Stack HCI cluster in the portal and click Resources > Virtual Machines
 
 ![Create WinVM 1](images/Create-WinVM-1.png)
-![Create WinVM 2](images/Create-WinVM-2.png)
+
+Use the following parameters to create Virtual Machine from Portal:
+```
+Basics:
+    
+    Project details
+
+    Subscription:               <use-your-subscription>
+    Resource Group:             <use-your-resource-group>
+
+    Instance details
+
+    Virtual machine name:       <use-your-vm-name>
+    Custom location:            <automatically populated and grayed out>
+    Virtual machine kind:       <automatically populated and grayed out>
+    Security type:              Standard (Choose Trusted launch VM if you want to enable secureboot and vTPM)
+    Storage path:               Choose manually (UserStorage2-<id> (TB of TB available))
+    Image:                      Win22DCAzure-Hotpatch
+    Virtual processor count     4
+    Memory (MB)                 8192 
+    Memory type                 static
+
+    VM extensions           
+    
+    Enable guest management     Yes
+
+    Administrator account
+
+    Username                    <use-local-administrator>
+    Password                    <use-local-administrator-password>
+    Confirm password            <confirmed-your-password>
+    
+    Domain join
+
+    Enable domain join          Leave this un-ticked (no need to have domain joined VM for now)
+```
+* Click next
+> I deliberately use UserStorage2 CSV for my VM just to balance the capacity
+
+![Create WinVM Basics](images/Create-WinVM-Basics.png)
+
+```
+Disks:
+
+    Network Switch for storage
+    Group All traffic
+
+    Network adapter 1:          Ethernet
+    Network adapter 1 VLAN ID:  711 (default)
+    Network adapter 2:          Ethernet 2
+    Network adapter 2 VLAN ID:  712 (default)
+
+    Starting IP:                10.0.0.111
+    ENding IP:                  10.0.0.116
+    Subnet mask:                255.255.255.0
+    Default Gateway:            10.0.0.1
+    DNS Server:                 10.0.0.1
+
+    RDMA Protocol:              Disabled (in case you are running lab in VMs)
+
+Management
+    Custom location name:       dcoffee-clus01-cl
+    Azure storage account name: <just generate new> dcoffeeclus01sa
+
+    Domain:                     th.dcoffee.com
+    Computer name prefix:       clus01
+    OU:                         OU=clus01,DC=th,DC=dcoffee,DC=com
+
+    Deployment account:
+        Username:               <LCM user>
+        Password:               <LCM user password>
+
+    Local Administrator
+        Username:               <Local Administrator>
+        Password:               <Local Administrator Pasword>
+
+Security:
+    Customized security settings
+        Unselect Bitlocker for data volumes (would consume too much space)
+
+Advanced:
+    Create workload volumes (Default)
+
+Tags:
+    <keep default>
+```
+
+
+
+
 ![Create WinVM 3](images/Create-WinVM-3.png)
 
 #### Expected Result
