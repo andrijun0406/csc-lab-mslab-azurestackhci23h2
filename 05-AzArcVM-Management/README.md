@@ -25,10 +25,10 @@ Use the following options:
 ```
 Basics:
     Subscription:       <use-your-subscription>
-    Resource Group:     dcoffee-rg
+    Resource Group:     <use-your-resource-group>
     
     Save image as:      MarketPlaceWin22DCAzure-Hotpatch
-    Custom Location:    dcoffee-clus03-cl
+    Custom Location:    <use-your-custom-location>
     Storage path:       Choose Automatically
 
 Tags:
@@ -204,8 +204,8 @@ $ClusterName="clus01"
 $ClusterNodes=(Get-ClusterNode -Cluster $ClusterName).Name
 $VirtualSwitchName=(Get-VMSwitch -CimSession $ClusterNodes[0]).Name
 $Location="EastUS"
-$ResourceGroupName="dcoffee-rg"
-$CustomLocationName="dcoffee-clus01-cl"
+$ResourceGroupName=""
+$CustomLocationName=""
 $CustomLocationID=(Get-AzCustomLocation -ResourceGroupName $ResourceGroupName -Name $CustomLocationName).ID
 
 # define networks manually
