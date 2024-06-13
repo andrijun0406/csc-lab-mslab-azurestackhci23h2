@@ -180,8 +180,16 @@ foreach ($Network in $Networks){
 Invoke-Command -ComputerName $Server -ScriptBlock {
     #restart routing... just to make sure
     Restart-Service RemoteAccess
+    Restart-Service DHCPServer
 }
 ```
 #### Expected Result
 
+Got to DHCP MMC console
 ![DHCP Scope](images/DHCP-Scope.png)
+> you might need to authorize the DHCP servers if it is suddenly de-authorized
+
+* Test add new NIC in Management VM using Hyper-V Manager and set VLAN ID to 2 for example and see if it gets DHCP leased
+
+#### Step - 1 Configure Logical Networks using PowerShell
+
