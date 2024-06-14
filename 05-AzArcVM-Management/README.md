@@ -617,7 +617,7 @@ If the agent is running it will show the result as shown in the following snippe
     }
 ...
 ```
-> Look for **code": ProvisioningState/succeeded** and **displayStatus: Connected** this means the guest agent is running
+> Look for **code: ProvisioningState/succeeded** and **displayStatus: Connected** this means the guest agent is running
 
 * Enable guest management on a VM with guest agent running.
 
@@ -627,6 +627,11 @@ az stack-hci-vm update --name $VMname --enable-agent true --resource-group $RGna
 * Now the guest managemet is enabled in the Portal
 ![Enable Guest Management2](images/Enable-Guest-Management5.png)
 * Now let's try to connect
+
+Follow step here to enable SSH on Windows and Arc-enabled Servers:
+https://learn.microsoft.com/en-us/azure/azure-arc/servers/ssh-arc-overview?tabs=azure-cli
+https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=powershell
+
 ![Connect to VM1](images/Connect-VM1.png)
 * Connecting VM from Windows Admin Center
 ![Connect to VM2](images/Connect-VM2.png)
