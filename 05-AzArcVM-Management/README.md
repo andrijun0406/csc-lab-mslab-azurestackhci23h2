@@ -559,12 +559,11 @@ Networking:
 Let's see them on Windows Admin Center on-premise:
 
 ![Create WinVM Result3](images/Create-WinVM-Result3.png)
+> After deployment there is always one VM running which is actually Arc Resource Bridge to provide Azure Arc Custom Location object.
 
 Check whether DHCP provides leased IP address to this VM:
 
 ![Create WinVM Result4](images/Create-WinVM-Result4.png)
-
-> After deployment there is always one VM running which is actually Arc Resource Bridge to provide Azure Arc Custom Location object.
 
 Now let's try to connect to the VM. First make sure guest management is running (I thought deployment has taken care guest deployment since I set enabled, but looks like it didn't enable it )
 
