@@ -648,3 +648,74 @@ Follow step here to enable SSH on Windows and Arc-enabled Servers:
 ```
 
 #### Expected Result
+
+### Task 3b - Create Arc VMs (Linux) using Static from Portal
+
+* Basics
+```
+Basics:
+    
+    Project details
+
+    Subscription:               <use-your-subscription>
+    Resource Group:             <use-your-resource-group>
+
+    Instance details
+
+    Virtual machine name:       test-ubuntu1-vm
+    Custom location:            <automatically populated and grayed out>
+    Virtual machine kind:       <automatically populated and grayed out>
+    Security type:              Standard (Choose Trusted launch VM if you want to enable secureboot and vTPM)
+    Storage path:               Choose automatically
+    Image:                      Ubuntu-VM
+    Virtual processor count:    4
+    Memory (MB):                8192 
+    Memory type:                static
+
+    VM extensions           
+    
+    Enable guest management:    Yes
+
+    Root user
+
+    Username:                   labadmin (not azureuser)
+    Password:                   <use-local-administrator-password>
+    Confirm password:           <confirmed-your-password>
+    SSH public key resources:   Generate new key pair
+    Key pair name:              test-ubuntu1-vm_key_
+```
+![Create Linux VM - Basics](images/Create-UbuntuVM-Basics.png)
+
+* Disks
+```
+Disks:
+
+    Add new disk
+    
+    <skip this step as we do not require data disk for now>
+```
+![Create Linux VM - Disks](images/Create-UbuntuM-Disks.png)
+
+* Networking
+```
+Networking:
+
+    Add network interface (just one for now)
+    
+    Name:                   test-ubuntu1-vm-eth01
+    Network:                subnet1 (this one use Static)
+    IPv4 type:              Static
+    Allocation Method       Automatic (let it be assigned from pool)
+```
+![Create Linux VM - Networking1](images/Create-UbuntuVM-Networking1.png)
+![Create Linux VM - Networking2](images/Create-UbuntuVM-Networking2.png)
+
+* Tags
+![Create Linux VM - Tags](images/Create-UbuntuVM-Tags.png)
+
+* Review and Create
+![Create Linux VM - Tags](images/Create-UbuntuVM-Review.png)
+
+#### Expected Result
+
+![Create Linux VM - Error](images/Create-UbuntuVM-Error.png)
