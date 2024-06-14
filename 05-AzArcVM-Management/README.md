@@ -633,6 +633,7 @@ Follow step here to enable SSH on Windows and Arc-enabled Servers:
 * [Get Started with OpenSSH for Windows](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=powershell)
 
 ![Connect to VM1](images/Connect-VM1.png)
+![Connect to VM1](images/Connect-ssh.png)
 * Connecting VM from Windows Admin Center
 ![Connect to VM2](images/Connect-VM2.png)
 
