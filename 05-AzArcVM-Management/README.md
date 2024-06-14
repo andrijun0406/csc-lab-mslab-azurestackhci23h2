@@ -552,5 +552,9 @@ Networking:
 > you can also download a template for creating with ARM template later
 
 #### Expected Result
+
+![Create WinVM Result1](images/Create-WinVM-Result1.png)
+![Create WinVM Result2](images/Create-WinVM-Result2.png)
+
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
 #### Expected Result
