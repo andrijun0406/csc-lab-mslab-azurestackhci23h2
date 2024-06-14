@@ -626,6 +626,10 @@ az stack-hci-vm update --name $VMname --enable-agent true --resource-group $RGna
 ```
 * Now the guest managemet is enabled in the Portal
 ![Enable Guest Management2](images/Enable-Guest-Management5.png)
+* Now let's try to connect
+![Connect to VM1](images/Connect-VM1.png)
+* Connecting VM from Windows Admin Center
+![Connect to VM2](images/Connect-VM2.png)
 
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
 #### Expected Result
