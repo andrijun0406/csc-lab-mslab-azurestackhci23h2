@@ -551,7 +551,7 @@ Networking:
 ![Create WinVM Review](images/Create-WinVM-Review.png)
 > you can also download a template for creating with ARM template later
 
-#### Expected Result
+#### Step 2 - Check the Result
 
 ![Create WinVM Result1](images/Create-WinVM-Result1.png)
 ![Create WinVM Result2](images/Create-WinVM-Result2.png)
@@ -565,6 +565,8 @@ Check whether DHCP provides leased IP address to this VM:
 
 ![Create WinVM Result4](images/Create-WinVM-Result4.png)
 
+#### Step 3 - Connect to the VM
+
 Now let's try to connect to the VM. First make sure guest management is running (I thought deployment has taken care guest deployment since I set enabled, but looks like it didn't enable it )
 
 * Go to VM > Configuration and Enable Guest Management in VM extensions
@@ -572,6 +574,58 @@ Now let's try to connect to the VM. First make sure guest management is running 
 ![Enable Guest Management2](images/Enable-Guest-Management2.png)
 ![Enable Guest Management2](images/Enable-Guest-Management3.png)
 > looks like it does not work enabling from portal, let's try from Azure CLI:
-* 
+* Run the following script
+
+```powershell
+# verify VM is running
+
+$VMname="test-win22azure-vm"
+$RGname="dcoffee-rg"
+
+# Install Az CLI module if not exists yet (we have not installed any in Management machine so let's install them)
+
+$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri https://aka.ms/installazurecliwindowsx64 -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; Remove-Item .\AzureCLI.msi
+
+# you might need to close powershell windows and start a new one
+az login --use-device-code
+az stack-hci-vm show --name $VMname --resource-group $RGname
+
+# it will ask you to install the stack-hci-vm extension, type Y
+```
+If the agent is running it will show the result as shown in the following snippets:
+```
+...
+"vmAgent": {
+        "statuses": [
+          {
+            "code": "ProvisioningState/succeeded",
+            "displayStatus": "Connected",
+            "level": "Info",
+            "message": "Successfully established connection with mocguestagent",
+            "time": "2024-06-14T00:22:10+00:00"
+          },
+          {
+            "code": "ProvisioningState/succeeded",
+            "displayStatus": "Connected",
+            "level": "Info",
+            "message": "New mocguestagent version detected 'v0.14.0-2-g5c6a4b32'",
+            "time": "2024-06-14T00:22:11+00:00"
+          }
+        ],
+        "vmConfigAgentVersion": "v0.14.0-2-g5c6a4b32"
+      }
+    }
+...
+```
+> Look for **code": ProvisioningState/succeeded** and **displayStatus: Connected** this means the guest agent is running
+
+* Enable guest management on a VM with guest agent running.
+
+```powershell
+az stack-hci-vm update --name $VMname --enable-agent true --resource-group $RGname
+```
+* Now the guest managemet is enabled in the Portal
+![Enable Guest Management2](images/Enable-Guest-Management5.png)
+
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
 #### Expected Result
