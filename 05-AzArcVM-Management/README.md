@@ -629,8 +629,8 @@ az stack-hci-vm update --name $VMname --enable-agent true --resource-group $RGna
 * Now let's try to connect
 
 Follow step here to enable SSH on Windows and Arc-enabled Servers:
-https://learn.microsoft.com/en-us/azure/azure-arc/servers/ssh-arc-overview?tabs=azure-cli
-https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=powershell
+* [SSH access to Azure Arc-enabled servers](https://learn.microsoft.com/en-us/azure/azure-arc/servers/ssh-arc-overview?tabs=azure-cli)
+* [Get Started with OpenSSH for Windows](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=powershell)
 
 ![Connect to VM1](images/Connect-VM1.png)
 * Connecting VM from Windows Admin Center
