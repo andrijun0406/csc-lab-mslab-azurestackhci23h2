@@ -487,31 +487,31 @@ Basics:
 
     Instance details
 
-    Virtual machine name:       <use-your-vm-name>
+    Virtual machine name:       test-win22azure-vm
     Custom location:            <automatically populated and grayed out>
     Virtual machine kind:       <automatically populated and grayed out>
     Security type:              Standard (Choose Trusted launch VM if you want to enable secureboot and vTPM)
     Storage path:               Choose manually (UserStorage2-<id> (TB of TB available))
     Image:                      Win22DCAzure-Hotpatch
-    Virtual processor count     4
-    Memory (MB)                 8192 
-    Memory type                 static
+    Virtual processor count:    4
+    Memory (MB):                8192 
+    Memory type:                static
 
     VM extensions           
     
-    Enable guest management     Yes
+    Enable guest management:    Yes
 
     Administrator account
 
-    Username                    <use-local-administrator>
-    Password                    <use-local-administrator-password>
-    Confirm password            <confirmed-your-password>
+    Username:                   <use-local-administrator>
+    Password:                   <use-local-administrator-password>
+    Confirm password:           <confirmed-your-password>
     
     Domain join
 
-    Enable domain join          Leave this un-ticked (no need to have domain joined VM for now)
+    Enable domain join:         Leave this un-ticked (no need to have domain joined VM for now)
 ```
-* Click next
+* Click Next
 > I deliberately use UserStorage2 CSV for my VM just to balance the capacity
 
 ![Create WinVM Basics](images/Create-WinVM-Basics.png)
@@ -523,9 +523,33 @@ Disks:
     
     <skip this step as we do not require data disk for now>
 ```
-* Click next
+* Click Next
 
 ![Create WinVM Disks](images/Create-WinVM-Disks.png)
+
+```
+Networking:
+
+    Add network interface (just one for now)
+    
+    Name:                   test-win22azure-vm-eth01
+    Network:                subnet2 (this one use DHCP)
+    IPv4 type:              DHCP
+```
+
+* Click Add and then Next
+
+![Create WinVM Networking1](images/Create-WinVM-Networking1.png)
+![Create WinVM Networking2](images/Create-WinVM-Networking2.png)
+
+* Skip Tags for now
+
+![Create WinVM Tags](images/Create-WinVM-Tags.png)
+
+* Review and Create
+
+![Create WinVM Review](images/Create-WinVM-Review.png)
+> you can also download a template for creating with ARM template later
 
 #### Expected Result
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI

@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "value": "test-win22azure-vm"
+        },
+        "location": {
+            "value": "eastus"
+        },
+        "customLocationId": {
+            "value": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.ExtendedLocation/customLocations/dcoffee-clus01-cl"
+        },
+        "adminUsername": {
+            "value": "LabAdmin"
+        },
+        "securityType": {
+            "value": "Standard"
+        },
+        "adminPassword": {
+            "value": null
+        }
+    }
+}

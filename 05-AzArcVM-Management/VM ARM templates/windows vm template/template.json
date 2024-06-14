@@ -1,0 +1,101 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "customLocationId": {
+            "type": "string"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "securityType": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.HybridCompute/machines",
+            "apiVersion": "2023-06-20-preview",
+            "name": "test-win22azure-vm",
+            "kind": "HCI",
+            "location": "eastus",
+            "identity": {
+                "type": "SystemAssigned"
+            }
+        },
+        {
+            "name": "test-win22azure-vm-eth01",
+            "type": "Microsoft.AzureStackHCI/networkInterfaces",
+            "apiVersion": "2023-09-01-preview",
+            "location": "[parameters('location')]",
+            "extendedLocation": {
+                "type": "CustomLocation",
+                "name": "[parameters('customLocationId')]"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "test-win22azure-vm-eth01",
+                        "properties": {
+                            "gateway": null,
+                            "subnet": {
+                                "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/microsoft.azurestackhci/logicalNetworks/subnet2"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.AzureStackHCI/VirtualMachineInstances",
+            "apiVersion": "2023-09-01-preview",
+            "scope": "[concat('Microsoft.HybridCompute/machines', '/', 'test-win22azure-vm')]",
+            "name": "default",
+            "extendedLocation": {
+                "type": "CustomLocation",
+                "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.ExtendedLocation/customLocations/dcoffee-clus01-cl"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.HybridCompute/machines','test-win22azure-vm')]",
+                "[resourceid('Microsoft.AzureStackHCI/networkInterfaces','test-win22azure-vm-eth01')]"
+            ],
+            "properties": {
+                "osProfile": {
+                    "adminUsername": "LabAdmin",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "computerName": "test-win22azure",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "provisionVMConfigAgent": true
+                    }
+                },
+                "hardwareProfile": {
+                    "vmSize": "Default",
+                    "processors": 4,
+                    "memoryMB": 8192
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/microsoft.azurestackhci/marketplaceGalleryImages/Win22DCAzure-Hotpatch"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceid('Microsoft.AzureStackHCI/networkInterfaces','test-win22azure-vm-eth01')]"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
