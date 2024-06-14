@@ -558,10 +558,20 @@ Networking:
 
 Let's see them on Windows Admin Center on-premise:
 
-![Create WinVM Result2](images/Create-WinVM-Result3.png)
+![Create WinVM Result3](images/Create-WinVM-Result3.png)
+
+Check whether DHCP provides leased IP address to this VM:
+
+![Create WinVM Result4](images/Create-WinVM-Result4.png)
+
 > After deployment there is always one VM running which is actually Arc Resource Bridge to provide Azure Arc Custom Location object.
 
 Now let's try to connect to the VM. First make sure guest management is running (I thought deployment has taken care guest deployment since I set enabled, but looks like it didn't enable it )
 
+* Go to VM > Configuration and Enable Guest Management in VM extensions
+![Enable Guest Management](images/Enable-Guest-Management.png)
+![Enable Guest Management2](images/Enable-Guest-Management2.png)
+> looks like it does not work enabling from portal, let's try from Azure CLI:
+* 
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
 #### Expected Result
