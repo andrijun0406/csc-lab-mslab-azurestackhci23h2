@@ -557,10 +557,11 @@ Networking:
 ![Create WinVM Result2](images/Create-WinVM-Result2.png)
 
 Let's see them on Windows Admin Center on-premise:
+
 ![Create WinVM Result2](images/Create-WinVM-Result3.png)
+> After deployment there is always one VM running which is actually Arc Resource Bridge to provide Azure Arc Custom Location object.
 
-
-Now let's try to connect to the VM.
+Now let's try to connect to the VM. First make sure guest management is running (I thought deployment has taken care guest deployment since I set enabled, but looks like it didn't enable it )
 
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
 #### Expected Result
