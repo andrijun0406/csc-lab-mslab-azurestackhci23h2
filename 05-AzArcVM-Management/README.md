@@ -556,5 +556,11 @@ Networking:
 ![Create WinVM Result1](images/Create-WinVM-Result1.png)
 ![Create WinVM Result2](images/Create-WinVM-Result2.png)
 
+Let's see them on Windows Admin Center on-premise:
+![Create WinVM Result2](images/Create-WinVM-Result3.png)
+
+
+Now let's try to connect to the VM.
+
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
 #### Expected Result
