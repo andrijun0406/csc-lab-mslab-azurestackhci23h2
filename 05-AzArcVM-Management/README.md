@@ -570,6 +570,7 @@ Now let's try to connect to the VM. First make sure guest management is running 
 * Go to VM > Configuration and Enable Guest Management in VM extensions
 ![Enable Guest Management](images/Enable-Guest-Management.png)
 ![Enable Guest Management2](images/Enable-Guest-Management2.png)
+![Enable Guest Management2](images/Enable-Guest-Management3.png)
 > looks like it does not work enabling from portal, let's try from Azure CLI:
 * 
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
