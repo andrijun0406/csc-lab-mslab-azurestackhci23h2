@@ -8,6 +8,8 @@ There are other way though, you can use Azure CLI, or Azure Resource Manager tem
 
 > make sure your user has **"Azure Stack HCI Administrator"** Role
 
+> for naming resourcse please consider [Azure naming best practice](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming#example-names-networking)
+
 For more detail please check documentation [here](https://learn.microsoft.com/en-us/azure-stack/hci/manage/create-arc-virtual-machines?tabs=azureportal).
 
 ### Task 1 - Create VM Images from Azure Marketplace
@@ -639,4 +641,10 @@ Follow step here to enable SSH on Windows and Arc-enabled Servers:
 ![Connect to VM2](images/Connect-VM2.png)
 
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
+
+```powershell
+
+
+```
+
 #### Expected Result
