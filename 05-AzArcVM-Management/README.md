@@ -678,6 +678,12 @@ az stack-hci-vm create --name $vmName --resource-group $resource_group --admin-u
 
 #### Expected Result
 
+so far no luck:
+
+```
+moc-operator virtualmachine serviceClient returned an error while reconciling: rpc error: code = Unknown desc = Could not establish HyperV connection for VM ID [B1BF4AE9-ECA6-4AE8-ABEF-C64581E3FCFB] within [900] seconds, error: [<nil>] (Code: moc-operator virtualmachine serviceClient returned an error while reconciling: rpc error: code = Unknown desc = Could not establish HyperV connection for VM ID [B1BF4AE9-ECA6-4AE8-ABEF-C64581E3FCFB] within [900] seconds, error: [<nil>])
+``
+
 ### Task 3b - Create Arc VMs (Linux) using Static from Portal
 
 * Basics
