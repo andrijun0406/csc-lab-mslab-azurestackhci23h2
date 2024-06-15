@@ -642,9 +642,38 @@ Follow step here to enable SSH on Windows and Arc-enabled Servers:
 
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
 
+Run the following script from the cluster nodes.
+> somehow it doesn't work remotely from Management machine
+
 ```powershell
 
+# Define parameters for Azure CLI
 
+$vmName ="test-ubuntu-vm"
+$subscription = "<your-subscriptions>"
+$resource_group = "dcoffee-rg"
+$customLocationName = "dcoffee-clus01-cl"
+$customLocationID ="/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl"
+$location = "eastus"
+$userName = "labadmin"
+$password = "<admin-password>"
+$imageName ="Ubuntu-VM"
+$nicName ="test-ubuntu-vm-eth01"
+$storagePathName = "UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
+$storagePathId = "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
+$lnetName = "subnet1"
+$gateway ="10.0.1.1"
+$ipAddress ="10.0.1.10"
+$computerName = "th-mc660-1"
+
+
+az login --use-device-code
+
+# create network interface with static IP
+
+az stack-hci-vm network nic create --subscription $subscription --resource-group $resource_group --custom-location $customLocationID --location $location --name $nicName --subnet-id $lnetName --ip-address $ipAddress
+az stack-hci-vm network nic list --resource-group $resource_group
+az stack-hci-vm create --name $vmName --resource-group $resource_group --admin-username $userName --admin-password $password --computer-name $computerName --image $imageName --location $location --authentication-type all --nics $nicName --custom-location $customLocationID --hardware-profile memory-mb="8192" processors="4" --storage-path-id $storagePathId
 ```
 
 #### Expected Result
