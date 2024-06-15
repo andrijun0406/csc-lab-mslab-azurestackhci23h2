@@ -756,4 +756,6 @@ Networking:
 
 #### Expected Result
 
+So far no luck too the same error as when creating azure CLI:
+
 ![Create Linux VM - Error](images/Create-UbuntuVM-Error.png)
