@@ -1,0 +1,299 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterId": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "provisionedClustersName": {
+            "type": "string"
+        },
+        "resourceTags": {
+            "type": "object",
+            "defaultValue": {}
+        },
+        "adminGroupObjectIDs": {
+            "type": "array"
+        },
+        "keyData": {
+            "type": "securestring"
+        },
+        "controlPlaneNodeCount": {
+            "type": "int"
+        },
+        "controlPlaneNodesize": {
+            "type": "string"
+        },
+        "controlPlaneIp": {
+            "type": "string"
+        },
+        "controlPlaneOsType": {
+            "type": "string"
+        },
+        "kubernetesVersion": {
+            "type": "string"
+        },
+        "podCidr": {
+            "type": "string"
+        },
+        "networkPolicy": {
+            "type": "string"
+        },
+        "vnetSubnetIds": {
+            "type": "array"
+        },
+        "customLocation": {
+            "type": "string"
+        },
+        "workspace": {
+            "type": "object",
+            "defaultValue": {}
+        },
+        "omsWorkspaceId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "workspaceRegion": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "omsSku": {
+            "type": "string",
+            "allowedValues": [
+                "free",
+                "standalone",
+                "pernode"
+            ]
+        },
+        "isDCRNameAvailable": {
+            "type": "bool",
+            "defaultValue": "false"
+        },
+        "deployWorkspaceResource": {
+            "type": "bool",
+            "defaultValue": "false"
+        },
+        "addMonitoringExtension": {
+            "type": "bool",
+            "defaultValue": "false"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Kubernetes/ConnectedClusters",
+            "apiVersion": "2024-01-01",
+            "name": "[parameters('provisionedClustersName')]",
+            "location": "[parameters('location')]",
+            "tags": "[parameters('resourceTags')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "kind": "ProvisionedCluster",
+            "properties": {
+                "agentPublicKeyCertificate": "",
+                "aadProfile": {
+                    "enableAzureRBAC": false,
+                    "adminGroupObjectIDs": "[parameters('adminGroupObjectIDs')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.HybridContainerService/ProvisionedClusterInstances",
+            "apiVersion": "2024-01-01",
+            "name": "default",
+            "scope": "[parameters('clusterId')]",
+            "dependsOn": [
+                "[parameters('clusterId')]"
+            ],
+            "properties": {
+                "linuxProfile": {
+                    "ssh": {
+                        "publicKeys": [
+                            {
+                                "keyData": "[parameters('keyData')]"
+                            }
+                        ]
+                    }
+                },
+                "controlPlane": {
+                    "count": "[parameters('controlPlaneNodeCount')]",
+                    "controlPlaneEndpoint": {
+                        "hostIP": "[parameters('controlPlaneIp')]"
+                    },
+                    "vmSize": "[parameters('controlPlaneNodesize')]"
+                },
+                "kubernetesVersion": "[parameters('kubernetesVersion')]",
+                "networkProfile": {
+                    "loadBalancerProfile": {
+                        "count": 0
+                    },
+                    "networkPolicy": "[parameters('networkPolicy')]",
+                    "podCidr": "[parameters('podCidr')]"
+                },
+                "agentPoolProfiles": [
+                    {
+                        "name": "nodepool1",
+                        "count": 2,
+                        "vmSize": "Standard_A4_v2",
+                        "osType": "Linux"
+                    }
+                ],
+                "cloudProviderProfile": {
+                    "infraNetworkProfile": {
+                        "vnetSubnetIds": "[parameters('vnetSubnetIds')]"
+                    }
+                }
+            },
+            "extendedLocation": {
+                "type": "customLocation",
+                "name": "[parameters('customLocation')]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[parameters('isDCRNameAvailable')]",
+            "name": "aks-monitoring-msi-dcr-c8ce6859-6a3c-40a7-aee9-d18d101efb30",
+            "apiVersion": "2021-04-01",
+            "subscriptionId": "368ac09c-01c9-4b47-9142-a7581c6694a3",
+            "resourceGroup": "dcoffee-rg",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "variables": {},
+                    "resources": [
+                        {
+                            "apiVersion": "2021-04-01",
+                            "type": "Microsoft.Insights/dataCollectionRules",
+                            "location": "[parameters('workspaceRegion')]",
+                            "name": "MSCI-EUS-th-clus03-aks01",
+                            "tags": {},
+                            "kind": "Linux",
+                            "properties": {
+                                "dataSources": {
+                                    "extensions": [
+                                        {
+                                            "name": "ContainerInsightsExtension",
+                                            "streams": [
+                                                "Microsoft-ContainerInsights-Group-Default"
+                                            ],
+                                            "extensionName": "ContainerInsights"
+                                        }
+                                    ]
+                                },
+                                "destinations": {
+                                    "logAnalytics": [
+                                        {
+                                            "workspaceResourceId": "[parameters('omsWorkspaceId')]",
+                                            "name": "ciworkspace"
+                                        }
+                                    ]
+                                },
+                                "dataFlows": [
+                                    {
+                                        "streams": [
+                                            "Microsoft-ContainerInsights-Group-Default"
+                                        ],
+                                        "destinations": [
+                                            "ciworkspace"
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "parameters": {}
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[parameters('isDCRNameAvailable')]",
+            "name": "aks-monitoring-msi-dcra-5b4395f5-cc1f-47d8-952a-1f501fa6c91b",
+            "apiVersion": "2021-04-01",
+            "subscriptionId": "368ac09c-01c9-4b47-9142-a7581c6694a3",
+            "resourceGroup": "dcoffee-rg",
+            "dependsOn": [
+                "[parameters('clusterId')]",
+                "[concat('Microsoft.Resources/deployments/', 'aks-monitoring-msi-dcr-c8ce6859-6a3c-40a7-aee9-d18d101efb30')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Insights/dataCollectionRuleAssociations",
+                            "name": "'th-clus03-aks01-ContainerInsightsExtension",
+                            "apiVersion": "2021-04-01",
+                            "properties": {
+                                "description": "Association of data collection rule. Deleting this association will break the data collection for this Provisioned Cluster.",
+                                "dataCollectionRuleId": "[resourceId('368ac09c-01c9-4b47-9142-a7581c6694a3', 'dcoffee-rg', 'Microsoft.Insights/dataCollectionRules', 'MSCI-EUS-th-clus03-aks01')]"
+                            },
+                            "scope": "[parameters('clusterId')]"
+                        }
+                    ]
+                },
+                "parameters": {}
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[parameters('addMonitoringExtension')]",
+            "name": "azureMonitoringExtension-59adf46d-9474-4069-a655-463f6f3f2cf3",
+            "apiVersion": "2021-04-01",
+            "subscriptionId": "368ac09c-01c9-4b47-9142-a7581c6694a3",
+            "resourceGroup": "dcoffee-rg",
+            "dependsOn": [
+                "[parameters('clusterId')]",
+                "[extensionResourceId(parameters('clusterId'), 'Microsoft.HybridContainerService/ProvisionedClusterInstances', 'default')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "name": "azuremonitor-containers",
+                            "type": "Microsoft.KubernetesConfiguration/extensions",
+                            "apiVersion": "2022-03-01",
+                            "properties": {
+                                "configurationSettings": {
+                                    "logAnalyticsWorkspaceResourceID": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.OperationalInsights/workspaces/dcoffee-law",
+                                    "omsagent.domain": "opinsights.azure.com",
+                                    "amalogs.domain": "opinsights.azure.com",
+                                    "omsagent.useAADAuth": "true",
+                                    "amalogs.useAADAuth": "true"
+                                },
+                                "extensionType": "Microsoft.AzureMonitor.Containers",
+                                "autoUpgradeMinorVersion": true,
+                                "releaseTrain": "Stable",
+                                "scope": {
+                                    "Cluster": {
+                                        "releaseNamespace": "azuremonitor-containers"
+                                    }
+                                },
+                                "configurationProtectedSettings": {
+                                    "omsagent.secret.wsid": "if(equals(undefined, undefined), reference(undefined).outputs.customerId.value, 'undefined')",
+                                    "amalogs.secret.wsid": "if(equals(undefined, undefined), reference(undefined).outputs.customerId.value, 'undefined')"
+                                }
+                            },
+                            "scope": "[parameters('clusterId')]"
+                        }
+                    ],
+                    "variables": {}
+                },
+                "parameters": {}
+            }
+        }
+    ],
+    "outputs": {}
+}

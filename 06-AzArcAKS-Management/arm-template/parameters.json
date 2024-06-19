@@ -1,0 +1,85 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterId": {
+            "value": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.Kubernetes/ConnectedClusters/th-clus03-aks01"
+        },
+        "location": {
+            "value": "eastus"
+        },
+        "provisionedClustersName": {
+            "value": "th-clus03-aks01"
+        },
+        "resourceTags": {
+            "value": {}
+        },
+        "adminGroupObjectIDs": {
+            "value": [
+                "4b5d705d-7c47-4731-b1ee-58c52165da1f"
+            ]
+        },
+        "controlPlaneIp": {
+            "value": "10.0.3.9"
+        },
+        "controlPlaneNodeCount": {
+            "value": 1
+        },
+        "controlPlaneNodesize": {
+            "value": "Standard_A4_v2"
+        },
+        "controlPlaneOsType": {
+            "value": "Linux"
+        },
+        "kubernetesVersion": {
+            "value": "v1.26.6"
+        },
+        "podCidr": {
+            "value": "10.244.0.0/16"
+        },
+        "networkPolicy": {
+            "value": "calico"
+        },
+        "vnetSubnetIds": {
+            "value": [
+                "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/microsoft.azurestackhci/logicalNetworks/subnet3"
+            ]
+        },
+        "customLocation": {
+            "value": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.ExtendedLocation/customLocations/dcoffee-clus01-cl"
+        },
+        "workspace": {
+            "value": {
+                "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.OperationalInsights/workspaces/dcoffee-law",
+                "location": "eastus",
+                "name": "dcoffee-law",
+                "properties": null,
+                "resourceGroup": {
+                    "name": "dcoffee-rg",
+                    "mode": 0
+                }
+            }
+        },
+        "omsWorkspaceId": {
+            "value": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.OperationalInsights/workspaces/dcoffee-law"
+        },
+        "workspaceRegion": {
+            "value": "eastus"
+        },
+        "omsSku": {
+            "value": "standalone"
+        },
+        "isDCRNameAvailable": {
+            "value": false
+        },
+        "deployWorkspaceResource": {
+            "value": false
+        },
+        "addMonitoringExtension": {
+            "value": false
+        },
+        "keyData": {
+            "value": null
+        }
+    }
+}
