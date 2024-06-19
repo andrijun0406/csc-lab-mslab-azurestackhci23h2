@@ -1,7 +1,12 @@
-## 1. Hydrating MSLab Files
+## 6. Azure Arc AKS Manaagement
 
-I am creating a folder with a dummy domain name I use throughout the Lab. After hydrating MSLab files, this folder will contain Domain Controller - ready to be imported and parent disks: Windows Server 2022 and Azure Stack HCI 23H2. 
-Please note that the Domain controller here is unique to this Lab and can not be changed later (I use the specific Domain Name and also DC admin password). If you want to change domain name and password, you must re-hydrate MSLAB files again from fresh.
+One of the cool capabilities of Azure Arc enabled-AKS or AKS Hybrid is that now, you can create AKS cluster from Azure Portal, CLI and also ARM template. 
+In this section I will describe in detail my experience deploying Azure Arc enabled AKS on Azure Stack HCI using Portal and CLI
+
+> * You need to have a working Azure Stack HCI version 23H3 cluster
+  * YOu need to have Kubernetes Cluster Administrator access
+  * Noted down your Subscription ID and Custom Location ID
+  * You already created Logical Network, noted down the logical network ID. Please check this [step](../05-AzArcVM-Management/) if you have not.
 
 ### Task 1 - Check hardware requirement
 

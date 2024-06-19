@@ -1,4 +1,4 @@
-## 4a. Update Azure Stack HCI 23H2 via PowerShell
+## 4. Update Azure Stack HCI 23H2 via PowerShell
 
 Now that you have deployed your 23H2 cluster you realize the cluster is a little bit outdated.
 ![Cluster status](images/Cluster-Status.png)

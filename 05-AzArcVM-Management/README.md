@@ -1,4 +1,4 @@
-## 4. Azure Arc VM Management
+## 5. Azure Arc VM Management
 
 Now that you have deployed your 23H2 cluster you are ready to create Arc VM from Portal. 
 There are other way though, you can use Azure CLI, or Azure Resource Manager template too.
