@@ -124,7 +124,7 @@ Networking:
 
 > Note: Network Load-Balancer will be configured later after cluster is created if required.
 
-![Create Kubernetes Cluster - Networking](images/Create-Kubernetes-Networking.png)
+![Create Kubernetes Cluster - Networking](images/Create-Kubernetes-Cluster-Networking.png)
 
 #### Step 6 - Integration
 
@@ -138,14 +138,14 @@ Azure Monitor:
 ```
 > Note: We will do it later once the cluster is created if required (this will add some costs)
 
-![Create Kubernetes Cluster - Integration](images/Create-Kubernetes-Integration.png)
+![Create Kubernetes Cluster - Integration](images/Create-Kubernetes-Cluster-Integration.png)
 
 #### Step 7 - Tags
 
 On The Tags page, skip this and click *Next: Review + create*
 
 Configuration will be validated click *Create*
-![Create Kubernetes Cluster - Validation](images/Create-Kubernetes-Validation.png)
+![Create Kubernetes Cluster - Validation](images/Create-Kubernetes-Cluster-Validation.png)
 
 >You can aslo download a Template for automation later
 
