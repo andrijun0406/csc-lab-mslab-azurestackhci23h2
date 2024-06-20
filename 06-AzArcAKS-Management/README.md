@@ -153,7 +153,8 @@ Configuration will be validated click *Create*
 
 Deployment Progress
 ![AKS Deployment Progress](images/AKS-Deployment-Progress.png)
-
+![AKS Deployment Progress](images/AKS-Deployment-Progress2.png)
+![AKS Deployment Progress](images/AKS-Deployment-Result.png)
 
 ### Task 2 - Create AKS cluster from Azure CLI
 
