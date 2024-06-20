@@ -151,14 +151,65 @@ Configuration will be validated click *Create*
 
 #### Expected Results
 
-Deployment Progress
+**Deployment Progress**:
+
 ![AKS Deployment Progress](images/AKS-Deployment-Progress.png)
 ![AKS Deployment Progress](images/AKS-Deployment-Progress2.png)
 ![AKS Deployment Progress](images/AKS-Deployment-Result.png)
 
+**Check on Windows Admin Center**
+
+![AKS Deployment Progress](images/AKS-Deployment-Result2.png)
+
+> You can see the deployment create 3 VMs: 1 Control Plane and 2 Worker Node from NodePool1
+
 ### Task 2 - Create AKS cluster from Azure CLI
 
-* MSLab scripts : [MSLab](https://aka.ms/mslab) make sure you are using the latest (currently its v24.05.1)
-* latest Windows Server ISO: [MSDN Download](https://my.visualstudio.com/downloads) requires Visual Studio users.
-* latest Azure Stack HCI ISO: [23H2](https://azure.microsoft.com/en-us/products/azure-stack/hci/hci-download/) requires login to azure portal.
+Now let's try to create AKS clusters from Azure CLI.
 
+#### Step 1 - Make sure you have all the prerequisite
+
+* Azure Subscription ID
+* Custom Location ID of your cluster
+* Logical NetworkID, make sure you use Static Logical network
+
+Run the following Script on Management machine to get CustomLocationID
+```powershell
+
+$subscription = "368ac09c-01c9-4b47-9142-a7581c6694a3"
+$resource_group = "dcoffee-rg"
+$customLocationName = "dcoffee-clus01-cl"
+$location = "eastus"
+
+# login first if you haven't already
+az login --use-device-code
+
+# install required azure cli extensions
+az extension add -n aksarc --upgrade
+az extension add -n customlocation --upgrade
+az extension add -n stack-hci-vm --upgrade
+az extension add -n connectedk8s --upgrade
+
+$customLocationID = (az customlocation show --name $customLocationName --resource-group $resource_group --query "id" -o tsv)
+```
+![Check Custom Location ID](images/Check-CustomLocationID.png)
+
+Run the following Script on Management machine to get Logical Network ID
+
+```powershell
+$lnetName = "subnet3"
+$lnetid = (az stack-hci-vm network lnet show --name $lnetName --resource-group $resource_group --query "id" -o tsv)
+```
+
+![Check Logical Network ID](images/Check-LogicalNetworkID.png)
+
+```powershell
+$aksclustername = "th-clus01-aks-01"
+$controlplaneIP = "10.0.0.149"
+$aadgroupID = "4b5d705d-7c47-4731-b1ee-58c52165da1f"
+
+```
+
+
+
+#### Step 2 - Install Azure CLI extensions
