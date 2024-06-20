@@ -203,13 +203,84 @@ $lnetid = (az stack-hci-vm network lnet show --name $lnetName --resource-group $
 
 ![Check Logical Network ID](images/Check-LogicalNetworkID.png)
 
+#### Step 2 - Install Kubectl on your machine
+
+Follow this to install and setup kubectl on Windows
+> [Install and Set up kubectl on Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/)
+
+I am going to use scoop here:
+
+```powershell
+
+# don't run Powershell as admin (RunAs) use regular PowerShell
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+```
+The output would be something like this:
+
+```
+Execution Policy Change
+The execution policy helps protect you from scripts that you do not trust. Changing the execution policy might expose you to the security risks described in the about_Execution_Policies help topic at
+https:/go.microsoft.com/fwlink/?LinkID=135170. Do you want to change the execution policy?
+[Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "N"): A
+Initializing...
+Downloading...
+Extracting...
+Creating shim...
+Adding ~\scoop\shims to your path.
+Scoop was installed successfully!
+Type 'scoop help' for instructions.
+PS C:\Users\LabAdmin>
+```
+
+> Note: scoop has problem using 7zip binary from www.7-zip.org use from sourceforge instead
+```
+notepad C:\Users\LabAdmin\scoop\buckets\main\bucket\7zip.json
+
+# Change the following Version, URL and Hash with
+"version": "24.06",
+"architecture": {
+        "64bit": {
+            "url": "https://sourceforge.net/projects/sevenzip/files/7-Zip/24.06/7z2406-x64.msi",
+            "hash": "946e32bf1eb545146ad47287d0837b01de86329c20f7081fc171d543a8578ec9",
+            "extract_dir": "Files\\7-Zip"
+        }
+
+Leave other as default, then run:
+
+scoop install 7zip
+```
+
+Now, install kubectl using scoop
+
+```powershell
+scoop install kubectl
+kubectl version --client
+```
+
+The output would be something like this
+
+```
+PS C:\Users\LabAdmin> scoop install kubectl
+Installing 'kubectl' (1.30.2) [64bit] from 'main' bucket
+kubernetes-client-windows-amd64.tar.gz (30.3 MB) [========================================================================================================================================================================================================================================================================] 100%
+Checking hash of kubernetes-client-windows-amd64.tar.gz ... ok.
+Extracting kubernetes-client-windows-amd64.tar.gz ... done.
+Linking ~\scoop\apps\kubectl\current => ~\scoop\apps\kubectl\1.30.2
+Creating shim for 'kubectl'.
+Creating shim for 'kubectl-convert'.
+'kubectl' (1.30.2) was installed successfully!
+PS C:\Users\LabAdmin> kubectl version --client
+Client Version: v1.30.2
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+PS C:\Users\LabAdmin>
+```
+
+#### Step 3 - Create a AKS cluster
 ```powershell
 $aksclustername = "th-clus01-aks-01"
 $controlplaneIP = "10.0.0.149"
 $aadgroupID = "4b5d705d-7c47-4731-b1ee-58c52165da1f"
 
 ```
-
-
-
-#### Step 2 - Install Azure CLI extensions
