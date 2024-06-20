@@ -77,7 +77,7 @@ Node pools:
     at this stage we just enough with 1 linux node pool.
   
 ```
-![Create Kubernetes Cluster - Basics](images/Create-Kubernetes-Cluster-Nodepools.png)
+![Create Kubernetes Cluster - Nodepools](images/Create-Kubernetes-Cluster-Nodepools.png)
 
 #### Step 4a - Access
 
@@ -92,7 +92,7 @@ Access:
 ```
 > Note: if you choose Entra ID for Authentication you need to assigned entra ID group to cluster admin role and add your user to the group
 
-![Create Kubernetes Cluster - Basics](images/Create-Kubernetes-Cluster-Access.png)
+![Create Kubernetes Cluster - Access](images/Create-Kubernetes-Cluster-Access.png)
 
 #### Step 4b - Access
 
@@ -108,7 +108,7 @@ Access:
 ```
 > Note: This will enable you to connect to AKS arc anywhere without requiring to have connectivity to on-premise
 
-![Create Kubernetes Cluster - Basics](images/Create-Kubernetes-Cluster-Access2.png)
+![Create Kubernetes Cluster - Access](images/Create-Kubernetes-Cluster-Access2.png)
 
 #### Step 5 - Networking
 
@@ -124,7 +124,7 @@ Networking:
 
 > Note: Network Load-Balancer will be configured later after cluster is created if required.
 
-![Create Kubernetes Cluster - Basics](images/Create-Kubernetes-Networking.png)
+![Create Kubernetes Cluster - Networking](images/Create-Kubernetes-Networking.png)
 
 #### Step 6 - Integration
 
@@ -138,14 +138,14 @@ Azure Monitor:
 ```
 > Note: We will do it later once the cluster is created if required (this will add some costs)
 
-![Create Kubernetes Cluster - Basics](images/Create-Kubernetes-Integration.png)
+![Create Kubernetes Cluster - Integration](images/Create-Kubernetes-Integration.png)
 
 #### Step 7 - Tags
 
 On The Tags page, skip this and click *Next: Review + create*
 
 Configuration will be validated click *Create*
-![Create Kubernetes Cluster - Basics](images/Create-Kubernetes-Validation.png)
+![Create Kubernetes Cluster - Validation](images/Create-Kubernetes-Validation.png)
 
 >You can aslo download a Template for automation later
 
