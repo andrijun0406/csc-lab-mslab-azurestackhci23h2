@@ -147,7 +147,13 @@ On The Tags page, skip this and click *Next: Review + create*
 Configuration will be validated click *Create*
 ![Create Kubernetes Cluster - Validation](images/Create-Kubernetes-Cluster-Validation.png)
 
->You can aslo download a Template for automation later
+>You can also download a Template for automation later
+
+#### Expected Results
+
+Deployment Progress
+![AKS Deployment Progress](images/AKS-Deployment-Progress.png)
+
 
 ### Task 2 - Create AKS cluster from Azure CLI
 
