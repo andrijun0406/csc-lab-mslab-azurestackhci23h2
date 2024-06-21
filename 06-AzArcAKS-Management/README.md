@@ -197,7 +197,7 @@ $customLocationID = (az customlocation show --name $customLocationName --resourc
 Run the following Script on Management machine to get Logical Network ID
 
 ```powershell
-$lnetName = "subnet3"
+$lnetName = "subnet1"
 $lnetid = (az stack-hci-vm network lnet show --name $lnetName --resource-group $resource_group --query "id" -o tsv)
 ```
 
@@ -279,8 +279,27 @@ PS C:\Users\LabAdmin>
 
 #### Step 3 - Create a AKS cluster
 ```powershell
-$aksclustername = "th-clus01-aks-01"
-$controlplaneIP = "10.0.0.149"
+
+# define parameters for az aksarc
+
+$subscription = "368ac09c-01c9-4b47-9142-a7581c6694a3"
+$resource_group = "dcoffee-rg"
+$customLocationName = "dcoffee-clus01-cl"
+$location = "eastus"
+$aksclustername = "th-clus01-aks01"
+$controlplaneIP = "10.0.1.9"
 $aadgroupID = "4b5d705d-7c47-4731-b1ee-58c52165da1f"
+$lnetName = "subnet1"
+
+# login first if you haven't already
+az login --use-device-code
+
+$customLocationID = (az customlocation show --name $customLocationName --resource-group $resource_group --query "id" -o tsv)
+$lnetid = (az stack-hci-vm network lnet show --name $lnetName --resource-group $resource_group --query "id" -o tsv)
+
+# provision AKS cluster
+az aksarc create -n $aksclustername -g $resource_group --custom-location $customlocationID --vnet-ids $lnetid --aad-admin-group-object-ids $aadgroupID --generate-ssh-keys --load-balancer-count 0  --control-plane-ip $controlplaneIP
 
 ```
+
+#### Expected Results
