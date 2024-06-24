@@ -18,24 +18,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "README.md",
-              "DocumentMoniker": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\06-AzArcAKS-Management\\README.md",
-              "RelativeDocumentMoniker": "06-AzArcAKS-Management\\README.md",
-              "ToolTip": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\06-AzArcAKS-Management\\README.md",
-              "RelativeToolTip": "06-AzArcAKS-Management\\README.md",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2024-06-16T03:01:51.987Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -45,9 +32,22 @@
               "RelativeDocumentMoniker": "05-AzArcVM-Management\\README.md",
               "ToolTip": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\05-AzArcVM-Management\\README.md",
               "RelativeToolTip": "05-AzArcVM-Management\\README.md",
-              "ViewState": "AQIAANYCAAAAAAAAAAAAAPcCAAAAAAAA",
+              "ViewState": "AQIAAMsBAAAAAAAAAAAAAAICAAADAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2024-06-13T22:38:57.008Z",
+              "WhenOpened": "2024-06-19T08:37:54.083Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\06-AzArcAKS-Management\\README.md",
+              "RelativeDocumentMoniker": "06-AzArcAKS-Management\\README.md",
+              "ToolTip": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\06-AzArcAKS-Management\\README.md",
+              "RelativeToolTip": "06-AzArcAKS-Management\\README.md",
+              "ViewState": "AQIAAAYBAAAAAAAAAAAAADABAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2024-06-16T03:01:51.987Z",
               "EditorCaption": ""
             }
           ]
