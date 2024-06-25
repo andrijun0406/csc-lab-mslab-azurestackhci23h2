@@ -542,3 +542,53 @@ After the extension is successfully installed, you can create a load balancer se
 
 #### Step 1a - Create a MetalLB load balancer from Azure CLI
 
+** Install Azure CLI extensions **
+
+```bash
+az extension add -n k8s-runtime --upgrade
+az extension list
+```
+
+the output would be something like this:
+
+```
+PS C:\Users\LabAdmin> az extension add -n k8s-runtime --upgrade
+Default enabled including preview versions for extension installation now. Disabled in future release. Use '--allow-preview true' to enable it specifically if needed. Use '--allow-preview false' to install stable version only.
+PS C:\Users\LabAdmin> az extension list
+[
+  <snippets>
+  {
+    "experimental": false,
+    "extensionType": "whl",
+    "name": "k8s-runtime",
+    "path": "C:\\Users\\LabAdmin\\.azure\\cliextensions\\k8s-runtime",
+    "preview": false,
+    "version": "1.0.1"
+  },
+<snippets>
+]
+```
+
+**Install Load Balancer Arc extensions**
+
+```bash
+$resource_group = "dcoffee-rg"
+$aksclustername = "th-clus03-aks01"
+$subscriptionID=""
+
+az k8s-runtime load-balancer enable --resource-uri subscriptions/$subscriptionID/resourceGroups/$resource_group/providers/Microsoft.Kubernetes/connectedClusters/$aksclustername
+```
+
+the output would be something like this:
+
+![Deploy AKS arc load balancer extensions](images/Deploy-arclb-extension.png)
+
+**Deploy MetalLB load balancer**
+
+```bash
+$resource_group = "dcoffee-rg"
+$aksclustername = "th-clus03-aks01"
+$subscriptionID=""
+
+az k8s-runtime load-balancer enable --resource-uri subscriptions/$subscriptionID/resourceGroups/$resource_group/providers/Microsoft.Kubernetes/connectedClusters/$aksclustername
+```
