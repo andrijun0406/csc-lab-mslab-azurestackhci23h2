@@ -698,7 +698,7 @@ on how to use the CRs.
 
 **Configure CR for Metallb**
 
-Create the following yaml file and save as metallb.yaml in ~\Documents
+Create the following yaml manifest and save as metallb.yaml in ~\Documents
 
 ```yaml
 apiVersion: metallb.io/v1beta1
@@ -741,3 +741,134 @@ metallb-speaker-kmzc7                 4/4     Running   0          12m
 PS C:\Users\LabAdmin>
 ```
 
+#### Step 2 - Deploy sample application
+
+Now that we have load balancer in place, we could deploy sample application.
+
+Create a file named azure-vote.yaml, and copy in the following manifest:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-vote-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azure-vote-back
+  template:
+    metadata:
+      labels:
+        app: azure-vote-back
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: azure-vote-back
+        image: mcr.microsoft.com/oss/bitnami/redis:6.0.8
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        ports:
+        - containerPort: 6379
+          name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-back
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: azure-vote-back
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-vote-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azure-vote-front
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: azure-vote-front
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: azure-vote-front
+        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: REDIS
+          value: "azure-vote-back"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-front
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: azure-vote-front
+```
+
+Deploy the application using kubectl apply:
+
+```
+kubectl apply -f .\Documents\azure-vote.yaml
+```
+
+the output would be something like this:
+
+```
+PS C:\Users\LabAdmin> kubectl apply -f .\Documents\azure-vote.yaml
+deployment.apps/azure-vote-back created
+service/azure-vote-back created
+deployment.apps/azure-vote-front created
+service/azure-vote-front created
+PS C:\Users\LabAdmin>
+```
+
+Check deployments and services in default namespace
+```
+PS C:\Users\LabAdmin> kubectl get all
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/azure-vote-back-8fd8d8db4-hplpq     1/1     Running   0          2m11s
+pod/azure-vote-front-5698dd7765-bg92x   1/1     Running   0          2m9s
+
+NAME                       TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/azure-vote-back    ClusterIP      10.100.123.236   <none>        6379/TCP       2m11s
+service/azure-vote-front   LoadBalancer   10.98.67.239     10.0.1.4      80:30578/TCP   2m9s
+service/kubernetes         ClusterIP      10.96.0.1        <none>        443/TCP        4d5h
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/azure-vote-back    1/1     1            1           2m13s
+deployment.apps/azure-vote-front   1/1     1            1           2m11s
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/azure-vote-back-8fd8d8db4     1         1         1       2m14s
+replicaset.apps/azure-vote-front-5698dd7765   1         1         1       2m12s
+```
+
+Test by opening web browser from Management machine (you need to add new interface with the Vlan and subnet 10.0.1.0/24 first)
+
+![Sample Application Azure Vote](images/azure-vote-app.png)
