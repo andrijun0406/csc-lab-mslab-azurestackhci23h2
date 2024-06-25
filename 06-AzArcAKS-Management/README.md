@@ -536,5 +536,9 @@ After the extension is successfully installed, you can create a load balancer se
 ![Deploy MetalLB load balancer 3](images/Deploy-MetalLB3.png)
 > Choose ARP for Adversite Mode since in this environment we don't have any BGP peers
 
+**still failed**
+
+![Deploy MetalLB load balancer Result](images/Deploy-MetalLB-Result.png)
+
 #### Step 1a - Create a MetalLB load balancer from Azure CLI
 
