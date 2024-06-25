@@ -527,6 +527,14 @@ Prerequisite:
 **Go to your AKS cluster and Navigate to Networking**
 
 ![Deploy MetalLB load balancer 1](images/Deploy-MetalLB1.png)
-> Click Install to install the Arc Networking k8s-extension
+> Click Install to install the ArcNetworking k8s-extension
+
+![Deploy MetalLB load balancer 2](images/Deploy-MetalLB2.png)
+
+After the extension is successfully installed, you can create a load balancer service to the AKS cluster.
+
+![Deploy MetalLB load balancer 3](images/Deploy-MetalLB3.png)
+> Choose ARP for Adversite Mode since in this environment we don't have any BGP peers
 
 #### Step 1a - Create a MetalLB load balancer from Azure CLI
+
