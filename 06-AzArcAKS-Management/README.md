@@ -510,3 +510,22 @@ kube-node-lease   Active   3d23h
 kube-public       Active   3d23h
 kube-system       Active   3d23h
 ```
+
+### Task 4 - Deploy Sample Application
+
+#### Step 1 - Create a MetalLB load balancer from Azure Portal
+
+The main purpose of a load balancer is to distribute traffic across multiple nodes in a Kubernetes cluster. 
+This can help prevent downtime and improve overall performance of applications. 
+AKS enabled by Azure Arc supports creating MetalLB load balancer instance on your Kubernetes cluster using the Arc Networking k8s-extension.
+
+Prerequisite:
+1. A Kubernetes cluster with at least one Linux node (created through portal or cli)
+2. Assign Ip address for Load Balancer with the same subnet as the kubernetes logical networks. 
+> Make sure it is outside of the pool and not overlapped with control plane IP address.
+
+** Go to your AKS cluster and Navigate to Networking**
+
+![Deploy MetalLB load balancer 1](images/Deploy-MetalLB1.png)
+
+#### Step 1a - Create a MetalLB load balancer from Azure CLI
