@@ -600,3 +600,144 @@ az k8s-runtime load-balancer create --load-balancer-name $lbName --resource-uri 
 **still failed**
 
 ![Deploy MetalLB load balancer Failed](images/Deploy-MetalLB-failed.png)
+
+#### Step 1c - Create a MetalLB load balancer using Helmchart
+
+This time we directly work with the given kubernetes cluster and use Helmchart to install MetalLB load balancer.
+
+> remove any arcnetworking extensions first in the kubernetes cluster
+
+**Install helmchart on Management Machine**
+
+```powershell
+scoop install helm
+```
+
+the output would be something like this:
+
+```
+PS C:\Users\LabAdmin> scoop install helm
+Scoop uses Git to update itself. Run 'scoop install git' and try again.
+Installing 'helm' (3.15.2) [64bit] from 'main' bucket
+helm-v3.15.2-windows-amd64.zip (16.2 MB) [=============================================================================================] 100%
+Checking hash of helm-v3.15.2-windows-amd64.zip ... ok.
+Extracting helm-v3.15.2-windows-amd64.zip ... done.
+Linking ~\scoop\apps\helm\current => ~\scoop\apps\helm\3.15.2
+Creating shim for 'helm'.
+'helm' (3.15.2) was installed successfully!
+PS C:\Users\LabAdmin>
+```
+
+**Add MetalLB in the helmchart repo**
+
+```powershell
+helm repo list
+helm repo add stable https://charts.helm.sh/stable
+helm repo list
+helm repo add metallb https://metallb.github.io/metallb
+helm repo list
+```
+
+now you would have 2 repo including the metallb repo:
+
+```
+PS C:\Users\LabAdmin> helm repo list
+Error: no repositories to show
+PS C:\Users\LabAdmin> helm repo add stable https://charts.helm.sh/stable
+"stable" has been added to your repositories
+PS C:\Users\LabAdmin> helm repo list
+NAME    URL
+stable  https://charts.helm.sh/stable
+PS C:\Users\LabAdmin> helm repo add metallb https://metallb.github.io/metallb
+"metallb" has been added to your repositories
+PS C:\Users\LabAdmin> helm repo list
+NAME    URL
+stable  https://charts.helm.sh/stable
+metallb https://metallb.github.io/metallb
+```
+
+**Connect to the kubernetes and create new namespaces for metallb**
+
+```powershell
+$resource_group = "dcoffee-rg"
+$aksclustername = "th-clus01-aks01"
+az connectedk8s proxy --name $aksclustername --resource-group $resource_group --file "~\.kube\config"
+
+# go to other terminal 
+kubectl get namespaces
+kubectl create namespace metallb-system
+helm install metallb metallb/metallb --namespace metallb-system
+```
+
+the output would be something like this:
+```
+PS C:\Users\LabAdmin> kubectl create namespace metallb-system
+namespace/metallb-system created
+
+PS C:\Users\LabAdmin> kubectl get namespaces
+NAME              STATUS   AGE
+azure-arc         Active   4d4h
+default           Active   4d4h
+kube-node-lease   Active   4d4h
+kube-public       Active   4d4h
+kube-system       Active   4d4h
+metallb-system    Active   7m11s
+PS C:\Users\LabAdmin> helm install metallb metallb/metallb --namespace metallb-system
+NAME: metallb
+LAST DEPLOYED: Tue Jun 25 14:42:35 2024
+NAMESPACE: metallb-system
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+MetalLB is now running in the cluster.
+
+Now you can configure it via its CRs. Please refer to the metallb official docs
+on how to use the CRs.
+```
+
+**Configure CR for Metallb**
+
+Create the following yaml file and save as metallb.yaml in ~\Documents
+
+```yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: ippool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 10.0.1.4-10.0.1.8
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: l2adv
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - ippool
+```
+
+After that apply in kubectl and verified the metallb pods are deployed in metallb-system namespaces
+
+```
+dir .\Documents\
+kubectl apply -f .\Documents\metallb.yaml
+kubectl get pods -n metallb-system
+```
+
+the output should be something like this:
+```
+PS C:\Users\LabAdmin> kubectl apply -f .\Documents\metallb.yaml
+ipaddresspool.metallb.io/ippool created
+l2advertisement.metallb.io/l2adv created
+PS C:\Users\LabAdmin> kubectl get pods -n metallb-system
+NAME                                  READY   STATUS    RESTARTS   AGE
+metallb-controller-57c69844b9-v5s6c   1/1     Running   0          12m
+metallb-speaker-5944t                 4/4     Running   0          12m
+metallb-speaker-kmzc7                 4/4     Running   0          12m
+PS C:\Users\LabAdmin>
+```
+
