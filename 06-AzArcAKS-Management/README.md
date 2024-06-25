@@ -521,11 +521,12 @@ AKS enabled by Azure Arc supports creating MetalLB load balancer instance on you
 
 Prerequisite:
 1. A Kubernetes cluster with at least one Linux node (created through portal or cli)
-2. Assign Ip address for Load Balancer with the same subnet as the kubernetes logical networks. 
+2. Assign IP Address for Load Balancer with the same subnet as the kubernetes logical networks. 
 > Make sure it is outside of the pool and not overlapped with control plane IP address.
 
-** Go to your AKS cluster and Navigate to Networking**
+**Go to your AKS cluster and Navigate to Networking**
 
 ![Deploy MetalLB load balancer 1](images/Deploy-MetalLB1.png)
+> Click Install to install the Arc Networking k8s-extension
 
 #### Step 1a - Create a MetalLB load balancer from Azure CLI
