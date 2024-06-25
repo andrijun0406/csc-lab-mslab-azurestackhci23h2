@@ -1,4 +1,4 @@
-## 6. Azure Arc AKS Manaagement
+## 6. Azure Arc AKS Management
 
 One of the cool capabilities of Azure Arc enabled-AKS or AKS Hybrid is that now, you can create AKS cluster from Azure Portal, CLI and also ARM template. 
 In this section I will describe in detail my experience deploying Azure Arc enabled AKS on Azure Stack HCI using Portal and CLI
@@ -463,3 +463,50 @@ Provisioning the AKSArc cluster. This operation might take a while...
 ![Create kubernetes through Azure CLI Result2](images/Create-AKSCLI-Result2.png)
 > You can see the deployment create 2 VMs: 1 Control Plane and 1 Worker Node from NodePool1
 you also see that all the VMs are running on subnet1 (10.0.1.0/24)
+
+### Task 3 - Connect to the kubernetes clusters
+
+Now you can connect to your Kubernetes cluster by running the az connectedk8s proxy command from your development machine.
+Make sure you sign in to Azure before running this command.
+This command downloads the kubeconfig of your Kubernetes cluster to your development machine and opens a proxy connection channel to your on-premises Kubernetes cluster. The channel is open for as long as the command runs. Let this command run for as long as you want to access your cluster. 
+If it times out, close the CLI window, open a fresh one, then run the command again.
+You must have Contributor permissions on the resource group that hosts the Kubernetes cluster in order to run the following command successfully:
+
+```powershell
+
+$resource_group = "dcoffee-rg"
+$aksclustername = "th-clus01-aks01"
+
+# login first if you haven't already
+az login --use-device-code
+
+az connectedk8s proxy --name $aksclustername --resource-group $resource_group --file "~\.kube\config"
+
+```
+
+The output would be something like this:
+
+```
+PS C:\Users\LabAdmin> az connectedk8s proxy --name $aksclustername --resource-group $resource_group --file "~\.kube\config"
+Proxy is listening on port 47011
+Merged "th-clus01-aks01" as current context in C:\Users\LabAdmin\.kube\config
+Start sending kubectl requests on 'th-clus01-aks01' context using kubeconfig at C:\Users\LabAdmin\.kube\config
+Press Ctrl+C to close proxy.
+
+```
+
+Now open another terminal to use kubectl
+
+```
+PS C:\Users\LabAdmin> kubectl get nodes
+NAME              STATUS   ROLES           AGE     VERSION
+moc-ldg8d1iqwb3   Ready    control-plane   3d23h   v1.27.3
+moc-lk3oqtsyffz   Ready    <none>          3d23h   v1.27.3
+PS C:\Users\LabAdmin> kubectl get namespaces
+NAME              STATUS   AGE
+azure-arc         Active   3d23h
+default           Active   3d23h
+kube-node-lease   Active   3d23h
+kube-public       Active   3d23h
+kube-system       Active   3d23h
+```
