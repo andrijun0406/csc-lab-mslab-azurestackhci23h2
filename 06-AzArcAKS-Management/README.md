@@ -303,3 +303,163 @@ az aksarc create -n $aksclustername -g $resource_group --custom-location $custom
 ```
 
 #### Expected Results
+
+The output would be something like this:
+
+```
+SSH key files 'C:\Users\LabAdmin\.ssh\id_rsa' and 'C:\Users\LabAdmin\.ssh\id_rsa.pub' have been generated under ~/.ssh to allow SSH access to the VM. If using machines without permanent storage like Azure Cloud Shell without an attached file share, back up your keys to a safe location
+Please see Microsoft's privacy statement for more information: https://go.microsoft.com/fwlink/?LinkId=521839
+Provisioning the AKSArc cluster. This operation might take a while...
+{
+  "extendedLocation": {
+    "name": "/subscriptions/xxx/resourceGroups/dcoffee-rg/providers/Microsoft.ExtendedLocation/customLocations/dcoffee-clus01-cl",
+    "type": "CustomLocation"
+  },
+  "id": "/subscriptions/xxx/resourceGroups/dcoffee-rg/providers/Microsoft.Kubernetes/connectedClusters/th-clus01-aks01/providers/Microsoft.HybridContainerService/provisionedClusterInstances/default",
+  "name": "default",
+  "properties": {
+    "agentPoolProfiles": [
+      {
+        "count": 1,
+        "enableAutoScaling": null,
+        "kubernetesVersion": null,
+        "maxCount": null,
+        "maxPods": null,
+        "minCount": null,
+        "name": "nodepool1",
+        "nodeLabels": null,
+        "nodeTaints": null,
+        "osSku": "CBLMariner",
+        "osType": "Linux",
+        "vmSize": "Standard_A4_v2"
+      }
+    ],
+    "autoScalerProfile": null,
+    "cloudProviderProfile": {
+      "infraNetworkProfile": {
+        "vnetSubnetIds": [
+          "/subscriptions/xxx/resourceGroups/dcoffee-rg/providers/microsoft.azurestackhci/logicalnetworks/subnet1"
+        ]
+      }
+    },
+    "clusterVmAccessProfile": {
+      "authorizedIpRanges": null
+    },
+    "controlPlane": {
+      "controlPlaneEndpoint": {
+        "hostIp": "10.0.1.9"
+      },
+      "count": 1,
+      "vmSize": "Standard_A4_v2"
+    },
+    "kubernetesVersion": "1.27.3",
+    "licenseProfile": {
+      "azureHybridBenefit": "False"
+    },
+    "linuxProfile": {
+      "ssh": {
+        "publicKeys": [
+          {
+            "keyData": "ssh-rsa xxx"
+          }
+        ]
+      }
+    },
+    "networkProfile": {
+      "loadBalancerProfile": {
+        "count": 0
+      },
+      "networkPolicy": "calico",
+      "podCidr": "10.244.0.0/16"
+    },
+    "provisioningState": "Succeeded",
+    "status": {
+      "controlPlaneStatus": [
+        {
+          "errorMessage": null,
+          "name": "ArcAgent",
+          "phase": "provisioned",
+          "ready": true
+        },
+        {
+          "errorMessage": null,
+          "name": "CloudProvider",
+          "phase": "provisioned",
+          "ready": true
+        },
+        {
+          "errorMessage": null,
+          "name": "Telemetry",
+          "phase": "provisioned",
+          "ready": true
+        },
+        {
+          "errorMessage": null,
+          "name": "CertificateAuthority",
+          "phase": "provisioned",
+          "ready": true
+        },
+        {
+          "errorMessage": null,
+          "name": "ProviderKeyVaultKms",
+          "phase": "provisioned",
+          "ready": true
+        },
+        {
+          "errorMessage": null,
+          "name": "ProviderCsiDriver",
+          "phase": "provisioned",
+          "ready": true
+        },
+        {
+          "errorMessage": null,
+          "name": "NfsCsiDriver",
+          "phase": "provisioned",
+          "ready": true
+        },
+        {
+          "errorMessage": "Error: AddOnAvailable: csi-smb-controller: Deployment does not have minimum availability. ",
+          "name": "SmbCsiDriver",
+          "phase": "provisioning",
+          "ready": null
+        },
+        {
+          "errorMessage": null,
+          "name": "KubeProxy",
+          "phase": "provisioned",
+          "ready": true
+        }
+      ],
+      "currentState": "Succeeded",
+      "errorMessage": null,
+      "operationStatus": null
+    },
+    "storageProfile": {
+      "nfsCsiDriver": {
+        "enabled": true
+      },
+      "smbCsiDriver": {
+        "enabled": true
+      }
+    }
+  },
+  "resourceGroup": "dcoffee-rg",
+  "systemData": {
+    "createdAt": "2024-06-21T02:22:04.427031+00:00",
+    "createdBy": "xxx",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-06-21T02:35:57.179071+00:00",
+    "lastModifiedBy": "xxx",
+    "lastModifiedByType": "Application"
+  },
+  "type": "microsoft.hybridcontainerservice/provisionedclusterinstances"
+```
+
+![Create kubernetes through Azure CLI Result1](images/Create-AKSCLI-Result1.png)
+> the AKS cluster is running on subnet1 as defined in parameter
+
+**Check on Windows Admin Center**
+
+![Create kubernetes through Azure CLI Result2](images/Create-AKSCLI-Result2.png)
+> You can see the deployment create 2 VMs: 1 Control Plane and 1 Worker Node from NodePool1
+you also see that all the VMs are running on subnet1 (10.0.1.0/24)
