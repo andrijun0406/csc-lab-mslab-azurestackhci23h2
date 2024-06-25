@@ -542,9 +542,9 @@ After the extension is successfully installed, you can create a load balancer se
 
 #### Step 1a - Create a MetalLB load balancer from Azure CLI
 
-** Install Azure CLI extensions **
+**Install Azure CLI extensions**
 
-```bash
+```powershell
 az extension add -n k8s-runtime --upgrade
 az extension list
 ```
@@ -571,7 +571,7 @@ PS C:\Users\LabAdmin> az extension list
 
 **Install Load Balancer Arc extensions**
 
-```bash
+```powershell
 $resource_group = "dcoffee-rg"
 $aksclustername = "th-clus03-aks01"
 $subscriptionID=""
@@ -585,10 +585,18 @@ the output would be something like this:
 
 **Deploy MetalLB load balancer**
 
-```bash
+```powershell
 $resource_group = "dcoffee-rg"
 $aksclustername = "th-clus03-aks01"
 $subscriptionID=""
 
-az k8s-runtime load-balancer enable --resource-uri subscriptions/$subscriptionID/resourceGroups/$resource_group/providers/Microsoft.Kubernetes/connectedClusters/$aksclustername
+$lbName="aks01-lb"
+$advertiseMode="ARP"
+$ipRange="10.0.3.8/32"
+
+az k8s-runtime load-balancer create --load-balancer-name $lbName --resource-uri "subscriptions/$subscriptionID/resourceGroups/$resource_group/providers/Microsoft.Kubernetes/connectedClusters/$aksclustername" --addresses $ipRange --advertise-mode $advertiseMode
 ```
+
+**still failed**
+
+![Deploy MetalLB load balancer Failed](images/Deploy-MetalLB-failed.png)
