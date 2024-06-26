@@ -14,6 +14,8 @@ This Lab consists of few Lab Scenarios here:
 8. [Test Azure Stack HCI Performance](08-AzureStackHCI-Perf)
 9. [Azure Devops + GitOps + AKS on Azure Stack HCI](09-AzDevops-GitOps-AKSHCI)
 10. [Azure API Gateway on Azure Stack HCI](10-APIGW)
-11. [Cleanup MSLAB](10-Cleanup-MSLAB)
+11. [Azure Virtual Desktop on Azure Stack HCI](11-AVD)
+12. [Azure Stack Software-Defined-network](12-SDN) 
+13. [Cleanup MSLAB](13-Cleanup-MSLAB)
 
 More scenarios to come, please check regularly.

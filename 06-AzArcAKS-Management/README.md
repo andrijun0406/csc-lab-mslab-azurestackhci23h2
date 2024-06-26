@@ -869,6 +869,6 @@ replicaset.apps/azure-vote-back-8fd8d8db4     1         1         1       2m14s
 replicaset.apps/azure-vote-front-5698dd7765   1         1         1       2m12s
 ```
 
-Test by opening web browser from Management machine (you need to add new interface with the Vlan and subnet 10.0.1.0/24 first)
+Test by opening web browser from Management machine (you need to add new interface with the Vlan 1 and subnet 10.0.1.0/24 first)
 
 ![Sample Application Azure Vote](images/azure-vote-app.png)
