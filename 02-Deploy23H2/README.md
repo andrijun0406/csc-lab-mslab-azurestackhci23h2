@@ -1,4 +1,4 @@
-## 2. Deploy Azure Stack HCI Cluster 23H2 using Cloud Based Deployment (Azure Portal)
+﻿## 2. Deploy Azure Stack HCI Cluster 23H2 using Cloud Based Deployment (Azure Portal)
 
 Now, after MSLAB is hydrated we are ready to build 2 node of Azure Stack HCI clusters 23H2 (in nested VM) using cloud based deployment (Azure Portal). Read the microsoft document [here](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deploy-via-portal) for more detail.
 > Note: Cloud Deployment is not yet supported from any OEM. Here we can get away to work nested VM with disabling bitlocker for OS and disabling WDAC (WDAC policy is distributed as part of Solution Builder Extensions)
@@ -407,3 +407,145 @@ Test-Cluster "th-mc660-1","th-mc660-2" -Include "Network"
 Ignore the warning for now, and resume the deployment from portal. It should now progressing again.
 
 ![Network ATC Issues-5](images/ATC-issues-5.png)
+
+*2. The deployment stops when there is error related to arb/moc installation.*
+
+This might be caused by the networkATC messing up with DHCP on point one. 
+If at some point, issues on point 1 fixed and the deployment resumed but then the arb/moc installation step show error, you might find network ATC still does not create the cluster network properly due to by default the vSMB adapters have DHCP enabled and because the physical adapters are trunked, they still get DHCP requests/receives from DHCP server and change the 10.71.X.X IP Addresses.
+
+To solve this issue:
+
+1. Deactive DHCP scope from DHCP servers and use static IP address instead (you might have to do it directly on DHCP server or using DHCP management snaps-in)
+2. Remove the compute_management_storage NetIntent
+
+```powershell
+Remove-NetIntent -Name "compute_management_storage"
+```
+
+3. Stop NetATC services on both nodes
+
+```powershell
+Stop-Service NetworkATC
+```
+
+3. Remove VMSwitch created by NetATC (this will remove the VMNetworkAdapter vManagement and vSMBs too)
+
+```powershell
+Get-VMSwitch | Remove-VMSwitch
+```
+4. Make Sure the original NetAdapter is using static IP address in the management subnet (one adapter only with Gateway address)
+
+```powershell
+
+# change IP address with the previous IP address assigned by DHCP
+netsh interface ipv4 set address name="Ethernet" static "10.0.0.12" 255.255.255.0 10.0.0.1
+netsh interface ipv4 set dns name="Ethernet" static 10.0.0.1
+```
+5. Create new NetIntent with the following script in just one of the nodes:
+
+```powershell
+#virtual environment (skipping RDMA config)
+$AdapterOverride = New-NetIntentAdapterPropertyOverrides
+$AdapterOverride.NetworkDirect = 0
+Add-NetIntent -Name "compute_management_storage" -Management -Compute -Storage -AdapterName "Ethernet","Ethernet 2" -AdapterPropertyOverrides $AdapterOverride -Verbose
+```
+
+6. Validate if NetATC doing the right thing now. (you can also use Failover Cluster Manager and see the Cluster network created there)
+
+```powershell
+Get-NetIntent
+Get-NetIntentStatus
+Get-VMNetworkAdapterIsolation -ManagementOS
+Get-ClusterNetwork
+Get-ClusterNetworkInterface
+ipconfig /all
+Get-ClusterGroup
+```
+> Make sure the Cluster IP address is not attached to the vSMB but attached to vManagement
+
+Good output of cluster network should be something like this:
+
+```
+PS C:\Users\LabAdmin> Get-ClusterNetwork
+ 
+Name                                        State Metric             Role
+----                                        ----- ------             ----
+compute_management_storage(Management)         Up  70240 ClusterAndClient
+compute_management_storage(Storage_VLAN711)    Up  30241          Cluster
+compute_management_storage(Storage_VLAN712)    Up  30242          Cluster
+```
+
+7. You might need to restart each node at the time to make sure the cluster network are properly configured
+8. Now let's check again the moc installation status.
+
+```powershell
+get-mocconfig
+```
+> the installState should show "installing"
+
+9. Uninstall moc
+
+```powershell
+uninstall-moc
+```
+
+10. Reinstall moc
+
+```powershell
+$ap = Invoke-ActionPlanInstance -RolePath 'MocArb' -ActionType 'InstallMoc'
+Start-MonitoringActionplanInstanceToComplete $ap
+```
+
+Successful output should be something like the following:
+
+```
+ERBOSE: Status of ActionPlan: InstallMoc InstanceID:d799ba62-a826-407a-b236-e6fc9312472f
+ 
+Start                  End                    Duration    Type   Status  Name
+-----                  ---                    --------    ----   ------  ----
+06/26/2024 06:50:04 AM 06/26/2024 06:57:36 AM 00.00:07:32 Action Success └─(A)InstallMoc
+06/26/2024 06:50:04 AM 06/26/2024 06:51:26 AM 00.00:01:22 Step   Success   ├─(S)0 Install OpenSSH client
+06/26/2024 06:50:04 AM 06/26/2024 06:51:26 AM 00.00:01:22 Task   Success   │ └─(T)Role=MocArb Action=InstallOpenSSHClient
+06/26/2024 06:50:04 AM 06/26/2024 06:51:26 AM 00.00:01:22 Action Success   │   └─(A)InstallOpenSSHClient
+06/26/2024 06:50:04 AM 06/26/2024 06:51:26 AM 00.00:01:22 Step   Success   │     └─(S)0.1 Parallel per-node operation top step
+06/26/2024 06:50:04 AM 06/26/2024 06:51:26 AM 00.00:01:22 Task   Success   │       ├─(T)Role=Cloud\Infrastructure\BareMetal Action=ParallelPerNode_SingleTask_sg-mc660-1
+06/26/2024 06:50:04 AM 06/26/2024 06:51:26 AM 00.00:01:22 Action Success   │       │ └─(A)ParallelPerNode_SingleAction_sg-mc660-1 [ExecutionContext]Node=sg-mc660-1
+06/26/2024 06:50:04 AM 06/26/2024 06:51:26 AM 00.00:01:22 Step   Success   │       │   └─(S)0.1.1 Install OpenSSH client
+06/26/2024 06:50:04 AM 06/26/2024 06:51:26 AM 00.00:01:22 Task   Success   │       │     └─(T)[RemoteNode=sg-mc660-1] Role=MocArb Interface=InstallOpenSSHClient
+06/26/2024 06:50:04 AM 06/26/2024 06:51:25 AM 00.00:01:21 Task   Success   │       └─(T)Role=Cloud\Infrastructure\BareMetal Action=ParallelPerNode_SingleTask_sg-mc660-2
+06/26/2024 06:50:04 AM 06/26/2024 06:51:25 AM 00.00:01:21 Action Success   │         └─(A)ParallelPerNode_SingleAction_sg-mc660-2 [ExecutionContext]Node=sg-mc660-2
+06/26/2024 06:50:04 AM 06/26/2024 06:51:25 AM 00.00:01:21 Step   Success   │           └─(S)0.1.1 Install OpenSSH client
+06/26/2024 06:50:04 AM 06/26/2024 06:51:25 AM 00.00:01:21 Task   Success   │             └─(T)[RemoteNode=sg-mc660-2] Role=MocArb Interface=InstallOpenSSHClient
+06/26/2024 06:51:26 AM 06/26/2024 06:57:36 AM 00.00:06:10 Step   Success   └─(S)1 Deploy moc only
+06/26/2024 06:51:26 AM 06/26/2024 06:57:36 AM 00.00:06:10 Task   Success     └─(T)Role=MocArb Interface=DeployMoc
+ 
+ 
+VERBOSE: ActionPlan : InstallMoc  ActionPlanStatus: Completed
+ 
+ 
+InstanceID          : d799ba62-a826-407a-b236-e6fc9312472f
+ActionPlanName      :
+Status              : Completed
+StartDateTime       : 6/26/2024 6:50:03 AM
+EndDateTime         : 6/26/2024 6:57:41 AM
+RemediationInstance :
+```
+
+if somehow it is failed then contact Microsoft and send the logs using the following procedures:
+
+```powershell
+$ToDate = Get-Date -Date "05/06/2024 15:00:00"
+$FromDate = Get-Date -Date "05/08/2024 15:00:00"
+Send-DiagnosticData -FromDate $fromDate -ToDate $ToDate 
+ 
+Get-ClusterGroup ca*
+Get-service wssd*
+Get-MocNode -location MocLocation
+```
+Check under the following directory: 
+```powershell
+(Get-MocConfig).workingDir + "\cloud\log\" 
+```
+for a file called wssdcloudagent.log, and if it exists, wssdcloudagent.log.old as well, upload them to Microsoft provided File server.
+
+11. Resume the Deployment from Portal
