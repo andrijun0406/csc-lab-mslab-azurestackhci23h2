@@ -469,7 +469,7 @@ Remove-Item $templateFileDynamic.FullName
 #### Expected Result
 ![Logical Networks Result](images/Logical-Networks-Result.png)
 
-### Task 2 - Create Arc VMs (Windows) using DHCP from Portal
+### Task 2a - Create Arc VMs (Windows) using DHCP from Portal
 
 Now that you have all Azure resources created (VM Images and Logical Networks) you are ready to create Azure Arc VMs.
 In this task, I will create Windows 2022 DC Azure Edition from Images that is created from Azure Marketplace and use Dynamic Network Interface using Dynamic Logical Networks (DHCP assigned).
@@ -639,6 +639,226 @@ Follow step here to enable SSH on Windows and Arc-enabled Servers:
 ![Connect to VM1](images/Connect-ssh.png)
 * Connecting VM from Windows Admin Center
 ![Connect to VM2](images/Connect-VM2.png)
+
+### Task 2b - Create Arc VMs (Windows) using DHCP from Azure CLI
+
+Run the following script from the cluster nodes.
+> somehow it doesn't work remotely from Management machine
+
+```powershell
+
+# Define Parameters for Azure CLI
+
+$vmName ="test2-win22azure-vm"
+$subscription =  "<your-subscriptions>"
+$resource_group = "dcoffee-rg"
+$customLocationName = "dcoffee-clus01-cl"
+$customLocationID ="/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl"
+$location = "eastus"
+$computerName = "th-mc660-1"
+$userName = "LabAdmin"
+$password = "<admin-password>"
+$imageName ="Win22DCAzure-Hotpatch"
+$nicName ="test2-win22azure-vm-eth01"   
+$lnetName ="subnet2"
+
+az login --use-device-code
+    
+# create network interface with dynamic IP(DHCP) - no need to specify ip address - only works for windows
+
+az stack-hci-vm network nic create --subscription $subscription --resource-group $resource_group --custom-location $customLocationID --location $location --name $nicName --subnet-id $lnetName
+az stack-hci-vm network nic list --resource-group $resource_group
+az stack-hci-vm create --name $vmName --resource-group $resource_group --admin-username $userName --admin-password $password --computer-name $computerName --image $imageName --location $location --authentication-type all --nics $nicName --custom-location $customLocationID --hardware-profile memory-mb="8192" processors="4"
+```
+
+#### Expected Result
+
+the network interface creation output would be something like this:
+
+```
+PS C:\Users\LabAdmin> az stack-hci-vm network nic create --subscription $subscription --resource-group $resource_group --custom-location $customLocationID --location $location --name $nicName --subnet-id $lnetName
+Command group 'stack-hci-vm' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
+{
+  "extendedLocation": {
+    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "type": "CustomLocation"
+  },
+  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test2-win22azure-vm-eth01",
+  "location": "eastus",
+  "name": "test2-win22azure-vm-eth01",
+  "properties": {
+    "dnsSettings": {
+      "dnsServers": null
+    },
+    "ipConfigurations": [
+      {
+        "name": null,
+        "properties": {
+          "gateway": null,
+          "prefixLength": null,
+          "privateIpAddress": null,
+          "privateIpAllocationMethod": null,
+          "subnet": {
+            "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/logicalnetworks/subnet2",
+            "resourceGroup": "dcoffee-rg"
+          }
+        }
+      }
+    ],
+    "macAddress": null,
+    "provisioningState": "Succeeded",
+    "resourceName": null,
+    "status": {}
+  },
+  "resourceGroup": "dcoffee-rg",
+  "systemData": {
+    "createdAt": "2024-06-27T12:16:26.324640+00:00",
+    "createdBy": "cscadmin@apjcsclocal.onmicrosoft.com",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-06-27T12:18:06.036299+00:00",
+    "lastModifiedBy": "319f651f-7ddb-4fc6-9857-7aef9250bd05",
+    "lastModifiedByType": "Application"
+  },
+  "tags": null,
+  "type": "microsoft.azurestackhci/networkinterfaces"
+}
+PS C:\Users\LabAdmin>
+```
+
+the output of VM creation would be something like this:
+
+```
+PS C:\Users\LabAdmin> az stack-hci-vm create --name $vmName --resource-group $resource_group --admin-username $userName --admin-password $password --computer-name $computerName --image $imageName --location $location --authentication-type all --nics $nicName --custom-location $customLocationID --hardware-profile memory-mb="8192" processors="4"
+Command group 'stack-hci-vm' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
+{
+  "extendedLocation": {
+    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "type": "CustomLocation"
+  },
+  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.HybridCompute/machines/test2-win22azure-vm/providers/Microsoft.AzureStackHCI/virtualMachineInstances/default",
+  "name": "default",
+  "properties": {
+    "guestAgentInstallStatus": {
+      "errorDetails": [
+        {
+          "code": "Timeout",
+          "message": "Timed out installing ArcForServerAgent. Last error: rpc error: code = Unknown desc = Failed to run command due to error rpc error: code = Unknown desc = RunCommand request [VirtualMachine:<name:\"test2-win22azure-vm-368ac09c-01c9-4b47-9142-a7581c6694a3-dcoffee-rg-0aff56b7\" id:\"DC34A70D-9F7E-4B25-9FF9-718B75F1FE30\" os:<> > Source:<CommandID:\"InstallArcAgent\" > RunCommandInputParameters:<Name:\"AgentConfig\" Value:\"{\\\"cloud\\\":\\\"AzureCloud\\\",\\\"vmid\\\":\\\"d0b6dd9b-f9e1-43d3-8ff7-dc4cfdd3be0d\\\",\\\"kind\\\":\\\"HCI\\\",\\\"private-key\\\":\\\"MIIEpQIBAAKCAQEA1lmk8G4Q1NUdQ+oAkT2yne5L5oCDroaV6zZZLFZWIU6/nN4sflbuj4ozEVhk+o/UmStfv8Ya6dETyF/jFFQrIIHdSSQ4Tq7eIb7lbm159QnmcKf1JZEYOUfVJ3nWQjIsUJTpP1qxGGruax47QfwY/lcI5TzbtLXbZBHJ0fl7Ne1CuYpGUOyKslf46zyDsa5IX6/aT3Wz8nOd5Y90dTpsyueW9mQ07ziPuoa6E81W2ZDNNr3HOTZhbUrge1Qtg55KKelKvFA6mttpbys4rBkp5+FHcywnGUkMeRGe2skHsgoCXiiQqx2G7pO4/4YofZxc6oBzQmYpmW1Zz3XRWjd0fwIDAQABAoIBAF0LTK2RGX1JhQqV6Oki/wXPCuNjpcV8ZldToCG+2GRc6pANYQL2eVeVhdVhqXOaO47BZS65r7UPLKct+EQ6xP23YXb+YfLFtWawlqb4npffVEhSn/dOpFU4+S3JlVfmr5XLDfSSSY1v3U5iMRbTd4XwAcyAPl6TEki97/1VbkZZizaqAfZTjXozIFwjAgFcezmedybyEwGcmQzScBdjcLpcb2wPfF98Y3R+oc4iRCQo3vYsYD7BGYqTW0ToSfrUvEMG0U8YnPqGLUivtAaSGg5sSSxCgMo4sPXpjgZh4a1lFg9psdGBPBGjydCLW76dx+IjxARTHQrpWx4fdcZSxAECgYEA2CkkVsblxL8H5hsjPJkKT9uu4JbGlHHhmNLzB+1zHbBkWA5AEkE4Qduat2MkaEsEEzhBHyiO/PJm/HX3NE2NoAZEaxKUnkDFkXE5b56uIgrD27ttykOAj8l48Mxggg5VVBuM20QvgANG6kWvIDmf9rwpMuBFcygdxIWPGWXlLG8CgYEA/dsT7qwZvqCpZCtaX9JkEs84HRehETb/yDo/JsEyEhMx86v3bNb1DBAlHVsZEshQOdvUSKYYV/4V8Z/3w58u+yGZv4B293bac+9JEWs9PSHhmZI0BcFleIXkF07E4s1mUsqHikAr0TAf7REwxDdfsDBAcmqO/ZZmkObj8qWhYPECgYEAzBbENZ5jUEihN5QFx/Ai+VVMnsYcxglj2/vH9IMvvidOBoml2tZzPFMQl/dmZ4X0WgUyDy4nGxHvRIxIk7xpbF6eeI25flVfdDv347hpZsDNPYiQV3k2SAwMQSZmNEU+MUQ10MxnILF3Yjfa6k0eCEKNj3iKefi1alhDzNIU98cCgYEAz9THqdSeszHn3MmdkOu34KpkX3UT+fsUSEJfp4PuUVwDvmJhDGukbb7eE/2cNoNnIyd10hChx5CPOKXl+/NcTGBC9sTfIVTeHqKeKLOqjF0rzUYkbz3ZrGW5ytdDXAgbqNaFR0uoU/hZewZi7ZIENkQaz1GsRbMXv7Q4lVTDHZECgYEA1m9SB+oaEdU+/hLrqPtV9QMIs6xMjH6Gqthx4Mn+GW7jrRU/BrLeJWVzrXIuGjgH9itEyPp/tCPYTX0rbEpzUIz9Dvblt0z60df1QEwYb6Nl1fm8HrfRupeRhwVDssbvgSawUor0ASGJCWJcdj7ZvK5nVxQz8UBXIRRlEBPOjp8=\\\",\\\"resource-name\\\":\\\"test2-win22azure-vm\\\",\\\"subscription-id\\\":\\\"368ac09c-01c9-4b47-9142-a7581c6694a3\\\",\\\"resource-group\\\":\\\"dcoffee-rg\\\",\\\"resource-namespace\\\":\\\"Microsoft.HybridCompute\\\",\\\"tenant-id\\\":\\\"2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b\\\",\\\"location\\\":\\\"eastus\\\",\\\"correlation-id\\\":\\\"eff6a40f-dd47-427a-a13e-e365e18321b2\\\",\\\"msi-cert-retries\\\":26,\\\"proxyurl\\\":\\\"\\\"}\" > OperationID:\"82d838f1-3487-11ef-a5a3-02ec00110008\" ] returned with FAILED execution state: Run Command Failed: Run Command Failed: Run Command Failed"
+        }
+      ],
+      "status": "Failed"
+    },
+    "hardwareProfile": {
+      "dynamicMemoryConfig": {
+        "maximumMemoryMb": null,
+        "minimumMemoryMb": null,
+        "targetMemoryBuffer": null
+      },
+      "memoryMb": 8192,
+      "processors": 4,
+      "vmSize": "Custom"
+    },
+    "httpProxyConfig": null,
+    "instanceView": {
+      "vmAgent": {
+        "statuses": [
+          {
+            "code": "ProvisioningState/succeeded",
+            "displayStatus": "Connected",
+            "level": "Info",
+            "message": "Successfully established connection with mocguestagent",
+            "time": "2024-06-27T12:57:52Z"
+          },
+          {
+            "code": "ProvisioningState/succeeded",
+            "displayStatus": "Connected",
+            "level": "Info",
+            "message": "New mocguestagent version detected 'v0.14.0-2-g5c6a4b32'",
+            "time": "2024-06-27T12:57:48Z"
+          }
+        ],
+        "vmConfigAgentVersion": "v0.14.0-2-g5c6a4b32"
+      }
+    },
+    "networkProfile": {
+      "networkInterfaces": [
+        {
+          "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test2-win22azure-vm-eth01",
+          "resourceGroup": "dcoffee-rg"
+        }
+      ]
+    },
+    "osProfile": {
+      "adminPassword": null,
+      "adminUsername": "LabAdmin",
+      "computerName": "th-mc660-1",
+      "linuxConfiguration": {
+        "disablePasswordAuthentication": false,
+        "provisionVmAgent": true,
+        "provisionVmConfigAgent": true,
+        "ssh": {
+          "publicKeys": null
+        }
+      },
+      "windowsConfiguration": {
+        "enableAutomaticUpdates": null,
+        "provisionVmAgent": true,
+        "provisionVmConfigAgent": true,
+        "ssh": {
+          "publicKeys": null
+        },
+        "timeZone": null
+      }
+    },
+    "provisioningState": "Succeeded",
+    "securityProfile": {
+      "enableTpm": false,
+      "securityType": null,
+      "uefiSettings": {
+        "secureBootEnabled": true
+      }
+    },
+    "status": {
+      "errorCode": "",
+      "errorMessage": "",
+      "powerState": "Running"
+    },
+    "storageProfile": {
+      "dataDisks": [],
+      "imageReference": {
+        "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/microsoft.azurestackhci/marketplacegalleryimages/Win22DCAzure-Hotpatch",
+        "resourceGroup": "dcoffee-rg"
+      },
+      "osDisk": {
+        "id": null,
+        "osType": "Windows"
+      },
+      "storagepathId": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
+    },
+    "vmId": "d0b6dd9b-f9e1-43d3-8ff7-dc4cfdd3be0d"
+  },
+  "resourceGroup": "dcoffee-rg",
+  "systemData": {
+    "createdAt": "2024-06-27T12:42:13.594634+00:00",
+    "createdBy": "cscadmin@apjcsclocal.onmicrosoft.com",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-06-27T13:19:34.318660+00:00",
+    "lastModifiedBy": "319f651f-7ddb-4fc6-9857-7aef9250bd05",
+    "lastModifiedByType": "Application"
+  },
+  "tags": null,
+  "type": "microsoft.azurestackhci/virtualmachineinstances"
+}
+PS C:\Users\LabAdmin>
+```
+> Note: arcAgent is failed to install with the following error:
+
+```
+Timed out installing ArcForServerAgent. 
+Last error: rpc error: code = Unknown desc = Failed to run command due to error rpc error: code = Unknown desc = RunCommand request [VirtualMachine:<name:\"test2-win22azure-vm-368ac09c-01c9-4b47-9142-a7581c6694a3-dcoffee-rg-0aff56b7\" id:\"DC34A70D-9F7E-4B25-9FF9-718B75F1FE30\" os:<> > Source:<CommandID:\"InstallArcAgent\" > RunCommandInputParameters:<Name:\"AgentConfig\" Value:\"{\\\"cloud\\\":\\\"AzureCloud\\\",\\\"vmid\\\":\\\"d0b6dd9b-f9e1-43d3-8ff7-dc4cfdd3be0d\\\",\\\"kind\\\":\\\"HCI\\\",\\\"private-key\\\":\\\"MIIEpQIBAAKCAQEA1lmk8G4Q1NUdQ+oAkT2yne5L5oCDroaV6zZZLFZWIU6/nN4sflbuj4ozEVhk+o/UmStfv8Ya6dETyF/jFFQrIIHdSSQ4Tq7eIb7lbm159QnmcKf1JZEYOUfVJ3nWQjIsUJTpP1qxGGruax47QfwY/lcI5TzbtLXbZBHJ0fl7Ne1CuYpGUOyKslf46zyDsa5IX6/aT3Wz8nOd5Y90dTpsyueW9mQ07ziPuoa6E81W2ZDNNr3HOTZhbUrge1Qtg55KKelKvFA6mttpbys4rBkp5+FHcywnGUkMeRGe2skHsgoCXiiQqx2G7pO4/4YofZxc6oBzQmYpmW1Zz3XRWjd0fwIDAQABAoIBAF0LTK2RGX1JhQqV6Oki/wXPCuNjpcV8ZldToCG+2GRc6pANYQL2eVeVhdVhqXOaO47BZS65r7UPLKct+EQ6xP23YXb+YfLFtWawlqb4npffVEhSn/dOpFU4+S3JlVfmr5XLDfSSSY1v3U5iMRbTd4XwAcyAPl6TEki97/1VbkZZizaqAfZTjXozIFwjAgFcezmedybyEwGcmQzScBdjcLpcb2wPfF98Y3R+oc4iRCQo3vYsYD7BGYqTW0ToSfrUvEMG0U8YnPqGLUivtAaSGg5sSSxCgMo4sPXpjgZh4a1lFg9psdGBPBGjydCLW76dx+IjxARTHQrpWx4fdcZSxAECgYEA2CkkVsblxL8H5hsjPJkKT9uu4JbGlHHhmNLzB+1zHbBkWA5AEkE4Qduat2MkaEsEEzhBHyiO/PJm/HX3NE2NoAZEaxKUnkDFkXE5b56uIgrD27ttykOAj8l48Mxggg5VVBuM20QvgANG6kWvIDmf9rwpMuBFcygdxIWPGWXlLG8CgYEA/dsT7qwZvqCpZCtaX9JkEs84HRehETb/yDo/JsEyEhMx86v3bNb1DBAlHVsZEshQOdvUSKYYV/4V8Z/3w58u+yGZv4B293bac+9JEWs9PSHhmZI0BcFleIXkF07E4s1mUsqHikAr0TAf7REwxDdfsDBAcmqO/ZZmkObj8qWhYPECgYEAzBbENZ5jUEihN5QFx/Ai+VVMnsYcxglj2/vH9IMvvidOBoml2tZzPFMQl/dmZ4X0WgUyDy4nGxHvRIxIk7xpbF6eeI25flVfdDv347hpZsDNPYiQV3k2SAwMQSZmNEU+MUQ10MxnILF3Yjfa6k0eCEKNj3iKefi1alhDzNIU98cCgYEAz9THqdSeszHn3MmdkOu34KpkX3UT+fsUSEJfp4PuUVwDvmJhDGukbb7eE/2cNoNnIyd10hChx5CPOKXl+/NcTGBC9sTfIVTeHqKeKLOqjF0rzUYkbz3ZrGW5ytdDXAgbqNaFR0uoU/hZewZi7ZIENkQaz1GsRbMXv7Q4lVTDHZECgYEA1m9SB+oaEdU+/hLrqPtV9QMIs6xMjH6Gqthx4Mn+GW7jrRU/BrLeJWVzrXIuGjgH9itEyPp/tCPYTX0rbEpzUIz9Dvblt0z60df1QEwYb6Nl1fm8HrfRupeRhwVDssbvgSawUor0ASGJCWJcdj7ZvK5nVxQz8UBXIRRlEBPOjp8=\\\",\\\"resource-name\\\":\\\"test2-win22azure-vm\\\",\\\"subscription-id\\\":\\\"368ac09c-01c9-4b47-9142-a7581c6694a3\\\",\\\"resource-group\\\":\\\"dcoffee-rg\\\",\\\"resource-namespace\\\":\\\"Microsoft.HybridCompute\\\",\\\"tenant-id\\\":\\\"2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b\\\",\\\"location\\\":\\\"eastus\\\",\\\"correlation-id\\\":\\\"eff6a40f-dd47-427a-a13e-e365e18321b2\\\",\\\"msi-cert-retries\\\":26,\\\"proxyurl\\\":\\\"\\\"}\" > OperationID:\"82d838f1-3487-11ef-a5a3-02ec00110008\" ] returned with FAILED execution state: Run Command Failed: Run Command Failed: Run Command Failed"
+```
+
+![Create Windows VM with CLI 1](images/Create-WinVM-Result5.png)
+![Create Windows VM with CLI 1](images/Create-WinVM-Result6.png)
 
 ### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
 
