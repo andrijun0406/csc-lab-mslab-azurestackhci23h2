@@ -374,7 +374,7 @@ Here is how it looked when deployment is successful.
 
 ### Known Issues
 
-*1. The deployment stops when there is error related to validate ATC service.*
+#### 1. The deployment stops when there is error related to validate ATC service.*
 
 The Network ATC seems to be allowing untagged vlan in storage adapter and since the default DHCP client is enabled it picks up DHCP address from native vlan 0 (untagged) which is used by Management traffic. Test-Cluster then failed because the subnet are wrong it should be storage subnet but instead using management subnet from DHCP.
 
@@ -408,7 +408,7 @@ Ignore the warning for now, and resume the deployment from portal. It should now
 
 ![Network ATC Issues-5](images/ATC-issues-5.png)
 
-*2. The deployment stops when there is error related to arb/moc installation.*
+#### 2. The deployment stops when there is error related to arb/moc installation.*
 
 This might be caused by the networkATC messing up with DHCP on point one. 
 If at some point, issues on point 1 fixed and the deployment resumed but then the arb/moc installation step show error, you might find network ATC still does not create the cluster network properly due to by default the vSMB adapters have DHCP enabled and because the physical adapters are trunked, they still get DHCP requests/receives from DHCP server and change the 10.71.X.X IP Addresses.
