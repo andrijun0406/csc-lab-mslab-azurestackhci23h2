@@ -52,16 +52,18 @@ On this step we are going to create linux Image from Azure CLI. Linux images are
 Run the following script from Management Machine
 ```powershell
 # Copy downloaded Ubuntu file to ClusterSharedVolume
-copy-item -path .\ubuntu-24.04-live-server-amd64.iso -Destination '\\th-mc660-1\c$\ClusterStorage\UserStorage_1\'
+# copy-item -path .\ubuntu-24.04-live-server-amd64.iso -Destination '\\th-mc660-1\c$\ClusterStorage\UserStorage_1\'
+copy-item -path .\ubuntu-22.04.4-live-server-amd64.iso -Destination '\\th-mc660-2\c$\ClusterStorage\UserStorage_1\'
 
 # Create new Ubuntu VM
 $server = "th-mc660-1"
 
-Invoke-Command -ComputerName $servers -ScriptBlock {
-    $vmname = "ubuntu-vm"
+Invoke-Command -ComputerName $server -ScriptBlock {
+    $vmname = "ubuntu2-vm"
     $vmram = [int64]4GB
     $vmboot = "CD"
-    $isopath="C:\ClusterStorage\UserStorage_1\ubuntu-24.04-live-server-amd64.iso"
+    #$isopath="C:\ClusterStorage\UserStorage_1\ubuntu-24.04-live-server-amd64.iso"
+    $isopath="C:\ClusterStorage\UserStorage_1\ubuntu-22.04.4-live-server-amd64.iso"
     $vmvhdpath= "C:\ClusterStorage\UserStorage_1\$vmname\$vmname.vhdx"
     $vmpath="C:\ClusterStorage\UserStorage_1\$vmname"
     $vmswitch="ConvergedSwitch(compute_management_storage)"
@@ -104,7 +106,7 @@ logout
 * Shutdown the VM (run from Management Machine)
 ```powershell
 $server = "th-mc660-1"
-$vmname = "ubuntu-vm"
+$vmname = "ubuntu2-vm"
 Invoke-Command -ComputerName $servers -ScriptBlock {
 Stop-VM $vmname
 }
@@ -112,18 +114,122 @@ Stop-VM $vmname
 * Create the VM Image using Azure CLI on one of the cluster node
 
 ```powershell
+
+$vmname = "ubuntu2-vm"
 $ResourceGroupName="dcoffee-rg"
 $Location="eastus"
 $CustomLocation = "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl"
 $OsType = "Linux"
 $SubscriptionID="368ac09c-01c9-4b47-9142-a7581c6694a3"
-$ImagePath ="C:\ClusterStorage\UserStorage_1\ubuntu-vm\ubuntu-vm.vhdx"
-$ImageName="Ubuntu-VM"
+$ImagePath ="C:\ClusterStorage\UserStorage_1\$vmname\$vmname.vhdx"
+$ImageName="Ubuntu-22.04.4"
 az login --use-device-code
 az stack-hci-vm image create --subscription $SubscriptionID -g $ResourceGroupName --custom-location $CustomLocation --location $Location --image-path $ImagePath --name $ImageName --debug --os-type $OsType
+
 ```
 #### Expected Result
+
+the output of image creation would be something like this:
+
+```
+
+az stack-hci-vm image create --subscription $SubscriptionID -g $ResourceGroupName --custom-location $CustomLocation --location $Location --image-path $ImagePath --name $ImageName --debug --os-type $OsType
+cli.knack.cli: Command arguments: ['stack-hci-vm', 'image', 'create', '--subscription', '368ac09c-01c9-4b47-9142-a7581c6694a3', '-g', 'dcoffee-rg', '--custom-location', '/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl', '--location', 'eastus', '--image-path', 'C:\\ClusterStorage\\UserStorage_1\\ubuntu2-vm\\ubuntu2-vm.vhdx', '--name', 'Ubuntu-22.04.4', '--debug', '--os-type', 'Linux']
+cli.knack.cli: __init__ debug log:
+Enable color in terminal.
+Enable VT mode.
+cli.knack.cli: Event: Cli.PreExecute []
+cli.knack.cli: Event: CommandParser.OnGlobalArgumentsCreate [<function CLILogging.on_global_arguments at 0x022BC4A8>, <function OutputProducer.on_global_arguments at 0x023BF6E8>, <function CLIQuery.on_global_arguments at 0x024D8340>]
+cli.knack.cli: Event: CommandInvoker.OnPreCommandTableCreate []
+cli.azure.cli.core: Modules found from index for 'stack-hci-vm': ['azext_stack_hci_vm']
+cli.azure.cli.core: Loading command modules:
+cli.azure.cli.core: Name                  Load Time    Groups  Commands
+cli.azure.cli.core: Total (0)                 0.000         0         0
+cli.azure.cli.core: These extensions are not installed and will be skipped: ['azext_ai_examples', 'azext_next']
+cli.azure.cli.core: Loading extensions:
+cli.azure.cli.core: Name                  Load Time    Groups  Commands  Directory
+cli.azure.cli.core: stack-hci-vm              0.975         8        37  C:\CloudContent\AzCliExtensions\stack-hci-vm
+cli.azure.cli.core: Total (1)                 0.975         8        37
+cli.azure.cli.core: Loaded 8 groups, 37 commands.
+cli.azure.cli.core: Found a match in the command table.
+cli.azure.cli.core: Raw command  : stack-hci-vm image create
+cli.azure.cli.core: Command table: stack-hci-vm image create
+cli.knack.cli: Event: CommandInvoker.OnPreCommandTableTruncate [<function AzCliLogging.init_command_file_logging at 0x0467C460>]
+cli.azure.cli.core.azlogging: metadata file logging enabled - writing logs to 'C:\Users\LabAdmin\.azure\commands\2024-06-28.00-34-46.stack-hci-vm_image_create.33640.log'.
+az_command_data_logger: command args: stack-hci-vm image create --subscription {} -g {} --custom-location {} --location {} --image-path {} --name {} --debug --os-type {}
+cli.knack.cli: Event: CommandInvoker.OnPreArgumentLoad [<function register_global_subscription_argument.<locals>.add_subscription_parameter at 0x046A76A0>]
+cli.knack.cli: Event: CommandInvoker.OnPostArgumentLoad []
+cli.knack.cli: Event: CommandInvoker.OnPostCommandTableCreate [<function register_ids_argument.<locals>.add_ids_arguments at 0x046B64F0>, <function register_cache_arguments.<locals>.add_cache_arguments at 0x046B66E8>]
+cli.knack.cli: Event: CommandInvoker.OnCommandTableLoaded []
+cli.knack.cli: Event: CommandInvoker.OnPreParseArgs []
+cli.knack.cli: Event: CommandInvoker.OnPostParseArgs [<function OutputProducer.handle_output_argument at 0x023BF730>, <function CLIQuery.handle_query_parameter at 0x024D8388>, <function register_ids_argument.<locals>.parse_ids_arguments at 0x046B66A0>]
+az_command_data_logger: extension name: stack-hci-vm
+az_command_data_logger: extension version: 1.1.2
+
+<skipped>
+
+{
+  "extendedLocation": {
+    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "type": "CustomLocation"
+  },
+  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/galleryimages/Ubuntu-22.04.4",
+  "location": "eastus",
+  "name": "Ubuntu-22.04.4",
+  "properties": {
+    "identifier": null,
+    "imagePath": null,
+    "osType": "Linux",
+    "provisioningState": "Succeeded",
+    "status": {
+      "downloadStatus": {},
+      "errorCode": "",
+      "errorMessage": "",
+      "progressPercentage": 100,
+      "provisioningStatus": {
+        "operationId": "9d900c03-8c12-4040-9657-806c12c6ebe4*614911A26C9DDDAC5C8223772CEA5EB2783CA71C8B3898FFC01741E87A577CA2",
+        "status": "Succeeded"
+      }
+    },
+    "storagepathId": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage1-9881979760fd413cb8bc4d6ec1667494",
+    "version": {
+      "name": null,
+      "properties": {
+        "storageProfile": {
+          "osDiskImage": {}
+        }
+      }
+    }
+  },
+  "resourceGroup": "dcoffee-rg",
+  "systemData": {
+    "createdAt": "2024-06-28T00:34:51.908956+00:00",
+    "createdBy": "cscadmin@apjcsclocal.onmicrosoft.com",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-06-28T00:37:22.412191+00:00",
+    "lastModifiedBy": "319f651f-7ddb-4fc6-9857-7aef9250bd05",
+    "lastModifiedByType": "Application"
+  },
+  "tags": null,
+  "type": "microsoft.azurestackhci/galleryimages"
+}
+cli.knack.cli: Event: Cli.SuccessfulExecute []
+cli.knack.cli: Event: Cli.PostExecute [<function AzCliLogging.deinit_cmd_metadata_logging at 0x0467C580>]
+az_command_data_logger: exit code: 0
+cli.__main__: Command ran in 160.109 seconds (init: 1.003, invoke: 159.106)
+telemetry.main: Begin splitting cli events and extra events, total events: 1
+telemetry.client: Accumulated 0 events. Flush the clients.
+telemetry.main: Finish splitting cli events and extra events, cli events: 1
+telemetry.save: Save telemetry record of length 3517 in cache
+telemetry.main: Begin creating telemetry upload process.
+telemetry.process: Creating upload process: "C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\python.exe C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\Lib\site-packages\azure\cli\telemetry\__init__.pyc C:\Users\LabAdmin\.azure"
+telemetry.process: Return from creating process
+telemetry.main: Finish creating telemetry upload process.
+```
+
+
 ![Ubuntu VM list](images/UbuntuVM-List.png)
+![Ubuntu VM list2](images/UbuntuVM-List2.png)
 
 ### Task 2 - Create Logical Networks
 
@@ -469,7 +575,7 @@ Remove-Item $templateFileDynamic.FullName
 #### Expected Result
 ![Logical Networks Result](images/Logical-Networks-Result.png)
 
-### Task 2a - Create Arc VMs (Windows) using DHCP from Portal
+### Task 3a - Create Arc VMs (Windows) using DHCP from Portal
 
 Now that you have all Azure resources created (VM Images and Logical Networks) you are ready to create Azure Arc VMs.
 In this task, I will create Windows 2022 DC Azure Edition from Images that is created from Azure Marketplace and use Dynamic Network Interface using Dynamic Logical Networks (DHCP assigned).
@@ -640,7 +746,7 @@ Follow step here to enable SSH on Windows and Arc-enabled Servers:
 * Connecting VM from Windows Admin Center
 ![Connect to VM2](images/Connect-VM2.png)
 
-### Task 2b - Create Arc VMs (Windows) using DHCP from Azure CLI
+### Task 3b - Create Arc VMs (Windows) using DHCP from Azure CLI
 
 Run the following script from the cluster nodes.
 > somehow it doesn't work remotely from Management machine
@@ -860,7 +966,7 @@ Last error: rpc error: code = Unknown desc = Failed to run command due to error 
 ![Create Windows VM with CLI 1](images/Create-WinVM-Result5.png)
 ![Create Windows VM with CLI 1](images/Create-WinVM-Result6.png)
 
-### Task 3 - Create Arc VMs (Linux) using Static from Azure CLI
+### Task 4a - Create Arc VMs (Linux) using Static from Azure CLI
 
 Run the following script from the cluster nodes.
 > somehow it doesn't work remotely from Management machine
@@ -907,7 +1013,7 @@ error: [<nil>] (Code: moc-operator virtualmachine serviceClient returned an erro
 code = Unknown desc = Could not establish HyperV connection for VM ID [B1BF4AE9-ECA6-4AE8-ABEF-C64581E3FCFB] within [900] seconds, error: [<nil>])
 ```
 
-### Task 3b - Create Arc VMs (Linux) using Static from Portal
+### Task 4b - Create Arc VMs (Linux) using Static from Portal
 
 * Basics
 ```
