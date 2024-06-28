@@ -118,9 +118,9 @@ Stop-VM $vmname
 $vmname = "ubuntu2-vm"
 $ResourceGroupName="dcoffee-rg"
 $Location="eastus"
-$CustomLocation = "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl"
+$CustomLocation = "/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl"
 $OsType = "Linux"
-$SubscriptionID="368ac09c-01c9-4b47-9142-a7581c6694a3"
+$SubscriptionID="<your-subscriptions>"
 $ImagePath ="C:\ClusterStorage\UserStorage_1\$vmname\$vmname.vhdx"
 $ImageName="Ubuntu-22.04.4"
 az login --use-device-code
@@ -134,7 +134,7 @@ the output of image creation would be something like this:
 ```
 
 az stack-hci-vm image create --subscription $SubscriptionID -g $ResourceGroupName --custom-location $CustomLocation --location $Location --image-path $ImagePath --name $ImageName --debug --os-type $OsType
-cli.knack.cli: Command arguments: ['stack-hci-vm', 'image', 'create', '--subscription', '368ac09c-01c9-4b47-9142-a7581c6694a3', '-g', 'dcoffee-rg', '--custom-location', '/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl', '--location', 'eastus', '--image-path', 'C:\\ClusterStorage\\UserStorage_1\\ubuntu2-vm\\ubuntu2-vm.vhdx', '--name', 'Ubuntu-22.04.4', '--debug', '--os-type', 'Linux']
+cli.knack.cli: Command arguments: ['stack-hci-vm', 'image', 'create', '--subscription', '<your-subscriptions>', '-g', 'dcoffee-rg', '--custom-location', '/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl', '--location', 'eastus', '--image-path', 'C:\\ClusterStorage\\UserStorage_1\\ubuntu2-vm\\ubuntu2-vm.vhdx', '--name', 'Ubuntu-22.04.4', '--debug', '--os-type', 'Linux']
 cli.knack.cli: __init__ debug log:
 Enable color in terminal.
 Enable VT mode.
@@ -170,10 +170,10 @@ az_command_data_logger: extension version: 1.1.2
 
 {
   "extendedLocation": {
-    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "name": "/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
     "type": "CustomLocation"
   },
-  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/galleryimages/Ubuntu-22.04.4",
+  "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/galleryimages/Ubuntu-22.04.4",
   "location": "eastus",
   "name": "Ubuntu-22.04.4",
   "properties": {
@@ -191,7 +191,7 @@ az_command_data_logger: extension version: 1.1.2
         "status": "Succeeded"
       }
     },
-    "storagepathId": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage1-9881979760fd413cb8bc4d6ec1667494",
+    "storagepathId": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage1-9881979760fd413cb8bc4d6ec1667494",
     "version": {
       "name": null,
       "properties": {
@@ -786,10 +786,10 @@ PS C:\Users\LabAdmin> az stack-hci-vm network nic create --subscription $subscri
 Command group 'stack-hci-vm' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
 {
   "extendedLocation": {
-    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "name": "/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
     "type": "CustomLocation"
   },
-  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test2-win22azure-vm-eth01",
+  "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test2-win22azure-vm-eth01",
   "location": "eastus",
   "name": "test2-win22azure-vm-eth01",
   "properties": {
@@ -805,7 +805,7 @@ Command group 'stack-hci-vm' is experimental and under development. Reference an
           "privateIpAddress": null,
           "privateIpAllocationMethod": null,
           "subnet": {
-            "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/logicalnetworks/subnet2",
+            "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/logicalnetworks/subnet2",
             "resourceGroup": "dcoffee-rg"
           }
         }
@@ -838,17 +838,17 @@ PS C:\Users\LabAdmin> az stack-hci-vm create --name $vmName --resource-group $re
 Command group 'stack-hci-vm' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
 {
   "extendedLocation": {
-    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "name": "/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
     "type": "CustomLocation"
   },
-  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.HybridCompute/machines/test2-win22azure-vm/providers/Microsoft.AzureStackHCI/virtualMachineInstances/default",
+  "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.HybridCompute/machines/test2-win22azure-vm/providers/Microsoft.AzureStackHCI/virtualMachineInstances/default",
   "name": "default",
   "properties": {
     "guestAgentInstallStatus": {
       "errorDetails": [
         {
           "code": "Timeout",
-          "message": "Timed out installing ArcForServerAgent. Last error: rpc error: code = Unknown desc = Failed to run command due to error rpc error: code = Unknown desc = RunCommand request [VirtualMachine:<name:\"test2-win22azure-vm-368ac09c-01c9-4b47-9142-a7581c6694a3-dcoffee-rg-0aff56b7\" id:\"DC34A70D-9F7E-4B25-9FF9-718B75F1FE30\" os:<> > Source:<CommandID:\"InstallArcAgent\" > RunCommandInputParameters:<Name:\"AgentConfig\" Value:\"{\\\"cloud\\\":\\\"AzureCloud\\\",\\\"vmid\\\":\\\"d0b6dd9b-f9e1-43d3-8ff7-dc4cfdd3be0d\\\",\\\"kind\\\":\\\"HCI\\\",\\\"private-key\\\":\\\"MIIEpQIBAAKCAQEA1lmk8G4Q1NUdQ+oAkT2yne5L5oCDroaV6zZZLFZWIU6/nN4sflbuj4ozEVhk+o/UmStfv8Ya6dETyF/jFFQrIIHdSSQ4Tq7eIb7lbm159QnmcKf1JZEYOUfVJ3nWQjIsUJTpP1qxGGruax47QfwY/lcI5TzbtLXbZBHJ0fl7Ne1CuYpGUOyKslf46zyDsa5IX6/aT3Wz8nOd5Y90dTpsyueW9mQ07ziPuoa6E81W2ZDNNr3HOTZhbUrge1Qtg55KKelKvFA6mttpbys4rBkp5+FHcywnGUkMeRGe2skHsgoCXiiQqx2G7pO4/4YofZxc6oBzQmYpmW1Zz3XRWjd0fwIDAQABAoIBAF0LTK2RGX1JhQqV6Oki/wXPCuNjpcV8ZldToCG+2GRc6pANYQL2eVeVhdVhqXOaO47BZS65r7UPLKct+EQ6xP23YXb+YfLFtWawlqb4npffVEhSn/dOpFU4+S3JlVfmr5XLDfSSSY1v3U5iMRbTd4XwAcyAPl6TEki97/1VbkZZizaqAfZTjXozIFwjAgFcezmedybyEwGcmQzScBdjcLpcb2wPfF98Y3R+oc4iRCQo3vYsYD7BGYqTW0ToSfrUvEMG0U8YnPqGLUivtAaSGg5sSSxCgMo4sPXpjgZh4a1lFg9psdGBPBGjydCLW76dx+IjxARTHQrpWx4fdcZSxAECgYEA2CkkVsblxL8H5hsjPJkKT9uu4JbGlHHhmNLzB+1zHbBkWA5AEkE4Qduat2MkaEsEEzhBHyiO/PJm/HX3NE2NoAZEaxKUnkDFkXE5b56uIgrD27ttykOAj8l48Mxggg5VVBuM20QvgANG6kWvIDmf9rwpMuBFcygdxIWPGWXlLG8CgYEA/dsT7qwZvqCpZCtaX9JkEs84HRehETb/yDo/JsEyEhMx86v3bNb1DBAlHVsZEshQOdvUSKYYV/4V8Z/3w58u+yGZv4B293bac+9JEWs9PSHhmZI0BcFleIXkF07E4s1mUsqHikAr0TAf7REwxDdfsDBAcmqO/ZZmkObj8qWhYPECgYEAzBbENZ5jUEihN5QFx/Ai+VVMnsYcxglj2/vH9IMvvidOBoml2tZzPFMQl/dmZ4X0WgUyDy4nGxHvRIxIk7xpbF6eeI25flVfdDv347hpZsDNPYiQV3k2SAwMQSZmNEU+MUQ10MxnILF3Yjfa6k0eCEKNj3iKefi1alhDzNIU98cCgYEAz9THqdSeszHn3MmdkOu34KpkX3UT+fsUSEJfp4PuUVwDvmJhDGukbb7eE/2cNoNnIyd10hChx5CPOKXl+/NcTGBC9sTfIVTeHqKeKLOqjF0rzUYkbz3ZrGW5ytdDXAgbqNaFR0uoU/hZewZi7ZIENkQaz1GsRbMXv7Q4lVTDHZECgYEA1m9SB+oaEdU+/hLrqPtV9QMIs6xMjH6Gqthx4Mn+GW7jrRU/BrLeJWVzrXIuGjgH9itEyPp/tCPYTX0rbEpzUIz9Dvblt0z60df1QEwYb6Nl1fm8HrfRupeRhwVDssbvgSawUor0ASGJCWJcdj7ZvK5nVxQz8UBXIRRlEBPOjp8=\\\",\\\"resource-name\\\":\\\"test2-win22azure-vm\\\",\\\"subscription-id\\\":\\\"368ac09c-01c9-4b47-9142-a7581c6694a3\\\",\\\"resource-group\\\":\\\"dcoffee-rg\\\",\\\"resource-namespace\\\":\\\"Microsoft.HybridCompute\\\",\\\"tenant-id\\\":\\\"2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b\\\",\\\"location\\\":\\\"eastus\\\",\\\"correlation-id\\\":\\\"eff6a40f-dd47-427a-a13e-e365e18321b2\\\",\\\"msi-cert-retries\\\":26,\\\"proxyurl\\\":\\\"\\\"}\" > OperationID:\"82d838f1-3487-11ef-a5a3-02ec00110008\" ] returned with FAILED execution state: Run Command Failed: Run Command Failed: Run Command Failed"
+          "message": "Timed out installing ArcForServerAgent. Last error: rpc error: code = Unknown desc = Failed to run command due to error rpc error: code = Unknown desc = RunCommand request [VirtualMachine:<name:\"test2-win22azure-vm-<your-subscriptions>-dcoffee-rg-0aff56b7\" id:\"DC34A70D-9F7E-4B25-9FF9-718B75F1FE30\" os:<> > Source:<CommandID:\"InstallArcAgent\" > RunCommandInputParameters:<Name:\"AgentConfig\" Value:\"{\\\"cloud\\\":\\\"AzureCloud\\\",\\\"vmid\\\":\\\"d0b6dd9b-f9e1-43d3-8ff7-dc4cfdd3be0d\\\",\\\"kind\\\":\\\"HCI\\\",\\\"private-key\\\":\\\"MIIEpQIBAAKCAQEA1lmk8G4Q1NUdQ+oAkT2yne5L5oCDroaV6zZZLFZWIU6/nN4sflbuj4ozEVhk+o/UmStfv8Ya6dETyF/jFFQrIIHdSSQ4Tq7eIb7lbm159QnmcKf1JZEYOUfVJ3nWQjIsUJTpP1qxGGruax47QfwY/lcI5TzbtLXbZBHJ0fl7Ne1CuYpGUOyKslf46zyDsa5IX6/aT3Wz8nOd5Y90dTpsyueW9mQ07ziPuoa6E81W2ZDNNr3HOTZhbUrge1Qtg55KKelKvFA6mttpbys4rBkp5+FHcywnGUkMeRGe2skHsgoCXiiQqx2G7pO4/4YofZxc6oBzQmYpmW1Zz3XRWjd0fwIDAQABAoIBAF0LTK2RGX1JhQqV6Oki/wXPCuNjpcV8ZldToCG+2GRc6pANYQL2eVeVhdVhqXOaO47BZS65r7UPLKct+EQ6xP23YXb+YfLFtWawlqb4npffVEhSn/dOpFU4+S3JlVfmr5XLDfSSSY1v3U5iMRbTd4XwAcyAPl6TEki97/1VbkZZizaqAfZTjXozIFwjAgFcezmedybyEwGcmQzScBdjcLpcb2wPfF98Y3R+oc4iRCQo3vYsYD7BGYqTW0ToSfrUvEMG0U8YnPqGLUivtAaSGg5sSSxCgMo4sPXpjgZh4a1lFg9psdGBPBGjydCLW76dx+IjxARTHQrpWx4fdcZSxAECgYEA2CkkVsblxL8H5hsjPJkKT9uu4JbGlHHhmNLzB+1zHbBkWA5AEkE4Qduat2MkaEsEEzhBHyiO/PJm/HX3NE2NoAZEaxKUnkDFkXE5b56uIgrD27ttykOAj8l48Mxggg5VVBuM20QvgANG6kWvIDmf9rwpMuBFcygdxIWPGWXlLG8CgYEA/dsT7qwZvqCpZCtaX9JkEs84HRehETb/yDo/JsEyEhMx86v3bNb1DBAlHVsZEshQOdvUSKYYV/4V8Z/3w58u+yGZv4B293bac+9JEWs9PSHhmZI0BcFleIXkF07E4s1mUsqHikAr0TAf7REwxDdfsDBAcmqO/ZZmkObj8qWhYPECgYEAzBbENZ5jUEihN5QFx/Ai+VVMnsYcxglj2/vH9IMvvidOBoml2tZzPFMQl/dmZ4X0WgUyDy4nGxHvRIxIk7xpbF6eeI25flVfdDv347hpZsDNPYiQV3k2SAwMQSZmNEU+MUQ10MxnILF3Yjfa6k0eCEKNj3iKefi1alhDzNIU98cCgYEAz9THqdSeszHn3MmdkOu34KpkX3UT+fsUSEJfp4PuUVwDvmJhDGukbb7eE/2cNoNnIyd10hChx5CPOKXl+/NcTGBC9sTfIVTeHqKeKLOqjF0rzUYkbz3ZrGW5ytdDXAgbqNaFR0uoU/hZewZi7ZIENkQaz1GsRbMXv7Q4lVTDHZECgYEA1m9SB+oaEdU+/hLrqPtV9QMIs6xMjH6Gqthx4Mn+GW7jrRU/BrLeJWVzrXIuGjgH9itEyPp/tCPYTX0rbEpzUIz9Dvblt0z60df1QEwYb6Nl1fm8HrfRupeRhwVDssbvgSawUor0ASGJCWJcdj7ZvK5nVxQz8UBXIRRlEBPOjp8=\\\",\\\"resource-name\\\":\\\"test2-win22azure-vm\\\",\\\"subscription-id\\\":\\\"<your-subscriptions>\\\",\\\"resource-group\\\":\\\"dcoffee-rg\\\",\\\"resource-namespace\\\":\\\"Microsoft.HybridCompute\\\",\\\"tenant-id\\\":\\\"2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b\\\",\\\"location\\\":\\\"eastus\\\",\\\"correlation-id\\\":\\\"eff6a40f-dd47-427a-a13e-e365e18321b2\\\",\\\"msi-cert-retries\\\":26,\\\"proxyurl\\\":\\\"\\\"}\" > OperationID:\"82d838f1-3487-11ef-a5a3-02ec00110008\" ] returned with FAILED execution state: Run Command Failed: Run Command Failed: Run Command Failed"
         }
       ],
       "status": "Failed"
@@ -888,7 +888,7 @@ Command group 'stack-hci-vm' is experimental and under development. Reference an
     "networkProfile": {
       "networkInterfaces": [
         {
-          "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test2-win22azure-vm-eth01",
+          "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test2-win22azure-vm-eth01",
           "resourceGroup": "dcoffee-rg"
         }
       ]
@@ -931,14 +931,14 @@ Command group 'stack-hci-vm' is experimental and under development. Reference an
     "storageProfile": {
       "dataDisks": [],
       "imageReference": {
-        "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/microsoft.azurestackhci/marketplacegalleryimages/Win22DCAzure-Hotpatch",
+        "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/microsoft.azurestackhci/marketplacegalleryimages/Win22DCAzure-Hotpatch",
         "resourceGroup": "dcoffee-rg"
       },
       "osDisk": {
         "id": null,
         "osType": "Windows"
       },
-      "storagepathId": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
+      "storagepathId": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
     },
     "vmId": "d0b6dd9b-f9e1-43d3-8ff7-dc4cfdd3be0d"
   },
@@ -960,7 +960,7 @@ PS C:\Users\LabAdmin>
 
 ```
 Timed out installing ArcForServerAgent. 
-Last error: rpc error: code = Unknown desc = Failed to run command due to error rpc error: code = Unknown desc = RunCommand request [VirtualMachine:<name:\"test2-win22azure-vm-368ac09c-01c9-4b47-9142-a7581c6694a3-dcoffee-rg-0aff56b7\" id:\"DC34A70D-9F7E-4B25-9FF9-718B75F1FE30\" os:<> > Source:<CommandID:\"InstallArcAgent\" > RunCommandInputParameters:<Name:\"AgentConfig\" Value:\"{\\\"cloud\\\":\\\"AzureCloud\\\",\\\"vmid\\\":\\\"d0b6dd9b-f9e1-43d3-8ff7-dc4cfdd3be0d\\\",\\\"kind\\\":\\\"HCI\\\",\\\"private-key\\\":\\\"MIIEpQIBAAKCAQEA1lmk8G4Q1NUdQ+oAkT2yne5L5oCDroaV6zZZLFZWIU6/nN4sflbuj4ozEVhk+o/UmStfv8Ya6dETyF/jFFQrIIHdSSQ4Tq7eIb7lbm159QnmcKf1JZEYOUfVJ3nWQjIsUJTpP1qxGGruax47QfwY/lcI5TzbtLXbZBHJ0fl7Ne1CuYpGUOyKslf46zyDsa5IX6/aT3Wz8nOd5Y90dTpsyueW9mQ07ziPuoa6E81W2ZDNNr3HOTZhbUrge1Qtg55KKelKvFA6mttpbys4rBkp5+FHcywnGUkMeRGe2skHsgoCXiiQqx2G7pO4/4YofZxc6oBzQmYpmW1Zz3XRWjd0fwIDAQABAoIBAF0LTK2RGX1JhQqV6Oki/wXPCuNjpcV8ZldToCG+2GRc6pANYQL2eVeVhdVhqXOaO47BZS65r7UPLKct+EQ6xP23YXb+YfLFtWawlqb4npffVEhSn/dOpFU4+S3JlVfmr5XLDfSSSY1v3U5iMRbTd4XwAcyAPl6TEki97/1VbkZZizaqAfZTjXozIFwjAgFcezmedybyEwGcmQzScBdjcLpcb2wPfF98Y3R+oc4iRCQo3vYsYD7BGYqTW0ToSfrUvEMG0U8YnPqGLUivtAaSGg5sSSxCgMo4sPXpjgZh4a1lFg9psdGBPBGjydCLW76dx+IjxARTHQrpWx4fdcZSxAECgYEA2CkkVsblxL8H5hsjPJkKT9uu4JbGlHHhmNLzB+1zHbBkWA5AEkE4Qduat2MkaEsEEzhBHyiO/PJm/HX3NE2NoAZEaxKUnkDFkXE5b56uIgrD27ttykOAj8l48Mxggg5VVBuM20QvgANG6kWvIDmf9rwpMuBFcygdxIWPGWXlLG8CgYEA/dsT7qwZvqCpZCtaX9JkEs84HRehETb/yDo/JsEyEhMx86v3bNb1DBAlHVsZEshQOdvUSKYYV/4V8Z/3w58u+yGZv4B293bac+9JEWs9PSHhmZI0BcFleIXkF07E4s1mUsqHikAr0TAf7REwxDdfsDBAcmqO/ZZmkObj8qWhYPECgYEAzBbENZ5jUEihN5QFx/Ai+VVMnsYcxglj2/vH9IMvvidOBoml2tZzPFMQl/dmZ4X0WgUyDy4nGxHvRIxIk7xpbF6eeI25flVfdDv347hpZsDNPYiQV3k2SAwMQSZmNEU+MUQ10MxnILF3Yjfa6k0eCEKNj3iKefi1alhDzNIU98cCgYEAz9THqdSeszHn3MmdkOu34KpkX3UT+fsUSEJfp4PuUVwDvmJhDGukbb7eE/2cNoNnIyd10hChx5CPOKXl+/NcTGBC9sTfIVTeHqKeKLOqjF0rzUYkbz3ZrGW5ytdDXAgbqNaFR0uoU/hZewZi7ZIENkQaz1GsRbMXv7Q4lVTDHZECgYEA1m9SB+oaEdU+/hLrqPtV9QMIs6xMjH6Gqthx4Mn+GW7jrRU/BrLeJWVzrXIuGjgH9itEyPp/tCPYTX0rbEpzUIz9Dvblt0z60df1QEwYb6Nl1fm8HrfRupeRhwVDssbvgSawUor0ASGJCWJcdj7ZvK5nVxQz8UBXIRRlEBPOjp8=\\\",\\\"resource-name\\\":\\\"test2-win22azure-vm\\\",\\\"subscription-id\\\":\\\"368ac09c-01c9-4b47-9142-a7581c6694a3\\\",\\\"resource-group\\\":\\\"dcoffee-rg\\\",\\\"resource-namespace\\\":\\\"Microsoft.HybridCompute\\\",\\\"tenant-id\\\":\\\"2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b\\\",\\\"location\\\":\\\"eastus\\\",\\\"correlation-id\\\":\\\"eff6a40f-dd47-427a-a13e-e365e18321b2\\\",\\\"msi-cert-retries\\\":26,\\\"proxyurl\\\":\\\"\\\"}\" > OperationID:\"82d838f1-3487-11ef-a5a3-02ec00110008\" ] returned with FAILED execution state: Run Command Failed: Run Command Failed: Run Command Failed"
+Last error: rpc error: code = Unknown desc = Failed to run command due to error rpc error: code = Unknown desc = RunCommand request [VirtualMachine:<name:\"test2-win22azure-vm-<your-subscriptions>-dcoffee-rg-0aff56b7\" id:\"DC34A70D-9F7E-4B25-9FF9-718B75F1FE30\" os:<> > Source:<CommandID:\"InstallArcAgent\" > RunCommandInputParameters:<Name:\"AgentConfig\" Value:\"{\\\"cloud\\\":\\\"AzureCloud\\\",\\\"vmid\\\":\\\"d0b6dd9b-f9e1-43d3-8ff7-dc4cfdd3be0d\\\",\\\"kind\\\":\\\"HCI\\\",\\\"private-key\\\":\\\"MIIEpQIBAAKCAQEA1lmk8G4Q1NUdQ+oAkT2yne5L5oCDroaV6zZZLFZWIU6/nN4sflbuj4ozEVhk+o/UmStfv8Ya6dETyF/jFFQrIIHdSSQ4Tq7eIb7lbm159QnmcKf1JZEYOUfVJ3nWQjIsUJTpP1qxGGruax47QfwY/lcI5TzbtLXbZBHJ0fl7Ne1CuYpGUOyKslf46zyDsa5IX6/aT3Wz8nOd5Y90dTpsyueW9mQ07ziPuoa6E81W2ZDNNr3HOTZhbUrge1Qtg55KKelKvFA6mttpbys4rBkp5+FHcywnGUkMeRGe2skHsgoCXiiQqx2G7pO4/4YofZxc6oBzQmYpmW1Zz3XRWjd0fwIDAQABAoIBAF0LTK2RGX1JhQqV6Oki/wXPCuNjpcV8ZldToCG+2GRc6pANYQL2eVeVhdVhqXOaO47BZS65r7UPLKct+EQ6xP23YXb+YfLFtWawlqb4npffVEhSn/dOpFU4+S3JlVfmr5XLDfSSSY1v3U5iMRbTd4XwAcyAPl6TEki97/1VbkZZizaqAfZTjXozIFwjAgFcezmedybyEwGcmQzScBdjcLpcb2wPfF98Y3R+oc4iRCQo3vYsYD7BGYqTW0ToSfrUvEMG0U8YnPqGLUivtAaSGg5sSSxCgMo4sPXpjgZh4a1lFg9psdGBPBGjydCLW76dx+IjxARTHQrpWx4fdcZSxAECgYEA2CkkVsblxL8H5hsjPJkKT9uu4JbGlHHhmNLzB+1zHbBkWA5AEkE4Qduat2MkaEsEEzhBHyiO/PJm/HX3NE2NoAZEaxKUnkDFkXE5b56uIgrD27ttykOAj8l48Mxggg5VVBuM20QvgANG6kWvIDmf9rwpMuBFcygdxIWPGWXlLG8CgYEA/dsT7qwZvqCpZCtaX9JkEs84HRehETb/yDo/JsEyEhMx86v3bNb1DBAlHVsZEshQOdvUSKYYV/4V8Z/3w58u+yGZv4B293bac+9JEWs9PSHhmZI0BcFleIXkF07E4s1mUsqHikAr0TAf7REwxDdfsDBAcmqO/ZZmkObj8qWhYPECgYEAzBbENZ5jUEihN5QFx/Ai+VVMnsYcxglj2/vH9IMvvidOBoml2tZzPFMQl/dmZ4X0WgUyDy4nGxHvRIxIk7xpbF6eeI25flVfdDv347hpZsDNPYiQV3k2SAwMQSZmNEU+MUQ10MxnILF3Yjfa6k0eCEKNj3iKefi1alhDzNIU98cCgYEAz9THqdSeszHn3MmdkOu34KpkX3UT+fsUSEJfp4PuUVwDvmJhDGukbb7eE/2cNoNnIyd10hChx5CPOKXl+/NcTGBC9sTfIVTeHqKeKLOqjF0rzUYkbz3ZrGW5ytdDXAgbqNaFR0uoU/hZewZi7ZIENkQaz1GsRbMXv7Q4lVTDHZECgYEA1m9SB+oaEdU+/hLrqPtV9QMIs6xMjH6Gqthx4Mn+GW7jrRU/BrLeJWVzrXIuGjgH9itEyPp/tCPYTX0rbEpzUIz9Dvblt0z60df1QEwYb6Nl1fm8HrfRupeRhwVDssbvgSawUor0ASGJCWJcdj7ZvK5nVxQz8UBXIRRlEBPOjp8=\\\",\\\"resource-name\\\":\\\"test2-win22azure-vm\\\",\\\"subscription-id\\\":\\\"<your-subscriptions>\\\",\\\"resource-group\\\":\\\"dcoffee-rg\\\",\\\"resource-namespace\\\":\\\"Microsoft.HybridCompute\\\",\\\"tenant-id\\\":\\\"2fc994a3-81d2-4ba3-ad3e-c1d68b3aaf6b\\\",\\\"location\\\":\\\"eastus\\\",\\\"correlation-id\\\":\\\"eff6a40f-dd47-427a-a13e-e365e18321b2\\\",\\\"msi-cert-retries\\\":26,\\\"proxyurl\\\":\\\"\\\"}\" > OperationID:\"82d838f1-3487-11ef-a5a3-02ec00110008\" ] returned with FAILED execution state: Run Command Failed: Run Command Failed: Run Command Failed"
 ```
 
 ![Create Windows VM with CLI 1](images/Create-WinVM-Result5.png)
@@ -1013,10 +1013,10 @@ PS C:\Users\LabAdmin> az stack-hci-vm network nic create --subscription $subscri
 Command group 'stack-hci-vm' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
 {
   "extendedLocation": {
-    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "name": "/subscriptions/<<your-subscriptions>>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
     "type": "CustomLocation"
   },
-  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test-ubuntu2-vm-eth01",
+  "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test-ubuntu2-vm-eth01",
   "location": "eastus",
   "name": "test-ubuntu2-vm-eth01",
   "properties": {
@@ -1032,7 +1032,7 @@ Command group 'stack-hci-vm' is experimental and under development. Reference an
           "privateIpAddress": "10.0.1.99",
           "privateIpAllocationMethod": null,
           "subnet": {
-            "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/logicalnetworks/subnet1",
+            "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/logicalnetworks/subnet1",
             "resourceGroup": "dcoffee-rg"
           }
         }
@@ -1063,10 +1063,10 @@ PS C:\Users\LabAdmin> az stack-hci-vm create --name $vmName --resource-group $re
 Command group 'stack-hci-vm' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
 {
   "extendedLocation": {
-    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "name": "/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
     "type": "CustomLocation"
   },
-  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.HybridCompute/machines/test-ubuntu2-vm/providers/Microsoft.AzureStackHCI/virtualMachineInstances/default",
+  "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.HybridCompute/machines/test-ubuntu2-vm/providers/Microsoft.AzureStackHCI/virtualMachineInstances/default",
   "name": "default",
   "properties": {
     "hardwareProfile": {
@@ -1104,7 +1104,7 @@ Command group 'stack-hci-vm' is experimental and under development. Reference an
     "networkProfile": {
       "networkInterfaces": [
         {
-          "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test-ubuntu2-vm-eth01",
+          "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test-ubuntu2-vm-eth01",
           "resourceGroup": "dcoffee-rg"
         }
       ]
@@ -1147,14 +1147,14 @@ Command group 'stack-hci-vm' is experimental and under development. Reference an
     "storageProfile": {
       "dataDisks": [],
       "imageReference": {
-        "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/galleryimages/Ubuntu-22.04.4",
+        "id": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/galleryimages/Ubuntu-22.04.4",
         "resourceGroup": "dcoffee-rg"
       },
       "osDisk": {
         "id": null,
         "osType": "Linux"
       },
-      "storagepathId": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
+      "storagepathId": "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
     },
     "vmId": "a0b065b0-d403-4c5e-9573-616df9c43731"
   },
