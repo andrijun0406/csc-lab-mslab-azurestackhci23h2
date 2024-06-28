@@ -975,7 +975,8 @@ Run the following script from the cluster nodes.
 
 # Define parameters for Azure CLI
 
-$vmName ="test-ubuntu-vm"
+#$vmName ="test-ubuntu-vm"
+$vmName ="test-ubuntu2-vm"
 $subscription = "<your-subscriptions>"
 $resource_group = "dcoffee-rg"
 $customLocationName = "dcoffee-clus01-cl"
@@ -983,13 +984,15 @@ $customLocationID ="/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-r
 $location = "eastus"
 $userName = "labadmin"
 $password = "<admin-password>"
-$imageName ="Ubuntu-VM"
-$nicName ="test-ubuntu-vm-eth01"
+#$imageName ="Ubuntu-VM"
+$imageName ="Ubuntu-22.04.4"
+#$nicName ="test-ubuntu-vm-eth01"
+$nicName ="test-ubuntu2-vm-eth01" 
 $storagePathName = "UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
 $storagePathId = "/subscriptions/<your-subscriptions>/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
 $lnetName = "subnet1"
 $gateway ="10.0.1.1"
-$ipAddress ="10.0.1.10"
+$ipAddress ="10.0.1.11"
 $computerName = "th-mc660-1"
 
 
@@ -1004,7 +1007,178 @@ az stack-hci-vm create --name $vmName --resource-group $resource_group --admin-u
 
 #### Expected Result
 
-so far no luck:
+the output of nic creation would be something like this:
+```
+PS C:\Users\LabAdmin> az stack-hci-vm network nic create --subscription $subscription --resource-group $resource_group --custom-location $customLocationID --location $location --name $nicName --subnet-id $lnetName --ip-address $ipAddress
+Command group 'stack-hci-vm' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
+{
+  "extendedLocation": {
+    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "type": "CustomLocation"
+  },
+  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test-ubuntu2-vm-eth01",
+  "location": "eastus",
+  "name": "test-ubuntu2-vm-eth01",
+  "properties": {
+    "dnsSettings": {
+      "dnsServers": null
+    },
+    "ipConfigurations": [
+      {
+        "name": null,
+        "properties": {
+          "gateway": "10.0.1.1",
+          "prefixLength": "24",
+          "privateIpAddress": "10.0.1.99",
+          "privateIpAllocationMethod": null,
+          "subnet": {
+            "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/logicalnetworks/subnet1",
+            "resourceGroup": "dcoffee-rg"
+          }
+        }
+      }
+    ],
+    "macAddress": null,
+    "provisioningState": "Succeeded",
+    "resourceName": null,
+    "status": {}
+  },
+  "resourceGroup": "dcoffee-rg",
+  "systemData": {
+    "createdAt": "2024-06-28T01:06:54.129816+00:00",
+    "createdBy": "cscadmin@apjcsclocal.onmicrosoft.com",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-06-28T01:08:21.412819+00:00",
+    "lastModifiedBy": "319f651f-7ddb-4fc6-9857-7aef9250bd05",
+    "lastModifiedByType": "Application"
+  },
+  "tags": null,
+  "type": "microsoft.azurestackhci/networkinterfaces"
+}
+```
+
+the output of vm creation would be something like this:
+```
+PS C:\Users\LabAdmin> az stack-hci-vm create --name $vmName --resource-group $resource_group --admin-username $userName --admin-password $password --computer-name $computerName --image $imageName --location $location --authentication-type all --nics $nicName --custom-location $customLocationID --hardware-profile memory-mb="8192" processors="4" --storage-path-id $storagePathId
+Command group 'stack-hci-vm' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
+{
+  "extendedLocation": {
+    "name": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl",
+    "type": "CustomLocation"
+  },
+  "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.HybridCompute/machines/test-ubuntu2-vm/providers/Microsoft.AzureStackHCI/virtualMachineInstances/default",
+  "name": "default",
+  "properties": {
+    "hardwareProfile": {
+      "dynamicMemoryConfig": {
+        "maximumMemoryMb": null,
+        "minimumMemoryMb": null,
+        "targetMemoryBuffer": null
+      },
+      "memoryMb": 8192,
+      "processors": 4,
+      "vmSize": "Custom"
+    },
+    "httpProxyConfig": null,
+    "instanceView": {
+      "vmAgent": {
+        "statuses": [
+          {
+            "code": "ProvisioningState/succeeded",
+            "displayStatus": "Connected",
+            "level": "Info",
+            "message": "Successfully established connection with mocguestagent",
+            "time": "2024-06-28T01:17:01Z"
+          },
+          {
+            "code": "ProvisioningState/succeeded",
+            "displayStatus": "Connected",
+            "level": "Info",
+            "message": "New mocguestagent version detected 'v0.14.0-2-g5c6a4b32'",
+            "time": "2024-06-28T01:16:59Z"
+          }
+        ],
+        "vmConfigAgentVersion": "v0.14.0-2-g5c6a4b32"
+      }
+    },
+    "networkProfile": {
+      "networkInterfaces": [
+        {
+          "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/networkinterfaces/test-ubuntu2-vm-eth01",
+          "resourceGroup": "dcoffee-rg"
+        }
+      ]
+    },
+    "osProfile": {
+      "adminPassword": null,
+      "adminUsername": "labadmin",
+      "computerName": "th-mc660-1",
+      "linuxConfiguration": {
+        "disablePasswordAuthentication": false,
+        "provisionVmAgent": true,
+        "provisionVmConfigAgent": true,
+        "ssh": {
+          "publicKeys": null
+        }
+      },
+      "windowsConfiguration": {
+        "enableAutomaticUpdates": null,
+        "provisionVmAgent": true,
+        "provisionVmConfigAgent": true,
+        "ssh": {
+          "publicKeys": null
+        },
+        "timeZone": null
+      }
+    },
+    "provisioningState": "Succeeded",
+    "securityProfile": {
+      "enableTpm": false,
+      "securityType": null,
+      "uefiSettings": {
+        "secureBootEnabled": true
+      }
+    },
+    "status": {
+      "errorCode": "",
+      "errorMessage": "",
+      "powerState": "Running"
+    },
+    "storageProfile": {
+      "dataDisks": [],
+      "imageReference": {
+        "id": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/galleryimages/Ubuntu-22.04.4",
+        "resourceGroup": "dcoffee-rg"
+      },
+      "osDisk": {
+        "id": null,
+        "osType": "Linux"
+      },
+      "storagepathId": "/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourceGroups/dcoffee-rg/providers/Microsoft.AzureStackHCI/storagecontainers/UserStorage2-ffb0cb403cc44734b9f4ad113a7f9d4c"
+    },
+    "vmId": "a0b065b0-d403-4c5e-9573-616df9c43731"
+  },
+  "resourceGroup": "dcoffee-rg",
+  "systemData": {
+    "createdAt": "2024-06-28T01:09:35.588218+00:00",
+    "createdBy": "cscadmin@apjcsclocal.onmicrosoft.com",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-06-28T01:19:17.548085+00:00",
+    "lastModifiedBy": "319f651f-7ddb-4fc6-9857-7aef9250bd05",
+    "lastModifiedByType": "Application"
+  },
+  "tags": null,
+  "type": "microsoft.azurestackhci/virtualmachineinstances"
+}
+PS C:\Users\LabAdmin>
+```
+
+![Create Linux VM with CLI 1](images/Create-LinuxVM-Result1.png)
+![Create Linux VM with CLI 1](images/Create-LinuxVM-Result2.png)
+![Create Linux VM with CLI 1](images/Create-LinuxVM-Result3.png)
+
+
+MOVE TO KNOWN ISSUE: so far no luck (using un-supported image):
 
 ```
 moc-operator virtualmachine serviceClient returned an error while reconciling: 

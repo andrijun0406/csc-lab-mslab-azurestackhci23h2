@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\06-AzArcAKS-Management\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:06-AzArcAKS-Management\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\05-AzArcVM-Management\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:05-AzArcVM-Management\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
     }
   ],
   "DocumentGroupContainers": [
@@ -24,13 +24,13 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "README.md",
-              "DocumentMoniker": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\06-AzArcAKS-Management\\README.md",
-              "RelativeDocumentMoniker": "06-AzArcAKS-Management\\README.md",
-              "ToolTip": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\06-AzArcAKS-Management\\README.md",
-              "RelativeToolTip": "06-AzArcAKS-Management\\README.md",
-              "ViewState": "AQIAAC4DAAAAAAAAAAAAAGcDAABiAAAA",
+              "DocumentMoniker": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\05-AzArcVM-Management\\README.md",
+              "RelativeDocumentMoniker": "05-AzArcVM-Management\\README.md",
+              "ToolTip": "C:\\Users\\ahmada8\\source\\repos\\andrijun0406\\csc-lab-mslab-azurestackhci23h2\\05-AzArcVM-Management\\README.md",
+              "RelativeToolTip": "05-AzArcVM-Management\\README.md",
+              "ViewState": "AQIAAIgEAAAAAAAAAAAqwJwEAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2024-06-16T03:01:51.987Z",
+              "WhenOpened": "2024-06-27T11:01:17.884Z",
               "EditorCaption": ""
             }
           ]
