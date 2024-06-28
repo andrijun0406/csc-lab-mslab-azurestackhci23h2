@@ -1177,16 +1177,6 @@ PS C:\Users\LabAdmin>
 ![Create Linux VM with CLI 1](images/Create-LinuxVM-Result2.png)
 ![Create Linux VM with CLI 1](images/Create-LinuxVM-Result3.png)
 
-
-MOVE TO KNOWN ISSUE: so far no luck (using un-supported image):
-
-```
-moc-operator virtualmachine serviceClient returned an error while reconciling: 
-rpc error: code = Unknown desc = Could not establish HyperV connection for VM ID [B1BF4AE9-ECA6-4AE8-ABEF-C64581E3FCFB] within [900] seconds, 
-error: [<nil>] (Code: moc-operator virtualmachine serviceClient returned an error while reconciling: rpc error: 
-code = Unknown desc = Could not establish HyperV connection for VM ID [B1BF4AE9-ECA6-4AE8-ABEF-C64581E3FCFB] within [900] seconds, error: [<nil>])
-```
-
 ### Task 4b - Create Arc VMs (Linux) using Static from Portal
 
 * Basics
@@ -1256,6 +1246,20 @@ Networking:
 
 #### Expected Result
 
-So far no luck too the same error as when creating azure CLI:
+![Create Linux VM - Portal](images/Create-UbuntuVM-Result1.png)
+![Create Linux VM - Portal](images/Create-UbuntuVM-Result2.png)
 
+#### Known Issues
+
+##### 1. Creation Linux VM failed due to the use of unsupported OS version
+
+if the result of Linux VM creation failed with error like the following, using Azure CLI or Azure Portal:
+```
+moc-operator virtualmachine serviceClient returned an error while reconciling: 
+rpc error: code = Unknown desc = Could not establish HyperV connection for VM ID [B1BF4AE9-ECA6-4AE8-ABEF-C64581E3FCFB] within [900] seconds, 
+error: [<nil>] (Code: moc-operator virtualmachine serviceClient returned an error while reconciling: rpc error: 
+code = Unknown desc = Could not establish HyperV connection for VM ID [B1BF4AE9-ECA6-4AE8-ABEF-C64581E3FCFB] within [900] seconds, error: [<nil>])
+```
 ![Create Linux VM - Error](images/Create-UbuntuVM-Error.png)
+
+Then you are not using a supported Linux OS version, create new Linux Image with supported OS version.
