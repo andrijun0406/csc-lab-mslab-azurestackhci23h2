@@ -51,18 +51,34 @@ On this step we are going to create linux Image from Azure CLI. Linux images are
 > This will enable guest management on the VMs
 Run the following script from Management Machine
 ```powershell
-# Copy downloaded Ubuntu file to ClusterSharedVolume
-# copy-item -path .\ubuntu-24.04-live-server-amd64.iso -Destination '\\th-mc660-1\c$\ClusterStorage\UserStorage_1\'
-copy-item -path .\ubuntu-22.04.4-live-server-amd64.iso -Destination '\\th-mc660-2\c$\ClusterStorage\UserStorage_1\'
+
+$url="https://releases.ubuntu.com/22.04.4/ubuntu-22.04.4-live-server-amd64.iso?_ga=2.222611803.1926523896.1719726970-1435091834.1719726970&_gl=1*lg0woe*_gcl_au*MzQ2NTU1NDQuMTcxODE1MjkxMA.."
+$dest="$env:USERPROFILE\Downloads\ubuntu-22.04.4-live-server-amd64.iso"
+$storagepath="C:\ClusterStorage\UserStorage_1\"
+$server = "th-mc660-1"
+$hash="45f873de9f8cb637345d6e66a583762730bbea30277ef7b32c9c3bd6700a32b2"
+
+## Download and copy Ubuntu ISO to node 2
+
+if (-not (Test-Path -Path $dest)){
+    Start-BitsTransfer -Source $url -Destination $dest  
+}
+$filehash=Get-FileHash $dest -Algorithm SHA256
+if ($filehash.hash.toLower().equals($hash)) {
+    #Create PS Session and copy install files to remote server
+    #make sure maxevenlope is 8k
+    Invoke-Command -ComputerName $server -ScriptBlock {Set-Item -Path WSMan:\localhost\MaxEnvelopeSizekb -Value 8192}
+    $Session=New-PSSession -ComputerName $server
+    Copy-Item -Path $dest -Destination $storagepath -ToSession $Session
+    $Session | Remove-PSSession
+}
 
 # Create new Ubuntu VM
-$server = "th-mc660-1"
 
 Invoke-Command -ComputerName $server -ScriptBlock {
-    $vmname = "ubuntu2-vm"
+    $vmname = "ubuntu22.04.4-template"
     $vmram = [int64]4GB
     $vmboot = "CD"
-    #$isopath="C:\ClusterStorage\UserStorage_1\ubuntu-24.04-live-server-amd64.iso"
     $isopath="C:\ClusterStorage\UserStorage_1\ubuntu-22.04.4-live-server-amd64.iso"
     $vmvhdpath= "C:\ClusterStorage\UserStorage_1\$vmname\$vmname.vhdx"
     $vmpath="C:\ClusterStorage\UserStorage_1\$vmname"
@@ -106,7 +122,7 @@ logout
 * Shutdown the VM (run from Management Machine)
 ```powershell
 $server = "th-mc660-1"
-$vmname = "ubuntu2-vm"
+$vmname = "ubuntu22.04.4-template"
 Invoke-Command -ComputerName $servers -ScriptBlock {
 Stop-VM $vmname
 }
@@ -115,7 +131,7 @@ Stop-VM $vmname
 
 ```powershell
 
-$vmname = "ubuntu2-vm"
+$vmname = "ubuntu22.04.4-template"
 $ResourceGroupName="dcoffee-rg"
 $Location="eastus"
 $CustomLocation = "/subscriptions/<your-subscriptions>/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus01-cl"
