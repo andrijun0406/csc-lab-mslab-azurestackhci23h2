@@ -58,7 +58,7 @@ $storagepath="C:\ClusterStorage\UserStorage_1\"
 $server = "th-mc660-1"
 $hash="45f873de9f8cb637345d6e66a583762730bbea30277ef7b32c9c3bd6700a32b2"
 
-## Download and copy Ubuntu ISO to node 2
+## Download and copy Ubuntu ISO to one of the nodes
 
 if (-not (Test-Path -Path $dest)){
     Start-BitsTransfer -Source $url -Destination $dest  
@@ -247,6 +247,78 @@ telemetry.main: Finish creating telemetry upload process.
 ![Ubuntu VM list](images/UbuntuVM-List.png)
 ![Ubuntu VM list2](images/UbuntuVM-List2.png)
 
+#### Known Issues
+
+##### 1. Creation of VM Images failed (Windows or Linux) using Portal or CLI
+
+If you failed to deploy VM Images using Azure Marketplace (portal) or using Azure CLI and received error as the following:
+
+![VM Images Deployment Error](images/VMImages-Error1.png)
+
+The output of az stack-hci-vm image create looks something like this:
+
+```
+PS C:\Users\LabAdmin> az stack-hci-vm image create --subscription $SubscriptionID -g $ResourceGroupName --custom-location $CustomLocation --location $Location --image-path $ImagePath --name $ImageName --debug --os-type $OsType
+cli.knack.cli: Command arguments: ['stack-hci-vm', 'image', 'create', '--subscription', '368ac09c-01c9-4b47-9142-a7581c6694a3', '-g', 'dcoffee-rg', '--custom-location', '/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/dcoffee-rg/providers/microsoft.extendedlocation/customlocations/dcoffee-clus02-cl', '--location', 'eastus', '--image-path', 'C:\\ClusterStorage\\UserStorage_1\\ubuntu22.04.4-template\\ubuntu22.04.4-template.vhdx', '--name', 'clus02-Ubuntu-22.04.4', '--debug', '--os-type', 'Linux']
+cli.knack.cli: __init__ debug log:
+Enable color in terminal.
+Enable VT mode.
+
+<snipped>
+
+azure.core.exceptions.HttpResponseError: (Timeout) Timedout while retrieving MocHealthChecker resource. Last error: MocHealthCheckerList is empty.: Timedout
+Code: Timeout
+Message: Timedout while retrieving MocHealthChecker resource. Last error: MocHealthCheckerList is empty.: Timedout
+
+cli.azure.cli.core.azclierror: (Timeout) Timedout while retrieving MocHealthChecker resource. Last error: MocHealthCheckerList is empty.: Timedout
+Code: Timeout
+Message: Timedout while retrieving MocHealthChecker resource. Last error: MocHealthCheckerList is empty.: Timedout                              
+az_command_data_logger: (Timeout) Timedout while retrieving MocHealthChecker resource. Last error: MocHealthCheckerList is empty.: Timedout     
+Code: Timeout                                                                                                                                   
+Message: Timedout while retrieving MocHealthChecker resource. Last error: MocHealthCheckerList is empty.: Timedout                              
+cli.knack.cli: Event: Cli.PostExecute [<function AzCliLogging.deinit_cmd_metadata_logging at 0x04838208>]                                       
+az_command_data_logger: exit code: 1                                                                                                            
+cli.__main__: Command ran in 1540.814 seconds (init: 0.702, invoke: 1540.112)                                                                   
+telemetry.main: Begin splitting cli events and extra events, total events: 1                                                                    
+telemetry.client: Accumulated 0 events. Flush the clients.                                                                                      
+telemetry.main: Finish splitting cli events and extra events, cli events: 1                                                                     
+telemetry.save: Save telemetry record of length 4107 in cache                                                                                   
+telemetry.main: Begin creating telemetry upload process.                                                                                        
+telemetry.process: Creating upload process: "C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\python.exe C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\Lib\site-packages\azure\cli\telemetry\__init__.pyc C:\Users\LabAdmin\.azure"                                                          
+telemetry.process: Return from creating process                                                                                                 
+telemetry.main: Finish creating telemetry upload process.  
+```
+
+**Collect AKSHCI Logs and send it to Microsoft Support**
+
+```
+$csv_path="C:\ClusterStorage\Infrastructure_1\Shares\SU1_Infrastructure_1\MocArb\WorkingDirectory\Appliance"
+$VMIP_1="10.0.0.112"
+Get-ArcHCILogs -workDirectory $csv_path -kvaTokenPath $csv_path\kvatoken.tok -ip $VMIP_1 
+```
+
+The output should be something loke this:
+
+```
+PS C:\Users\LabAdmin> $csv_path="C:\ClusterStorage\Infrastructure_1\Shares\SU1_Infrastructure_1\MocArb\WorkingDirectory\Appliance"
+>> $VMIP_1="10.0.0.112"
+>> Get-ArcHCILogs -workDirectory $csv_path -kvaTokenPath $csv_path\kvatoken.tok -ip $VMIP_1
+>>
+WARNING: The names of some imported commands from the module 'Moc' include unapproved verbs that might make them less discoverable. To find the
+ commands with unapproved verbs, run the Import-Module command again with the Verbose parameter. For a list of approved verbs, type Get-Verb.
+WARNING: The names of some imported commands from the module 'Common' include unapproved verbs that might make them less discoverable. To find
+the commands with unapproved verbs, run the Import-Module command again with the Verbose parameter. For a list of approved verbs, type
+Get-Verb.
+WARNING: The names of some imported commands from the module 'Moc' include unapproved verbs that might make them less discoverable. To find the
+ commands with unapproved verbs, run the Import-Module command again with the Verbose parameter. For a list of approved verbs, type Get-Verb.
+WARNING: The names of some imported commands from the module 'Common' include unapproved verbs that might make them less discoverable. To find
+the commands with unapproved verbs, run the Import-Module command again with the Verbose parameter. For a list of approved verbs, type
+Get-Verb.
+C:\ClusterStorage\Infrastructure_1\ArcHci\archcilogs_20240701030428
+Logs were successfully saved to "C:\ClusterStorage\Infrastructure_1\ArcHci\archcilogs_20240701030428.zip"
+C:\ClusterStorage\Infrastructure_1\ArcHci\archcilogs_20240701030428.zip
+```
+
 ### Task 2 - Create Logical Networks
 
 This task will create multiple subnet that you can add as logical networks via portal to the clusters.
@@ -268,6 +340,18 @@ Run the following script on Management machine:
 #define networks, Odd number DHCP True, Even Number DHCP false
 $domain="th.dcoffee.com"
 $Server="DC"
+
+# install RSAT-DHCP if not already
+Install-WindowsFeature -Name "RSAT-DHCP", "RSAT-RemoteAccess", "RSAT-Clustering","Hyper-V-PowerShell"
+
+#download Azure modules
+$Modules="az.resources","Az.CustomLocation","Az.Accounts"
+foreach ($Module in $Modules){
+    if (!(Get-InstalledModule -Name $Module -ErrorAction Ignore)){
+        Install-Module -Name $Module -Force
+    }
+}
+
 $Networks=@()
 1..4 | ForEach-Object{
     If ($_ % 2 -eq 0) {
@@ -328,8 +412,8 @@ $ClusterName="clus01"
 $ClusterNodes=(Get-ClusterNode -Cluster $ClusterName).Name
 $VirtualSwitchName=(Get-VMSwitch -CimSession $ClusterNodes[0]).Name
 $Location="EastUS"
-$ResourceGroupName=""
-$CustomLocationName=""
+$ResourceGroupName="dcoffee-rg"
+$CustomLocationName="dcoffee-clus01-cl"
 $CustomLocationID=(Get-AzCustomLocation -ResourceGroupName $ResourceGroupName -Name $CustomLocationName).ID
 
 # define networks manually
