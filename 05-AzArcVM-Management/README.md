@@ -1077,7 +1077,6 @@ Run the following script from the cluster nodes.
 
 # Define parameters for Azure CLI
 
-#$vmName ="test-ubuntu-vm"
 $vmName ="test-ubuntu2-vm"
 $subscription = "<your-subscriptions>"
 $resource_group = "dcoffee-rg"
@@ -1348,8 +1347,10 @@ Networking:
 
 #### Expected Result
 
-![Create Linux VM - Portal](images/Create-UbuntuVM-Result1.png)
-![Create Linux VM - Portal](images/Create-UbuntuVM-Result2.png)
+![Create Linux VM - Portal1](images/Create-UbuntuVM-Result1.png)
+![Create Linux VM - Portal2](images/Create-UbuntuVM-Result2.png)
+![Create Linux VM - Portal3](images/Create-UbuntuVM-Result3.png)
+![Create Linux VM - Portal3](images/Create-UbuntuVM-Result4.png)
 
 #### Known Issues
 
