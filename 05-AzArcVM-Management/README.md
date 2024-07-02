@@ -827,11 +827,13 @@ If the agent is running it will show the result as shown in the following snippe
 ```
 > Look for **code: ProvisioningState/succeeded** and **displayStatus: Connected** this means the guest agent is running
 
-* Enable guest management on a VM with guest agent running.
-
+* Enable guest management on a VM with guest agent running
+> you need to run this on cluster node, running on Management node will fail
 ```powershell
 az stack-hci-vm update --name $VMname --enable-agent true --resource-group $RGname
 ```
+
+
 * Now the guest managemet is enabled in the Portal
 ![Enable Guest Management2](images/Enable-Guest-Management5.png)
 * Now let's try to connect
@@ -848,8 +850,8 @@ Follow step here to enable SSH on Windows and Arc-enabled Servers:
 
 ### Task 3b - Create Arc VMs (Windows) using DHCP from Azure CLI
 
-Run the following script from the cluster nodes.
-> somehow it doesn't work remotely from Management machine
+Run the following script from the cluster nodes or Management Machine
+> az cli should work from anywhere
 
 ```powershell
 
