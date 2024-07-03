@@ -1357,8 +1357,9 @@ Networking:
 ##### Step 1. Using Portal (Browser)
 
 **1. using Entra ID**
+<work in progress>
 **2. using SSH Private Key**
-When creating linux vm from portal, the private key (file with *.pem extensions) will be donwloaded automatically. Open the file and copy and paste to SSH Private key field as the following diagram:
+When creating linux vm from portal, the private key (file with *.pem extensions) will be downloaded automatically. Open the file and copy and paste to SSH Private key field as the following diagram:
 
 ![Connect to Linux 2](images/Connect-Linux2.png)
 
@@ -1373,7 +1374,54 @@ Click **Connect in browser**
 ##### Step 2. Using Azure CLI
 
 **1. using Entra ID**
+<work in progress>
 **2. using SSH Private Key**
+When creating linux vm from portal, the private key (file with *.pem extensions) will be downloaded automatically. locate the file and use it as parameter for az ssh arc:
+
+```powershell
+$subscription = <your-subscriptions>
+$resource_group = <your-resourcegroup>
+$vmname = <your-vmname>
+$username = <your-username>
+$privateKeyFile="$env:USERPROFILE\Downloads\cl3ubuntuvm2_key.pem"
+az ssh arc --subscription $subscription --resource-group $resource_group --name $vmname" --local-user $username  --private-key-file $privateKeyFile
+```
+The output would be something like this:
+```powershell
+PS C:\Users\LabAdmin> $privateKeyFile="$env:USERPROFILE\Downloads\cl3ubuntuvm2_key.pem"
+PS C:\Users\LabAdmin> az ssh arc --subscription $subscription --resource-group $resource_group --name $vmname --local-user $username  --private-key-file $privateKeyFile
+labadmin@cl3ubuntuvm1's password:
+Welcome to Ubuntu 22.04.4 LTS (GNU/Linux 6.5.0-1023-azure x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Jul  3 02:54:23 AM UTC 2024
+
+  System load:  0.0                Processes:             133
+  Usage of /:   41.5% of 18.01GB   Users logged in:       0
+  Memory usage: 4%                 IPv4 address for eth0: 10.0.1.11
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+3 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Wed Jul  3 02:51:06 2024 from 127.0.0.1
+labadmin@id-mc660-1:~$
+```
+> Not sure why it still asking for password, it should be using private key authentication
 
 **3. using local password**
 
