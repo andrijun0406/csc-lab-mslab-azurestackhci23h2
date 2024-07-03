@@ -9,6 +9,18 @@ Please note that the Domain controller here is unique to this Lab and can not be
 * I'm also using Windows Server 2022 Datacenter Edition. This Hyper-V hosts will run a nested VM for azure stack HCI cluster nodes
 * This Hyper-V host VM also has two VHDX one is for OS (127GB) and another one is for MSLAB (5TB)
 
+However, for your environment and also depending what you want to do with it you can start with minimum as the following:
+
+* Client or Server Operating System that supports Hyper-V (Windows 10 Pro, Windows 11 Pro or Windows Server)
+
+* Hyper-V feature has to be enabled (tool will check it for you)
+
+* at least 16GB RAM
+
+* at least 100GB free space on SSD
+
+* Optionally you can setup VM in Azure Virtual Machine.
+
 ### Task 2 - Download all neccessary files
 
 * MSLab scripts : [MSLab](https://aka.ms/mslab) make sure you are using the latest (currently its v24.05.1)

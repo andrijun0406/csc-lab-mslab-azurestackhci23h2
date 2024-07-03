@@ -1356,9 +1356,9 @@ Networking:
 
 ##### Step 1. Using Portal (Browser)
 
-**using Entra ID**
-**using SSH Private Key**
-**using local password**
+**1. using Entra ID**
+**2. using SSH Private Key**
+**3. using local password**
 
 Go to your **Virtual Machine > Setings > Connect**
 Choose **Password**, and then enter your **username**
@@ -1368,9 +1368,9 @@ Click **Connect in browser**
 
 ##### Step 2. Using Azure CLI
 
-**using Entra ID**
-**using SSH Private Key**
-**using local password**
+**1. using Entra ID**
+**2. using SSH Private Key**
+**3. using local password**
 
 Go to any machine with Azure CLI enabled and ssh extension installed and run the following command:
 
@@ -1380,6 +1380,10 @@ $resource_group = <your-resourcegroup>
 $vmname = <your-vmname>
 $username = <your-username>
 az ssh arc --subscription $subscription --resource-group $resource_group --name $vmname" --local-user $username
+```
+
+The output would be something like this:
+```
 ```
 
 #### Known Issues
