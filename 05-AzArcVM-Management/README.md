@@ -1358,6 +1358,10 @@ Networking:
 
 **1. using Entra ID**
 **2. using SSH Private Key**
+When creating linux vm from portal, the private key (file with *.pem extensions) will be donwloaded automatically. Open the file and copy and paste to SSH Private key field as the following diagram:
+
+![Connect to Linux 2](images/Connect-Linux2.png)
+
 **3. using local password**
 
 Go to your **Virtual Machine > Setings > Connect**
@@ -1370,6 +1374,7 @@ Click **Connect in browser**
 
 **1. using Entra ID**
 **2. using SSH Private Key**
+
 **3. using local password**
 
 Go to any machine with Azure CLI enabled and ssh extension installed and run the following command:
@@ -1384,7 +1389,72 @@ az ssh arc --subscription $subscription --resource-group $resource_group --name 
 
 The output would be something like this:
 ```
+PS C:\Users\LabAdmin> az ssh arc --subscription $subscription --resource-group $resource_group --name $vmName --local-user $userName
+The command requires the extension ssh. Do you want to install it now? The command will continue to run after the extension is installed. (Y/n): Y
+Run 'az config set extension.use_dynamic_install=yes_without_prompt' to allow installing extensions without prompt.
+Default enabled including preview versions for extension installation now. Disabled in future release. Use '--allow-preview true' to enable it specifically if needed. Use '--allow-preview false' to install stable version only.
+Successfuly installed SSH Connectivity Proxy file C:\Users\LabAdmin\.clientsshproxy\sshProxy_windows_amd64_1_3_026973.exe
+Successfuly installed SSH Connectivity Proxy License file C:\Users\LabAdmin\.clientsshproxy\LICENSE.txt
+Successfuly installed SSH Connectivity Proxy License file C:\Users\LabAdmin\.clientsshproxy\ThirdPartyNotice.txt
+Port 22 is not allowed for SSH connections in this resource. Would you like to update the current Service Configuration in the endpoint to allow connections to port 22? If you would like to update the Service Configuration to allow connections to a different port, please provide the -Port parameter or manually set up the Service Configuration. (y/n): y
+Finished[#############################################################]  100.0000%
+{"level":"error","msg":"error connecting to wss://azgnrelay-eastus-l1.servicebus.windows.net/$hc/microsoft.hybridcompute/machines/879dfeaf85c01d7c162b24fde577f799f71bda9063d0f3c55a6676fa45a950ee/1719962291878554624/v2%3Fsb-hc-action=connect\u0026sb-hc-id=a1322e45-dea4-4e8e-b76b-a4bfceb02c28. 404 Endpoint does not exist. TrackingId:a1322e45-dea4-4e8e-b76b-a4bfceb02c28_G11, SystemTracker:sb://azgnrelay-eastus-l1.servicebus.windows.net/microsoft.hybridcompute/machines/879dfeaf85c01d7c162b24fde577f799f71bda9063d0f3c55a6676fa45a950ee/1719962291878554624/v2, Timestamp:2024-07-02T23:18:29. websocket: bad handshake ","proxyVersion":"1.3.026973"}
+{"level":"fatal","msg":"sshproxy: error connecting to the address: 404 Endpoint does not exist. TrackingId:a1322e45-dea4-4e8e-b76b-a4bfceb02c28_G11, SystemTracker:sb://azgnrelay-eastus-l1.servicebus.windows.net/microsoft.hybridcompute/machines/879dfeaf85c01d7c162b24fde577f799f71bda9063d0f3c55a6676fa45a950ee/1719962291878554624/v2, Timestamp:2024-07-02T23:18:29. websocket: bad handshake","proxyVersion":"1.3.026973"}
+kex_exchange_identification: Connection closed by remote host
+[93mSSH connection failed, possibly caused by new service configuration setup. Retrying the connect[0m
+
+
+
+
+PS C:\Users\LabAdmin>
+PS C:\Users\LabAdmin>
+PS C:\Users\LabAdmin> az ssh arc --subscription $subscription --resource-group $resource_group --name $vmName --local-user $userName
+The authenticity of host 'cl3ubuntuvm1 (<no hostip for proxy command>)' can't be established.
+ECDSA key fingerprint is SHA256:HicZrcRtO1GsbXB8QMVxfVOHjovTNwE2oiaABNqvoMw.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'cl3ubuntuvm1' (ECDSA) to the list of known hosts.
+labadmin@cl3ubuntuvm1's password:
+Welcome to Ubuntu 22.04.4 LTS (GNU/Linux 6.5.0-1023-azure x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Tue Jul  2 11:20:35 PM UTC 2024
+
+  System load:  0.0                Processes:             130
+  Usage of /:   41.5% of 18.01GB   Users logged in:       0
+  Memory usage: 4%                 IPv4 address for eth0: 10.0.1.11
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+6 updates can be applied immediately.
+3 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+labadmin@id-mc660-1:~$ ls -alht
+total 28K
+drwxr-x--- 4 labadmin labadmin 4.0K Jul  1 03:28 .
+-rw------- 1 labadmin labadmin    0 Jul  1 03:28 .bash_history
+-rw-r--r-- 1 labadmin labadmin    0 Jul  1 02:37 .sudo_as_admin_successful
+drwx------ 2 labadmin labadmin 4.0K Jul  1 02:36 .cache
+drwx------ 2 labadmin labadmin 4.0K Jul  1 02:31 .ssh
+drwxr-xr-x 3 root     root     4.0K Jul  1 02:31 ..
+-rw-r--r-- 1 labadmin labadmin  220 Jan  6  2022 .bash_logout
+-rw-r--r-- 1 labadmin labadmin 3.7K Jan  6  2022 .bashrc
+-rw-r--r-- 1 labadmin labadmin  807 Jan  6  2022 .profile
 ```
+> you may need to reconnect as the first time you connect, it will try to install the extension and Service Configuration.
 
 #### Known Issues
 
