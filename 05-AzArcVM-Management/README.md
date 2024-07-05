@@ -319,7 +319,174 @@ Logs were successfully saved to "C:\ClusterStorage\Infrastructure_1\ArcHci\archc
 C:\ClusterStorage\Infrastructure_1\ArcHci\archcilogs_20240701030428.zip
 ```
 
-### Task 2 - Create Logical Networks
+**SSH to MOC VM (ARB control plane) from on eof the cluster node**
+
+Check if SSH Client is installed on one of the cluster node, install if haven't already:
+
+```powershell
+Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
+```
+
+output would be something like this:
+
+```
+PS C:\Users\LabAdmin> Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
+
+
+Name  : OpenSSH.Client~~~~0.0.1.0
+State : Installed
+
+Name  : OpenSSH.Server~~~~0.0.1.0
+State : NotPresent
+```
+
+Check the MOC VM (ARB Control Plane)
+
+```powershell
+Get-VM
+```
+output would be something like this:
+
+```
+PS C:\Users\LabAdmin> get-vm
+
+Name                                                                   State   CPUUsage(%) MemoryAssigned(M) Uptime             Status
+----                                                                   -----   ----------- ----------------- ------             ------
+995f5cbf04565a8c42f104994fb7c11760b31a4ccccb2-control-plane-0-1d5382a8 Running 3           8192              7.02:45:52.1390000 Operating no...
+```
+Check VM IP address
+
+```powershell
+Get-VM | Select -ExpandProperty Networkadapters | Select IPAddresses
+```
+
+output would be something like this:
+
+```
+PS C:\Users\LabAdmin> get-vm | Select -ExpandProperty Networkadapters | Select IPAddresses
+
+IPAddresses
+-----------
+{10.0.0.112, 10.0.0.113, fe80::ec:ff:fe0c:0}
+```
+
+We need SSH key to login to the MOC VM
+
+```
+PS C:\Users\LabAdmin> cd 'C:\ProgramData\kva\.ssh\'
+PS C:\ProgramData\kva\.ssh> dir
+
+
+    Directory: C:\ProgramData\kva\.ssh
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----          7/1/2024   3:05 AM           1675 logkey
+-a----         6/26/2024   8:05 AM            381 logkey.pub
+-a----          7/1/2024   3:05 AM           3243 managementlogkey
+-a----          7/1/2024   3:05 AM           2534 managementlogkey-cert.pub
+```
+
+Go to the management machine and open File Explorer and type '\\sg-mc660-1\c$\ProgramData\kva\.ssh' in the path bar.
+Change file permission, remove the Domain users. Now SSH to the MOC VM with the logkey:
+
+```
+PS C:\ProgramData\kva\.ssh> ssh clouduser@10.0.0.112 -i .\logkey
+clouduser@moc-lp7eafa3at7 [ ~ ]$
+```
+
+Now let's set up the kubeconfig to use kubectl properly:
+
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+alternatively you could run:
+
+```
+export KUBECONFIG=/etc/kubernetes/admin.conf
+```
+
+Now, you can run the following kubectl commands in MOC VM:
+
+```
+kubectl get pods -A
+
+NAMESPACE                           NAME                                                             READY   STATUS             RESTARTS         AGE
+aks-operator-system                 aks-operator-controller-manager-5b869647b7-q2mlj                 2/2     Running            0                7d4h
+azstackhci-operator-system          azstackhci-operator-controller-manager-5d6798d55b-ll9xq          2/2     Running            0                7d4h
+azstackhci-operator-system          telemetry-manager-596977f79d-tdpxd                               5/5     Running            0                7d4h
+azure-arc                           alertmanager-azure-arc-monitoring-alertmanager-0                 3/3     Running            0                14h
+azure-arc                           appliance-connect-agent-8f864657b-vswh4                          1/1     Running            0                14h
+azure-arc                           azure-arc-monitoring-kube-state-metrics-6dd95cbd8f-vj9fx         1/1     Running            0                8d
+azure-arc                           azure-arc-monitoring-operator-7c9d77d5f5-x8bx9                   1/1     Running            0                8d
+azure-arc                           azure-arc-monitoring-prometheus-node-exporter-ds2tb              1/1     Running            0                8d
+azure-arc                           clusterconnect-agent-8f5c5b84d-zfjtv                             2/2     Running            0                14h
+azure-arc                           clusteridentityoperator-574988959f-9qrp5                         1/1     Running            0                14h
+azure-arc                           config-agent-dd64ddf7-vpxph                                      1/1     Running            0                14h
+azure-arc                           extension-manager-6cff766b8-k9zns                                1/1     Running            0                14h
+azure-arc                           geneva-agent-856fb946bb-s9s6q                                    3/3     Running            0                14h
+azure-arc                           guard-5654b8dcbd-qwqxp                                           1/1     Running            0                8d
+azure-arc                           logcollector-7b6b459b8b-4jfv4                                    1/1     Running            0                14h
+azure-arc                           metrics-agent-54548ccf7f-p8tvk                                   1/1     Running            0                14h
+azure-arc                           prometheus-azure-arc-monitoring-prometheus-0                     3/3     Running            0                14h
+azure-arc                           resource-sync-agent-65f49fccb7-jmb94                             1/1     Running            0                14h
+caph-system                         caph-controller-manager-7d6dbff879-njw75                         3/3     Running            0                8d
+capi-kubeadm-bootstrap-system       capi-kubeadm-bootstrap-controller-manager-f7dd4457d-bjt6v        2/2     Running            0                8d
+capi-kubeadm-control-plane-system   capi-kubeadm-control-plane-controller-manager-58898c887c-vz4nl   2/2     Running            0                8d
+capi-system                         capi-controller-manager-c6cb84466-h96w6                          2/2     Running            0                8d
+cert-manager                        cert-manager-7668cc58fb-25f87                                    1/1     Running            0                8d
+cert-manager                        cert-manager-cainjector-9bc4c79fc-rcgqk                          1/1     Running            0                8d
+cert-manager                        cert-manager-webhook-6b694859b7-bctsr                            1/1     Running            0                8d
+cloudop-system                      cloudop-controller-manager-5c95cd957d-pw99k                      1/1     Running            0                8d
+cloudop-system                      kvaio-controller-manager-56789d6d75-fnqxc                        2/2     Running            0                8d
+default                             pre-delete-hook-zctvs                                            0/1     Completed          0                7d4h
+hybridaks-operator-system           hybridaks-operator-controller-manager-574ddbd887-txfmq           8/8     Running            0                7d4h
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-4n4fx                          0/1     Error              0                7d4h
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-8gbrf                          0/1     Error              0                7d4h
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-ggknx                          0/1     Error              0                7d4h
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-s4vc2                          0/1     Error              0                7d4h
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-zx2p5                          0/1     Error              0                7d4h
+kube-system                         calico-kube-controllers-6bccb7c49-89cqc                          1/1     Running            0                8d
+kube-system                         calico-node-5vlln                                                1/1     Running            0                8d
+kube-system                         calico-patch-z74rm                                               1/1     Running            0                8d
+kube-system                         calicoctl                                                        1/1     Running            0                8d
+kube-system                         certificate-controller-manager-5f79bb4986-rn8rh                  1/1     Running            0                8d
+kube-system                         coredns-6df77c7d6-424tc                                          1/1     Running            0                8d
+kube-system                         coredns-6df77c7d6-wp4sp                                          1/1     Running            0                8d
+kube-system                         etcd-metrics-proxy-cz7qc                                         1/1     Running            0                8d
+kube-system                         etcd-moc-lp7eafa3at7                                             1/1     Running            0                8d
+kube-system                         kms-plugin-moc-lp7eafa3at7                                       1/1     Running            0                8d
+kube-system                         kube-apiserver-moc-lp7eafa3at7                                   1/1     Running            0                8d
+kube-system                         kube-controller-manager-moc-lp7eafa3at7                          1/1     Running            0                8d
+kube-system                         kube-proxy-nx9v9                                                 1/1     Running            0                8d
+kube-system                         kube-scheduler-moc-lp7eafa3at7                                   1/1     Running            0                8d
+kube-system                         kube-vip-moc-lp7eafa3at7                                         1/1     Running            0                8d
+kube-system                         moc-cloud-controller-manager-55bb9b894b-4ldsh                    1/1     Running            0                8d
+kube-system                         moc-kms-supporter-llkgk                                          1/1     Running            0                8d
+moc-operator-system                 moc-operator-controller-manager-5984d75f4c-vh2r6                 1/2     CrashLoopBackOff   2029 (99s ago)   7d4h
+```
+
+Check for pods which having problems. In this case one of the pod has "CrashLoopBackOff", let's check the logs:
+
+```bash
+kubectl logs moc-operator-controller-manager-5984d75f4c-vh2r6 -n moc-operator-system
+clouduser@moc-lp7eafa3at7 [ ~ ]$  kubectl logs moc-operator-controller-manager-5984d75f4c-vh2r6 -n moc-operator-system
+Defaulted container "manager" out of: manager, kube-rbac-proxy
+2024-07-04T09:37:08Z    INFO    controller-runtime.metrics      Metrics server is starting to listen    {"addr": "127.0.0.1:8080"}
+2024-07-04T09:37:08Z    ERROR   moc_operator_main       Failed to get cloud config      {"error": "kubernetes secret query for secret failed [secrets \"controllerconfig\" not found]"}
+main.main
+        /__w/1/s/moc-operator/main.go:99
+runtime.main
+        /__t/go/1.20.13/x64/src/runtime/proc.go:250
+```
+
+We are hitting a bug here where the Secrets are rotated but failed or lost, contact Mcrosoft Support to fix this.
+
+### Task 2 - Create Logical Networks using PowerShell and ARM template
 
 This task will create multiple subnet that you can add as logical networks via portal to the clusters.
 Please check detail documentation [here](https://learn.microsoft.com/en-us/azure-stack/hci/manage/create-logical-networks?tabs=azurecli).
