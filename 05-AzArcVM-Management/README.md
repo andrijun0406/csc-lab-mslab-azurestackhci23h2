@@ -319,7 +319,7 @@ Logs were successfully saved to "C:\ClusterStorage\Infrastructure_1\ArcHci\archc
 C:\ClusterStorage\Infrastructure_1\ArcHci\archcilogs_20240701030428.zip
 ```
 
-**SSH to MOC VM (ARB control plane) from on eof the cluster node**
+**SSH to MOC VM (ARB control plane) from one of the cluster node**
 
 Check if SSH Client is installed on one of the cluster node, install if haven't already:
 
@@ -388,7 +388,7 @@ Mode                 LastWriteTime         Length Name
 -a----          7/1/2024   3:05 AM           2534 managementlogkey-cert.pub
 ```
 
-Go to the management machine and open File Explorer and type '\\sg-mc660-1\c$\ProgramData\kva\.ssh' in the path bar.
+Go to the management machine and open File Explorer and type **\\sg-mc660-1\c$\ProgramData\kva\.ssh** in the path bar.
 Change file permission, remove the Domain users. Now SSH to the MOC VM with the logkey:
 
 ```
