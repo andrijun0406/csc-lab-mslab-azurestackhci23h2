@@ -14,7 +14,7 @@
 
 Let's create a small Windows Server 2022 Core VHD (30GB Size).
 
-Step 1 - Ensure Management Machine has Hyper-V PowerShell Module and Hyper-V itself (to work with VHDs).
+#### Step 1 - Ensure Management Machine has Hyper-V PowerShell Module and Hyper-V itself (to work with VHDs).
 
 ```powershell
 #install Hyper-V using DISM, run the powershell as Administrator
@@ -35,10 +35,10 @@ Display Name                                            Name                    
             [X] Hyper-V Module for Windows PowerShell   Hyper-V-PowerShell             Installed
 ```
 
-Step 2 - Run CreateParentDisk.ps1 by right-clicking and selecting "Run with PowerShell"
-Step 3 - Once asked, provide Windows Server 2022 ISO. Hit cancel to skip msu (cummulative update).
-Step 4 - Select Windows Server 2022 DataCenter (Core or No Desktop Experience)
-Step 5 - Hit Enter to keep the default name (Win2022Core_G2.vhdx) and Type 30 for 30GB VHD size
+#### Step 2 - Run CreateParentDisk.ps1 by right-clicking and selecting "Run with PowerShell"
+#### Step 3 - Once asked, provide Windows Server 2022 ISO. Hit cancel to skip msu (cummulative update).
+#### Step 4 - Select Windows Server 2022 DataCenter (Core or No Desktop Experience)
+#### Step 5 - Hit Enter to keep the default name (Win2022Core_G2.vhdx) and Type 30 for 30GB VHD size
 
 #### Expected Result
 
