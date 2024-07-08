@@ -56,5 +56,56 @@ Now, it's time to create VMFleet Image:
 
 ![Create VMFleet Image](images/Create-VMFleetImage.png)
 
-### Task 3 - Deploy VMFleet and Measure Performance
-### Task 4 - Cleanup VMFleet
+### Task 3 - Configure VMFleet Prerequisite
+
+> Run all the steps from Management Machine
+
+#### Step 1 - Install required PowerShell Module:
+
+```powershell
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+    Install-Module -Name VMFleet -Force
+    Install-Module -Name PrivateCloud.DiagnosticInfo -Force
+```
+
+#### Step 2 - Defined Variables and create "Collect" Volumes
+
+```powershell
+# Defined Variables
+
+$ClusterName="clus02"
+$Nodes=(Get-ClusterNode -Cluster $ClusterName).Name
+$VolumeSize=200GB
+$StoragePool=Get-StoragePool -CimSession $ClusterName | Where-Object OtherUsageDescription -eq "Reserved for S2D"
+
+#Create Collect volume (thin provisioned)
+
+if (-not (Get-Virtualdisk -CimSession $ClusterName -FriendlyName Collect -ErrorAction Ignore)){
+    New-Volume -CimSession $CLusterName -StoragePool $StoragePool -FileSystem CSVFS_ReFS -FriendlyName Collect -Size $VolumeSize -ProvisioningType Thin
+}
+```
+The output would be something like this:
+
+```
+PS C:\Windows\system32> #Create Collect volume (thin provisioned)
+>> if (-not (Get-Virtualdisk -CimSession $ClusterName -FriendlyName Collect -ErrorAction Ignore)){
+>>     New-Volume -CimSession $CLusterName -StoragePool $StoragePool -FileSystem CSVFS_ReFS -FriendlyName Collect -Size $VolumeSize -ProvisioningType Thin
+>> }
+
+DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining      Size
+----------- ------------ -------------- --------- ------------ ----------------- -------------      ----
+            Collect      CSVFS_ReFS     Fixed     Healthy      OK                    197.17 GB 199.94 GB
+
+PS C:\Windows\system32> Get-VirtualDisk -CimSession $ClusterName
+
+FriendlyName              ResiliencySettingName FaultDomainRedundancy OperationalStatus HealthStatus    Size FootprintOnPool StorageEfficiency PSComputerName
+------------              --------------------- --------------------- ----------------- ------------    ---- --------------- ----------------- --------------
+Infrastructure_1          Mirror                1                     OK                Healthy       252 GB          505 GB            49.90% clus02
+UserStorage_2             Mirror                1                     OK                Healthy      5.17 TB          107 GB            49.53% clus02
+ClusterPerformanceHistory Mirror                1                     OK                Healthy        24 GB           49 GB            48.98% clus02
+Collect                   Mirror                1                     OK                Healthy       200 GB           11 GB            45.45% clus02
+UserStorage_1             Mirror                1                     OK                Healthy      5.17 TB          141 GB            49.65% clus02
+``` 
+
+### Task 4 - Deploy VMFleet and Measure Performance
+### Task 5 - Cleanup VMFleet
