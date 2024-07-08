@@ -272,7 +272,7 @@ $VHDAdminPassword=""
  
 ```
 
-#### Step 2 - Enable CreadSSP and Install VMFleet
+#### Step 2 - Enable CredSSP and Install VMFleet
 > Note: CredSSP has to be enabled, as command to install VMFleet does not (yet) work correctly against Cluster. Therefore command Install-Fleet has to be invoked to one of the nodes.
 
 > Note: Installing VMFLeet will create folder structure (and copy diskspd and few scripts) in Cluster Shared Volume "Collect" that was created before.
@@ -293,5 +293,61 @@ Invoke-Command -ComputerName $Nodes[0] -Credential $Credentials -Authentication 
 }
 
 ```
+
+#### Expected Result
+
+```
+cfg         : http://schemas.microsoft.com/wbem/wsman/1/config/client/auth
+lang        : en-US
+Basic       : true
+Digest      : true
+Kerberos    : true
+Negotiate   : true
+Certificate : true
+CredSSP     : true
+
+cfg         : http://schemas.microsoft.com/wbem/wsman/1/config/client/auth
+lang        : en-US
+Basic       : true
+Digest      : true
+Kerberos    : true
+Negotiate   : true
+Certificate : true
+CredSSP     : true
+
+#text : false
+
+#text : true
+
+#text : true
+
+#text : false
+
+#text : true
+
+#text : Relaxed
+
+#text : false
+
+#text : true
+
+#text : true
+
+#text : false
+
+#text : true
+
+#text : Relaxed
+
+WARNING: Cannot download DISKSPD from public site @ https://aka.ms/getdiskspd : please acquire and place @ C:\ClusterStorage\collect\tools before running loads requiring it
+DISKSPD is not present. VM Fleet 2.1.0.0 requires DISKSPD for its core measurement functionality. Please update and, if running, restart the fleet to pick up the tool.
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,Install-Fleet
+    + PSComputerName        : sg-mc660-1
+```
+
+> Note: Install-Fleet scrip unable to download DISKSPD, we need to manually download it and place it on tools folder
+
+![Create VMFleet Image](images/Create-VMFleetImage.png)
 
 ### Task 5 - Cleanup VMFleet
