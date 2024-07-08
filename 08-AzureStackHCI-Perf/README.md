@@ -75,36 +75,77 @@ Now, it's time to create VMFleet Image:
 
 $ClusterName="clus02"
 $Nodes=(Get-ClusterNode -Cluster $ClusterName).Name
-$VolumeSize=200GB
+# $size = Get-FleetVolumeEstimate
+$CollectVolumeSize=200GB
+$VMFleetVolumeSize=1TB
 $StoragePool=Get-StoragePool -CimSession $ClusterName | Where-Object OtherUsageDescription -eq "Reserved for S2D"
 
-#Create Collect volume (thin provisioned)
+# Create Volumes for VMs (thin provisioned)
+    
+Foreach ($Node in $Nodes){
+    if (-not (Get-Virtualdisk -CimSession $ClusterName -FriendlyName $Node -ErrorAction Ignore)){
+        New-Volume -CimSession $Node -StoragePool $StoragePool -FileSystem CSVFS_ReFS -FriendlyName $Node -Size $VMFleetVolumeSize -ProvisioningType Thin
+    }
+}
+
+# Create Collect volume (thin provisioned)
 
 if (-not (Get-Virtualdisk -CimSession $ClusterName -FriendlyName Collect -ErrorAction Ignore)){
-    New-Volume -CimSession $CLusterName -StoragePool $StoragePool -FileSystem CSVFS_ReFS -FriendlyName Collect -Size $VolumeSize -ProvisioningType Thin
-}
+    New-Volume -CimSession $CLusterName -StoragePool $StoragePool -FileSystem CSVFS_ReFS -FriendlyName Collect -Size $CollectVolumeSize -ProvisioningType Thin
+
+
+# Show resulting volume
+
+Get-VirtualDisk -CimSession $ClusterName
 ```
 The output would be something like this:
 
 ```
+PS C:\Windows\system32> # Defined Variables
+>>
+>> $ClusterName="clus02"                                                                                                                                                                                                                    
+>> $Nodes=(Get-ClusterNode -Cluster $ClusterName).Name                                                                                                                                                                                      
+>> # $size = Get-FleetVolumeEstimate                                                                                                                                                                                                        
+>> $CollectVolumeSize=200GB                                                                                                                                                                                                                 
+>> $VMFleetVolumeSize=1TB                                                                                                                                                                                                                   
+>> $StoragePool=Get-StoragePool -CimSession $ClusterName | Where-Object OtherUsageDescription -eq "Reserved for S2D"                                                                                                                        
+>> 
+>> #Create Volumes for VMs (thin provisioned)
+>>
+>> Foreach ($Node in $Nodes){
+>>     if (-not (Get-Virtualdisk -CimSession $ClusterName -FriendlyName $Node -ErrorAction Ignore)){
+>>         New-Volume -CimSession $Node -StoragePool $StoragePool -FileSystem CSVFS_ReFS -FriendlyName $Node -Size $VMFleetVolumeSize -ProvisioningType Thin
+>>     }
+>> }
+
+DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining       Size
+----------- ------------ -------------- --------- ------------ ----------------- -------------       ----
+            sg-mc660-1   CSVFS_ReFS     Fixed     Healthy      OK                   1015.21 GB 1023.94 GB
+            sg-mc660-2   CSVFS_ReFS     Fixed     Healthy      OK                   1015.21 GB 1023.94 GB
+
 PS C:\Windows\system32> #Create Collect volume (thin provisioned)
 >> if (-not (Get-Virtualdisk -CimSession $ClusterName -FriendlyName Collect -ErrorAction Ignore)){
->>     New-Volume -CimSession $CLusterName -StoragePool $StoragePool -FileSystem CSVFS_ReFS -FriendlyName Collect -Size $VolumeSize -ProvisioningType Thin
+>>     New-Volume -CimSession $CLusterName -StoragePool $StoragePool -FileSystem CSVFS_ReFS -FriendlyName Collect -Size $CollectVolumeSize -ProvisioningType Thin
 >> }
 
 DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining      Size
 ----------- ------------ -------------- --------- ------------ ----------------- -------------      ----
             Collect      CSVFS_ReFS     Fixed     Healthy      OK                    197.17 GB 199.94 GB
 
-PS C:\Windows\system32> Get-VirtualDisk -CimSession $ClusterName
+
+PS C:\Windows\system32>
+>>  Get-VirtualDisk -CimSession $ClusterName
 
 FriendlyName              ResiliencySettingName FaultDomainRedundancy OperationalStatus HealthStatus    Size FootprintOnPool StorageEfficiency PSComputerName
 ------------              --------------------- --------------------- ----------------- ------------    ---- --------------- ----------------- --------------
+sg-mc660-2                Mirror                1                     OK                Healthy         1 TB           25 GB            48.00% clus02
 Infrastructure_1          Mirror                1                     OK                Healthy       252 GB          505 GB            49.90% clus02
 UserStorage_2             Mirror                1                     OK                Healthy      5.17 TB          107 GB            49.53% clus02
 ClusterPerformanceHistory Mirror                1                     OK                Healthy        24 GB           49 GB            48.98% clus02
-Collect                   Mirror                1                     OK                Healthy       200 GB           11 GB            45.45% clus02
+sg-mc660-1                Mirror                1                     OK                Healthy         1 TB           25 GB            48.00% clus02
+Collect                   Mirror                1                     OK                Healthy       200 GB           39 GB            48.72% clus02
 UserStorage_1             Mirror                1                     OK                Healthy      5.17 TB          141 GB            49.65% clus02
+
 ``` 
 
 #### Step 3 - Ask for FleetImage VHD and copy it to collect folder using following script. Keep PowerShell window open for next task.
@@ -124,11 +165,14 @@ $VHDPath=$openfile.FileName
 
 #Copy VHD to collect folder
 Copy-Item -Path $VHDPath -Destination \\$ClusterName\ClusterStorage$\Collect\
-#Copy VMFleet to cluster nodes
+
+#Copy VMFleet and PrivateCloud.DiagnosticInfo PowerShell Modules to cluster nodes
 $Sessions=New-PSSession -ComputerName $Nodes
 Foreach ($Session in $Sessions){
     Copy-Item -Recurse -Path "C:\Program Files\WindowsPowerShell\Modules\VMFleet" -Destination "C:\Program Files\WindowsPowerShell\Modules\" -ToSession $Session -Force
+    Copy-Item -Path 'C:\Program Files\WindowsPowerShell\Modules\PrivateCloud.DiagnosticInfo' -Destination 'C:\Program Files\WindowsPowerShell\Modules\' -ToSession $Session -Recurse -Force
 }
+
 
 ```
 
@@ -174,10 +218,37 @@ Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
 d-----          7/8/2024   3:43 PM                2.1.0.0
 
-```
 
+PS C:\Windows\system32> dir "\\sg-mc660-2\c`$\Program Files\WindowsPowerShell\Modules\PrivateCloud.DiagnosticInfo\"
+
+
+    Directory: \\sg-mc660-2\c$\Program Files\WindowsPowerShell\Modules\PrivateCloud.DiagnosticInfo
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----          7/8/2024   6:35 PM                1.1.38
+-a----          3/6/2023  10:28 PM          18167 PrivateCloud.DiagnosticInfo.psd1
+-a----          3/6/2023  10:28 PM         247777 PrivateCloud.DiagnosticInfo.psm1
+
+
+PS C:\Windows\system32> dir "\\sg-mc660-1\c`$\Program Files\WindowsPowerShell\Modules\PrivateCloud.DiagnosticInfo\"
+
+
+    Directory: \\sg-mc660-1\c$\Program Files\WindowsPowerShell\Modules\PrivateCloud.DiagnosticInfo
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----          7/8/2024   6:35 PM                1.1.38
+-a----          3/6/2023  10:28 PM          18167 PrivateCloud.DiagnosticInfo.psd1
+-a----          3/6/2023  10:28 PM         247777 PrivateCloud.DiagnosticInfo.psm1
+
+```
 
 ### Task 4 - Deploy VMFleet and Measure Performance
 
+#### Step 1 - Generate Variables
+#### Step 2 - Enable CreadSSP and Install VMFleet
 
 ### Task 5 - Cleanup VMFleet
