@@ -249,6 +249,49 @@ d-----          7/8/2024   6:35 PM                1.1.38
 ### Task 4 - Deploy VMFleet and Measure Performance
 
 #### Step 1 - Generate Variables
+> Enter your domain admin password and VHD admin password
+
+```powershell
+#generate variables
+#generate VHD Name from path (path was created when you were asked for VHD)
+
+$VHDName=$VHDPath | Split-Path -Leaf
+
+#domain account credentials
+
+$AdminUsername="sg\LabAdmin"
+$AdminPassword=""
+$securedpassword = ConvertTo-SecureString $AdminPassword -AsPlainText -Force
+$Credentials = New-Object System.Management.Automation.PSCredential ($AdminUsername, $securedpassword)
+
+#Or simply ask for credentials
+#$Credentials=Get-Credential
+#credentials for local admin located in FleetImage VHD
+
+$VHDAdminPassword=""
+ 
+```
+
 #### Step 2 - Enable CreadSSP and Install VMFleet
+> Note: CredSSP has to be enabled, as command to install VMFleet does not (yet) work correctly against Cluster. Therefore command Install-Fleet has to be invoked to one of the nodes.
+
+> Note: Installing VMFLeet will create folder structure (and copy diskspd and few scripts) in Cluster Shared Volume "Collect" that was created before.
+
+```powershell
+#Enable CredSSP
+# Temporarily enable CredSSP delegation to avoid double-hop issue
+
+foreach ($Node in $Nodes){
+    Enable-WSManCredSSP -Role "Client" -DelegateComputer $Node -Force
+}
+Invoke-Command -ComputerName $Nodes -ScriptBlock { Enable-WSManCredSSP Server -Force }
+
+# Install VMFleet
+
+Invoke-Command -ComputerName $Nodes[0] -Credential $Credentials -Authentication Credssp -ScriptBlock {
+    Install-Fleet
+}
+
+```
 
 ### Task 5 - Cleanup VMFleet
