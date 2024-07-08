@@ -107,5 +107,77 @@ Collect                   Mirror                1                     OK        
 UserStorage_1             Mirror                1                     OK                Healthy      5.17 TB          141 GB            49.65% clus02
 ``` 
 
+#### Step 3 - Ask for FleetImage VHD and copy it to collect folder using following script. Keep PowerShell window open for next task.
+> Note: Script will also copy VMFleet PowerShell module into each cluster node
+```powershell
+#Ask for VHD
+Write-Output "Please select VHD created using CreateVMFleetDisk.ps1"
+[reflection.assembly]::loadwithpartialname("System.Windows.Forms")
+$openFile = New-Object System.Windows.Forms.OpenFileDialog -Property @{
+    Title="Please select VHD created using CreateVMFleetDisk.ps1"
+}
+$openFile.Filter = "vhdx files (*.vhdx)|*.vhdx|All files (*.*)|*.*"
+If($openFile.ShowDialog() -eq "OK"){
+    Write-Output "File $($openfile.FileName) selected"
+}
+$VHDPath=$openfile.FileName
+
+#Copy VHD to collect folder
+Copy-Item -Path $VHDPath -Destination \\$ClusterName\ClusterStorage$\Collect\
+#Copy VMFleet to cluster nodes
+$Sessions=New-PSSession -ComputerName $Nodes
+Foreach ($Session in $Sessions){
+    Copy-Item -Recurse -Path "C:\Program Files\WindowsPowerShell\Modules\VMFleet" -Destination "C:\Program Files\WindowsPowerShell\Modules\" -ToSession $Session -Force
+}
+
+```
+
+The output would be something like this:
+
+```
+Please select VHD created using CreateVMFleetDisk.ps1
+
+GAC    Version        Location
+---    -------        --------
+True   v4.0.30319     C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Windows.Forms\v4.0_4.0.0.0__b77a5c561934e089\System.Windows.Forms.dll
+File C:\Users\LabAdmin\Documents\FleetImage.vhdx selected
+
+
+PS C:\Windows\system32> dir '\\sg-mc660-1\c$\ClusterStorage\Collect\'
+
+
+    Directory: \\sg-mc660-1\c$\ClusterStorage\Collect
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----          7/8/2024   2:04 PM     5950668800 FleetImage.vhdx
+
+PS C:\Windows\system32> dir '\\sg-mc660-1\c$\Program Files\WindowsPowerShell\Modules\VMFleet\'
+
+
+    Directory: \\sg-mc660-1\c$\Program Files\WindowsPowerShell\Modules\VMFleet
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----          7/8/2024   3:43 PM                2.1.0.0
+
+
+PS C:\Windows\system32> dir '\\sg-mc660-2\c$\Program Files\WindowsPowerShell\Modules\VMFleet\'
+
+
+    Directory: \\sg-mc660-2\c$\Program Files\WindowsPowerShell\Modules\VMFleet
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----          7/8/2024   3:43 PM                2.1.0.0
+
+```
+
+
 ### Task 4 - Deploy VMFleet and Measure Performance
+
+
 ### Task 5 - Cleanup VMFleet
