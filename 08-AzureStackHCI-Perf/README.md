@@ -44,10 +44,17 @@ Display Name                                            Name                    
 
 ![Create Small Windows Server 2022 Core VHD](images/Create-SmallWindowsServerTemplate.png)
 
-
-
-
-
 ### Task 2 - Create VMFleet Image
+
+Now, it's time to create VMFleet Image:
+
+#### Step 1 - Run CreateVMFleetDisk.ps1 by right-clicking and selecting run with PowerShell
+#### Step 2 - Provide Small Windows Server VHD that we've created in the Task 1
+#### Step 3 - Provide Password for VMFleet Image (Please keep this password handy)
+
+#### Expected Result
+
+![Create VMFleet Image](images/Create-VMFleetImage.png)
+
 ### Task 3 - Deploy VMFleet and Measure Performance
 ### Task 4 - Cleanup VMFleet
