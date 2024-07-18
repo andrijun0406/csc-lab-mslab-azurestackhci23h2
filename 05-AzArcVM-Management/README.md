@@ -485,6 +485,105 @@ runtime.main
 ```
 
 We are hitting a bug here where the Secrets are rotated but failed or lost, contact Mcrosoft Support to fix this.
+Microsoft support has came back to fix the secrets with the following commands, while login ssh to the MOC VM:
+
+```bash
+sudo kubectl --kubeconfig /etc/kubernetes/admin.conf delete secret controllerconfig -n moc-operator-system
+```
+
+The output would be something like this:
+
+```
+PS C:\ProgramData\kva\.ssh> ssh clouduser@10.0.0.112 -i .\logkey
+Last login: Thu Jul  4 09:34:16 2024 from 10.0.0.12
+clouduser@moc-lp7eafa3at7 [ ~ ]$ sudo kubectl --kubeconfig /etc/kubernetes/admin.conf delete secret controllerconfig -n moc-operator-system
+Error from server (NotFound): secrets "controllerconfig" not found
+```
+This means the controllerconfig has not been created yet, let's create one:
+
+```bash
+echo -e "apiVersion: v1\nkind: Secret\nmetadata:\n  name: controllerconfig\n  namespace: moc-operator-system\ntype: Opaque\nstringData:\n  CloudFQDN: \"clus02.sg.dcoffee.com\"\n  LoginString: \"temp\"\n  Location: \"MocLocation\"\n  ContainerName: \"MocStorageContainer\"" | sudo kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f -
+```
+
+The output would be something like this:
+
+```
+clouduser@moc-lp7eafa3at7 [ ~ ]$ echo -e "apiVersion: v1\nkind: Secret\nmetadata:\n  name: controllerconfig\n  namespace: moc-operator-system\ntype: Opaque\nstringData:\n  CloudFQDN: \"clus02.sg.dcoffee.com\"\n  LoginString: \"temp\"\n  Location: \"MocLocation\"\n  ContainerName: \"MocStorageContainer\"" | sudo kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f -
+secret/controllerconfig created
+```
+
+Now let's patch the controlleconfig with loginstring received from support:
+
+```bash
+sudo kubectl --kubeconfig /etc/kubernetes/admin.conf patch secret controllerconfig -p "{\"data\":{\"LoginString\":\"<snip-login-string>"}}" -n moc-operator-system
+```
+
+Let's delete the problematic pods (moc-operator-controller-manager-<id> in namespace moc-operator-system),let the k8s re-created the pods:
+
+```bash
+sudo kubectl --kubeconfig /etc/kubernetes/admin.conf delete pods -n moc-operator-system -l control-plane=controller-manager
+```
+
+Verify:
+
+```bash
+clouduser@moc-lp7eafa3at7 [ ~ ]$ kubectl get pods -A
+NAMESPACE                           NAME                                                             READY   STATUS      RESTARTS          AGE
+aks-operator-system                 aks-operator-controller-manager-5b869647b7-q2mlj                 2/2     Running     0                 13d
+azstackhci-operator-system          azstackhci-operator-controller-manager-5d6798d55b-ll9xq          2/2     Running     0                 13d
+azstackhci-operator-system          telemetry-manager-596977f79d-tdpxd                               5/5     Running     212 (4d18h ago)   13d
+azure-arc                           alertmanager-azure-arc-monitoring-alertmanager-0                 3/3     Running     0                 7d7h
+azure-arc                           appliance-connect-agent-8f864657b-vswh4                          1/1     Running     0                 7d7h
+azure-arc                           azure-arc-monitoring-kube-state-metrics-6dd95cbd8f-vj9fx         1/1     Running     0                 14d
+azure-arc                           azure-arc-monitoring-operator-7c9d77d5f5-x8bx9                   1/1     Running     0                 14d
+azure-arc                           azure-arc-monitoring-prometheus-node-exporter-ds2tb              1/1     Running     0                 14d
+azure-arc                           clusterconnect-agent-8f5c5b84d-zfjtv                             2/2     Running     1 (5d9h ago)      7d7h
+azure-arc                           clusteridentityoperator-574988959f-9qrp5                         1/1     Running     0                 7d7h
+azure-arc                           config-agent-dd64ddf7-vpxph                                      1/1     Running     0                 7d7h
+azure-arc                           extension-manager-6cff766b8-k9zns                                1/1     Running     0                 7d7h
+azure-arc                           geneva-agent-856fb946bb-s9s6q                                    3/3     Running     0                 7d7h
+azure-arc                           guard-5654b8dcbd-qwqxp                                           1/1     Running     0                 14d
+azure-arc                           logcollector-7b6b459b8b-4jfv4                                    1/1     Running     0                 7d7h
+azure-arc                           metrics-agent-54548ccf7f-p8tvk                                   1/1     Running     0                 7d7h
+azure-arc                           prometheus-azure-arc-monitoring-prometheus-0                     3/3     Running     0                 7d7h
+azure-arc                           resource-sync-agent-65f49fccb7-jmb94                             1/1     Running     0                 7d7h
+caph-system                         caph-controller-manager-7d6dbff879-njw75                         3/3     Running     0                 14d
+capi-kubeadm-bootstrap-system       capi-kubeadm-bootstrap-controller-manager-f7dd4457d-bjt6v        2/2     Running     0                 14d
+capi-kubeadm-control-plane-system   capi-kubeadm-control-plane-controller-manager-58898c887c-vz4nl   2/2     Running     0                 14d
+capi-system                         capi-controller-manager-c6cb84466-h96w6                          2/2     Running     0                 14d
+cert-manager                        cert-manager-7668cc58fb-25f87                                    1/1     Running     0                 14d
+cert-manager                        cert-manager-cainjector-9bc4c79fc-rcgqk                          1/1     Running     0                 14d
+cert-manager                        cert-manager-webhook-6b694859b7-bctsr                            1/1     Running     0                 14d
+cloudop-system                      cloudop-controller-manager-5c95cd957d-pw99k                      1/1     Running     0                 14d
+cloudop-system                      kvaio-controller-manager-56789d6d75-fnqxc                        2/2     Running     0                 14d
+default                             pre-delete-hook-zctvs                                            0/1     Completed   0                 13d
+hybridaks-operator-system           hybridaks-operator-controller-manager-574ddbd887-txfmq           8/8     Running     207 (4d18h ago)   13d
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-4n4fx                          0/1     Error       0                 13d
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-8gbrf                          0/1     Error       0                 13d
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-ggknx                          0/1     Error       0                 13d
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-s4vc2                          0/1     Error       0                 13d
+hybridaks-operator-system           hybridaks-operator-crd-delete-job-zx2p5                          0/1     Error       0                 13d
+kube-system                         calico-kube-controllers-6bccb7c49-89cqc                          1/1     Running     0                 14d
+kube-system                         calico-node-5vlln                                                1/1     Running     0                 14d
+kube-system                         calico-patch-z74rm                                               1/1     Running     0                 14d
+kube-system                         calicoctl                                                        1/1     Running     0                 14d
+kube-system                         certificate-controller-manager-5f79bb4986-rn8rh                  1/1     Running     0                 14d
+kube-system                         coredns-6df77c7d6-424tc                                          1/1     Running     0                 14d
+kube-system                         coredns-6df77c7d6-wp4sp                                          1/1     Running     0                 14d
+kube-system                         etcd-metrics-proxy-cz7qc                                         1/1     Running     0                 14d
+kube-system                         etcd-moc-lp7eafa3at7                                             1/1     Running     0                 14d
+kube-system                         kms-plugin-moc-lp7eafa3at7                                       1/1     Running     0                 14d
+kube-system                         kube-apiserver-moc-lp7eafa3at7                                   1/1     Running     0                 14d
+kube-system                         kube-controller-manager-moc-lp7eafa3at7                          1/1     Running     0                 14d
+kube-system                         kube-proxy-nx9v9                                                 1/1     Running     0                 14d
+kube-system                         kube-scheduler-moc-lp7eafa3at7                                   1/1     Running     0                 14d
+kube-system                         kube-vip-moc-lp7eafa3at7                                         1/1     Running     0                 14d
+kube-system                         moc-cloud-controller-manager-55bb9b894b-4ldsh                    1/1     Running     0                 14d
+kube-system                         moc-kms-supporter-llkgk                                          1/1     Running     0                 14d
+moc-operator-system                 moc-operator-controller-manager-5984d75f4c-k9fht                 2/2     Running     0                 79s
+```
+
+Now you see the moc-operator-controller-manager-<id> pod is running again. Try to create again the VM Images
 
 ### Task 2 - Create Logical Networks using PowerShell and ARM template
 

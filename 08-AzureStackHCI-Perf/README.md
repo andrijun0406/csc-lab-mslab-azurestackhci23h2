@@ -346,8 +346,8 @@ DISKSPD is not present. VM Fleet 2.1.0.0 requires DISKSPD for its core measureme
     + PSComputerName        : sg-mc660-1
 ```
 
-> Note: Install-Fleet scrip unable to download DISKSPD, we need to manually download it and place it on tools folder
+> Note: Install-Fleet script is unable to download DISKSPD, we need to manually download it and place it on tools folder
 
-![Create VMFleet Image](images/Create-VMFleetImage.png)
+![Install Fleet Result](images/install-fleet-result.png)
 
 ### Task 5 - Cleanup VMFleet
