@@ -16,6 +16,6 @@ This Lab consists of few Lab Scenarios here:
 10. Azure API Gateway on Azure Stack HCI
 11. Azure Virtual Desktop on Azure Stack HCI
 12. Azure Stack Software-Defined-network
-13. Cleanup MSLAB
+13. [Cleanup MSLAB](13-Cleanup-MSLAB/)
 
 More scenarios to come, please check regularly.
