@@ -269,20 +269,17 @@ PSComputerName : th-mc660-2
 RunspaceId     : 1359f72a-4365-4cf4-ab1e-e5a383f63a57
 ```
 
+Let's make sure the Management Machine and DC Machine are shut down too.
+Go to to the Hyper-V Manager on the MSLAB host and shutdown all the VMs.
+![MSLAB PowerOff](images/MSLAB-PowerOff.png)
 
-### Task 3 - Hydrate Lab
+### Cleanup MSLAB
 
-> t disks. It will take 15-30 minutes to finish. Once Finished, press Enter to close window (it will cleanup unnecessary files and folders).
 
-### Expected Result
+If you have back-up all the Scripts inside the Management Machine, you can just remove all VMs and MSLAB resources.
 
-in MSLAB folder you should see LAB and ParentDisks folder along with three PowerShell scripts and log files.
-![MSLAB folder hydrated](images/MSLAB-folder-hydrate.png)
+#### Step 1 - Right Click on Cleanup.ps1 and select "Run with PowerShell"
+![Cleanup MSLAB](images/Cleanup-MSLAB.png)
 
-### Task 4 - Create Azure Stack HCI parent disk
-
-1.
-
-### Expected Result
-
-Azure Stack HCI 23H2 image will be created in ParentDisks folder. Hydrating is done
+#### Step 2 - Script will run and ask if you want to clean the lab. Type Y to confirm.
+#### Step 3 - The MSLAB folder will now be in original state - before you ran Deploy.ps1. This way you can deploy and destroy your lab anytime in very short timeframe.
