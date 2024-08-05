@@ -157,10 +157,116 @@ Go to the Windows Admin Center and Shut Down all VM:
 ![Shut down All VM](images/ShutDown-AllVM.png)
 ![All VM are stopped](images/AllVM-Stopped.png)
 
-You can also use the following powershell from each of the cluster node:
+You can also use the following powershell from one of the cluster node:
 ```powershell
-Get-VM
-Stop-VM
+Get-ClusterGroup | ? {$_.GroupType -eq 'VirtualMachine' } | Get-VM
+Get-ClusterGroup | ? {$_.GroupType -eq 'VirtualMachine' } | Stop-VM
+Get-ClusterGroup | ? {$_.GroupType -eq 'VirtualMachine' } | Get-VM
+```
+
+#### Step 2 - Verify no storage jobs are running and take the cluster shared volumes offline
+```powershell
+Get-StorageJob
+Get-ClusterSharedVolume
+Get-ClusterSharedVolume | Stop-CLusterResource
+Get-ClusterSharedVolume
+```
+
+Result should be like the following:
+```
+PS C:\Users\LabAdmin> Get-ClusterSharedVolume | Stop-CLusterResource
+
+Name                                    State   Node
+----                                    -----   ----
+Cluster Virtual Disk (Infrastructure_1) Offline th-mc660-1
+Cluster Virtual Disk (UserStorage_1)    Offline th-mc660-1
+Cluster Virtual Disk (UserStorage_2)    Offline th-mc660-2
+```
+
+#### Step 3 - Take the Storage Pool Offline
+```powershell
+Get-StoragePool -FriendlyName "*Pool*"
+Get-ClusterResource "*Pool*"
+Get-ClusterResource -Name "Cluster Pool 1" | Stop-Cluster Resource
+```
+
+Result should be like the following:
+```
+PS C:\Users\LabAdmin> Get-ClusterResource -Name "CLuster Pool 1"
+
+Name           State  OwnerGroup                           ResourceType
+----           -----  ----------                           ------------
+CLuster Pool 1 Online 3736ff8e-ac29-4867-87ea-591286fa56df Storage Pool
+
+
+PS C:\Users\LabAdmin> Get-ClusterResource -Name "CLuster Pool 1" | Stop-ClusterResource
+
+Name           State   OwnerGroup                           ResourceType
+----           -----   ----------                           ------------
+Cluster Pool 1 Offline 3736ff8e-ac29-4867-87ea-591286fa56df Storage Pool
+```
+#### Step 4 - Stop the cluster and cluster service ClusSvc from Management Node and Shutdown the node
+```powershell
+$Servers="th-mc660-1","th-mc660-2"
+$clustername="clus01"
+Invoke-Command -ComputerName $Servers -ScriptBlock {
+  Stop-Cluster -Force
+}
+
+
+Invoke-Command -ComputerName $Servers -ScriptBlock {
+  Get-Service -Name "ClusSvc" | select Name, DisplayName, Status, StartType
+  Get-Service -Name "ClusSvc" | Set-Service -StartupType Disabled
+  Get-Service -Name "ClusSvc" | select Name, DisplayName, Status, StartType
+  Stop-Computer -Force
+}
+```
+
+output would be something like this:
+```
+PS C:\Windows\system32> $Servers="th-mc660-1","th-mc660-2"
+>> $clustername="clus01"
+>> Invoke-Command -ComputerName $Servers -ScriptBlock {
+>>   Stop-Cluster -Force
+>> }
+>>
+>>
+>> Invoke-Command -ComputerName $Servers -ScriptBlock {
+>>   Get-Service -Name "ClusSvc" | select Name, DisplayName, Status, StartType
+>>   Get-Service -Name "ClusSvc" | Set-Service -StartupType Disabled
+>>   Get-Service -Name "ClusSvc" | select Name, DisplayName, Status, StartType
+>>   Stop-Computer -Force
+>> }
+>>
+
+
+Name           : ClusSvc
+DisplayName    : Cluster Service
+Status         : Stopped
+StartType      : Disabled
+PSComputerName : th-mc660-1
+RunspaceId     : bcc4ad25-a6f6-4960-9b44-4997c6ce2409
+
+Name           : ClusSvc
+DisplayName    : Cluster Service
+Status         : Stopped
+StartType      : Disabled
+PSComputerName : th-mc660-1
+RunspaceId     : bcc4ad25-a6f6-4960-9b44-4997c6ce2409
+
+Name           : ClusSvc
+DisplayName    : Cluster Service
+Status         : Stopped
+StartType      : Disabled
+PSComputerName : th-mc660-2
+RunspaceId     : 1359f72a-4365-4cf4-ab1e-e5a383f63a57
+
+Name           : ClusSvc
+DisplayName    : Cluster Service
+Status         : Stopped
+StartType      : Disabled
+PSComputerName : th-mc660-2
+RunspaceId     : 1359f72a-4365-4cf4-ab1e-e5a383f63a57
 ```
 
 
