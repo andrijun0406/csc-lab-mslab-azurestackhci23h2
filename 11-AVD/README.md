@@ -95,26 +95,125 @@ You can also check them in Azure Portal:
 
 ### Task 1 - Create a Host Pool
 
+There are two type of Host Pool: Pooled or Personal. Pooled destkops are stateless where Personal are stateful. I will create both to test.
+
+#### Step 1A - Create Pooled Host Pool
+
 ```powershell
-# Step 2 - Check if the SPN has sufficient RBAC roles/permissions on the resource group:
-$Subscription = Get-AzSubscription
-$SubscriptionID = $Subscription.Id
-$adminSPNObject = Get-AzADServicePrincipal -DisplayNameBeginsWith $AdminSPNName
-$adminSPNObjID = $adminSPNObject.Id
-
-# Check if the ROle should have Desktop Virtualization Contributor and Virtual Machine Contributor or just Contributor
-
-$adminSPNRoles = Get-AzRoleAssignment -ObjectId $adminSPNObjID -Scope "/subscriptions/$SubscriptionID/resourceGroups/$ResourceGroupName" | Select-Object -Property RoleDefinitionName
-$prerequisiteRoles = @('Desktop Virtualization Contributor','Virtual Machine Contributor','Contributor')
-#$prerequisiteRoles = @('Desktop Virtualization Contributor','Virtual Machine Contributor')
-$sufficient = $adminSPNRoles| Where-Object RoleDefinitionName -in $prerequisiteRoles
-if (!($sufficient)){
-    Write-Output "SPN has insufficient roles: $sufficient"
-} else {
-    Write-Output "SPN has sufficient roles: $sufficient"
+$parameters = @{
+     Name = $HostPoolPooled
+     ResourceGroupName = $ResourceGroupName
+     HostPoolType = 'Pooled'
+     LoadBalancerType = 'BreadthFirst'
+     PreferredAppGroupType = 'Desktop'
+     MaxSessionLimit = '5'
+     Location = $Location
 }
+
+New-AzWvdHostPool @parameters
+
+# Check HostPool created in Azure
+Get-AzWvdHostPool -Name $parameters.Name -ResourceGroupName $parameters.ResourceGroupName | FL *
+
+```
+#### Expected Result
+
+```
+PS C:\Windows\system32> New-AzWvdHostPool @parameters
+
+Etag IdentityPrincipalId IdentityTenantId IdentityType Kind Location ManagedBy Name              PlanName PlanProduct PlanPromotionCode PlanPublisher PlanVersion SkuCapacity SkuFamily SkuN
+                                                                                                                                                                                        ame
+---- ------------------- ---------------- ------------ ---- -------- --------- ----              -------- ----------- ----------------- ------------- ----------- ----------- --------- ----
+                                                            eastus             MC760-Pooled-Pool
+
+
+PS C:\Windows\system32> Get-AzWvdHostPool -Name $parameters.Name -ResourceGroupName $parameters.ResourceGroupName | FL *
+
+
+AgentUpdateMaintenanceWindow               :
+AgentUpdateMaintenanceWindowTimeZone       :
+AgentUpdateType                            :
+AgentUpdateUseSessionHostLocalTime         :
+ApplicationGroupReference                  : {}
+CloudPcResource                            : False
+CustomRdpProperty                          : drivestoredirect:s:*;audiomode:i:0;videoplaybackmode:i:1;redirectclipboard:i:1;redirectprinters:i:1;devicestoredirect:s:*;redirectcomports:i:1;redirectsmartcards:i:1;usbdevicestoredirect:s:*;enablecredsspsupport:i:1;redirectwebauthn:i:1;use multimon:i:1;
+Description                                :
+Etag                                       :
+FriendlyName                               :
+HostPoolType                               : Pooled
+Id                                         : /subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/rg-sg-mc760/providers/Microsoft.DesktopVirtualization/hostpools/MC760-Pooled-Pool
+Identity                                   : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Identity
+IdentityPrincipalId                        :
+IdentityTenantId                           :
+IdentityType                               :
+Kind                                       :
+LoadBalancerType                           : BreadthFirst
+Location                                   : eastus
+ManagedBy                                  :
+MaxSessionLimit                            : 5
+Name                                       : MC760-Pooled-Pool
+ObjectId                                   : 37c135d5-6626-4a6c-b8c0-e9aba1af9b2b
+PersonalDesktopAssignmentType              :
+Plan                                       : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Plan
+PlanName                                   :
+PlanProduct                                :
+PlanPromotionCode                          :
+PlanPublisher                              :
+PlanVersion                                :
+PreferredAppGroupType                      : Desktop
+PrivateEndpointConnection                  : {}
+PublicNetworkAccess                        : Enabled
+RegistrationInfoExpirationTime             :
+RegistrationInfoRegistrationTokenOperation :
+RegistrationInfoToken                      :
+Ring                                       :
+Sku                                        : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Sku
+SkuCapacity                                :
+SkuFamily                                  :
+SkuName                                    :
+SkuSize                                    :
+SkuTier                                    :
+SsoClientId                                :
+SsoClientSecretKeyVaultPath                :
+SsoSecretType                              :
+SsoadfsAuthority                           :
+StartVMOnConnect                           : False
+SystemDataCreatedAt                        : 2/9/2024 10:32:30 AM
+SystemDataCreatedBy                        : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataCreatedByType                    : Application
+SystemDataLastModifiedAt                   : 2/9/2024 10:32:30 AM
+SystemDataLastModifiedBy                   : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataLastModifiedByType               : Application
+Tag                                        : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.ResourceModelWithAllowedPropertySetTags
+Type                                       : Microsoft.DesktopVirtualization/hostpools
+VMTemplate                                 :
+ValidationEnvironment                      : False
 ```
 
+You can also check on Azure Portal:
+
+![Pooled Host Pool](images/pooled-host-pool.png)
+
+#### Step 1B - Create Personal Host Pool
+
+```powershell
+$parameters = @{
+     Name = $HostPoolPersonal
+     ResourceGroupName = $ResourceGroupName
+     HostPoolType = 'Personal'
+     LoadBalancerType = 'Persistent'
+     PreferredAppGroupType = 'Desktop'
+     PersonalDesktopAssignmentType = 'Automatic'
+     Location = $Location
+}
+
+New-AzWvdHostPool @parameters
+
+# Check HostPool created in Azure
+Get-AzWvdHostPool -Name $parameters.Name -ResourceGroupName $parameters.ResourceGroupName | FL *
+
+```
+#### Expected Result
 
 ### Task 2 - Create a Workspace
 
