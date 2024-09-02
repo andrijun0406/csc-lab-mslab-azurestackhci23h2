@@ -49,16 +49,15 @@ $AdminSPNCred = New-Object -TypeName System.Management.Automation.PSCredential -
 #Set PSGallery as a trusted repo
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 
-if (!(Get-InstalledModule -Name az.accounts -ErrorAction Ignore)){
-	Install-Module -Name Az.Accounts -Force
-}
+$ModuleNames="Az.Accounts","Az.Resources","Az.Compute","Az.DesktopVirtualization"
+foreach ($ModuleName in $ModuleNames) {
+    if (!(Get-InstalledModule -Name $ModuleName -ErrorAction Ignore)){
+	    Install-Module -Name $ModuleName -Force
+    }
+} 
+
 if (-not (Get-AzContext)){
 	Connect-AzAccount -ServicePrincipal -TenantId $tenantID -Credential $AdminSPNCred
-}
-
-#install az resources module
-if (!(Get-InstalledModule -Name "az.resources" -ErrorAction Ignore)){
-	Install-Module -Name "az.resources" -Force
 }
 
 # Step 1 - Check if Microsoft.DesktopVirtualization resource provider is registered, create if it isn't.
@@ -92,6 +91,27 @@ if (!($sufficient)){
 ```
 
 ### Task 1 - Create a Host Pool
+
+```powershell
+# Step 2 - Check if the SPN has sufficient RBAC roles/permissions on the resource group:
+$Subscription = Get-AzSubscription
+$SubscriptionID = $Subscription.Id
+$adminSPNObject = Get-AzADServicePrincipal -DisplayNameBeginsWith $AdminSPNName
+$adminSPNObjID = $adminSPNObject.Id
+
+# Check if the ROle should have Desktop Virtualization Contributor and Virtual Machine Contributor or just Contributor
+
+$adminSPNRoles = Get-AzRoleAssignment -ObjectId $adminSPNObjID -Scope "/subscriptions/$SubscriptionID/resourceGroups/$ResourceGroupName" | Select-Object -Property RoleDefinitionName
+$prerequisiteRoles = @('Desktop Virtualization Contributor','Virtual Machine Contributor','Contributor')
+#$prerequisiteRoles = @('Desktop Virtualization Contributor','Virtual Machine Contributor')
+$sufficient = $adminSPNRoles| Where-Object RoleDefinitionName -in $prerequisiteRoles
+if (!($sufficient)){
+    Write-Output "SPN has insufficient roles: $sufficient"
+} else {
+    Write-Output "SPN has sufficient roles: $sufficient"
+}
+```
+
 
 ### Task 2 - Create a Workspace
 
