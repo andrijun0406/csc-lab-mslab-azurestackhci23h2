@@ -215,6 +215,81 @@ Get-AzWvdHostPool -Name $parameters.Name -ResourceGroupName $parameters.Resource
 ```
 #### Expected Result
 
+```
+PS C:\Windows\system32> New-AzWvdHostPool @parameters
+
+Etag IdentityPrincipalId IdentityTenantId IdentityType Kind Location ManagedBy Name                PlanName PlanProduct PlanPromotionCode PlanPublisher PlanVersion SkuCapacity SkuFamily SkuName SkuSize SkuTier
+---- ------------------- ---------------- ------------ ---- -------- --------- ----                -------- ----------- ----------------- ------------- ----------- ----------- --------- ------- ------- -------
+                                                            eastus             MC760-Personal-Pool
+
+
+PS C:\Windows\system32> Get-AzWvdHostPool -Name $parameters.Name -ResourceGroupName $parameters.ResourceGroupName | FL *
+
+
+AgentUpdateMaintenanceWindow               :
+AgentUpdateMaintenanceWindowTimeZone       :
+AgentUpdateType                            :
+AgentUpdateUseSessionHostLocalTime         :
+ApplicationGroupReference                  : {}
+CloudPcResource                            : False
+CustomRdpProperty                          : drivestoredirect:s:*;audiomode:i:0;videoplaybackmode:i:1;redirectclipboard:i:1;redirectprinters:i:1;devicestoredirect:s:*;redirectcomports:i:1;redirectsmartcards:i:1;usbdevicestoredirect:s:*;enablecredsspsupport:i:1;redirectwebauthn:i:1;use multimon:i:1;
+Description                                :
+Etag                                       :
+FriendlyName                               :
+HostPoolType                               : Personal
+Id                                         : /subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/rg-sg-mc760/providers/Microsoft.DesktopVirtualization/hostpools/MC760-Personal-Pool
+Identity                                   : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Identity
+IdentityPrincipalId                        :
+IdentityTenantId                           :
+IdentityType                               :
+Kind                                       :
+LoadBalancerType                           : Persistent
+Location                                   : eastus
+ManagedBy                                  :
+MaxSessionLimit                            : 999999
+Name                                       : MC760-Personal-Pool
+ObjectId                                   : 54aa095a-d620-47c3-9fb1-5fdc47b9c733
+PersonalDesktopAssignmentType              : Automatic
+Plan                                       : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Plan
+PlanName                                   :
+PlanProduct                                :
+PlanPromotionCode                          :
+PlanPublisher                              :
+PlanVersion                                :
+PreferredAppGroupType                      : Desktop
+PrivateEndpointConnection                  : {}
+PublicNetworkAccess                        : Enabled
+RegistrationInfoExpirationTime             :
+RegistrationInfoRegistrationTokenOperation :
+RegistrationInfoToken                      :
+Ring                                       :
+Sku                                        : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Sku
+SkuCapacity                                :
+SkuFamily                                  :
+SkuName                                    :
+SkuSize                                    :
+SkuTier                                    :
+SsoClientId                                :
+SsoClientSecretKeyVaultPath                :
+SsoSecretType                              :
+SsoadfsAuthority                           :
+StartVMOnConnect                           : False
+SystemDataCreatedAt                        : 2/9/2024 2:34:48 PM
+SystemDataCreatedBy                        : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataCreatedByType                    : Application
+SystemDataLastModifiedAt                   : 2/9/2024 2:34:48 PM
+SystemDataLastModifiedBy                   : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataLastModifiedByType               : Application
+Tag                                        : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.ResourceModelWithAllowedPropertySetTags
+Type                                       : Microsoft.DesktopVirtualization/hostpools
+VMTemplate                                 :
+ValidationEnvironment                      : False
+```
+
+You can also check on Azure Portal:
+
+![Personal Host Pool](images/personal-host-pool.png)
+
 ### Task 2 - Create a Workspace
 
 ### Task 3 - Create an Application Group
