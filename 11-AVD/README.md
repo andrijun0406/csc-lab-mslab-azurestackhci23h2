@@ -89,6 +89,9 @@ if (!($sufficient)){
     Write-Output "SPN has sufficient roles: $sufficient"
 }
 ```
+You can also check them in Azure Portal:
+
+![Check SPN Roles for AVD](images/Check-Roles.png)
 
 ### Task 1 - Create a Host Pool
 
