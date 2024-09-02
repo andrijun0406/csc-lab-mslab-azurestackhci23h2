@@ -8,6 +8,8 @@ References:
 Learn.microsoft.com [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
 https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-stack-hci-overview
 
+Please find AVD terminology here: https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology
+
 ### Prerequisites
 
 References:
