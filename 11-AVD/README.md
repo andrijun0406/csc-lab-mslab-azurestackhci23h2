@@ -33,7 +33,10 @@ Use the following powershell script to check and register if not exists the reso
 ```powershell
 # Setup some variables
 $ResourceGroupName=""
-$Location="southeastasia" #make sure location is lowercase
+$Location="eastus" #make sure location is lowercase, metadata for AVD only supported in certain region
+$HostPoolPooled = "MC760-Pooled-Pool"
+$HostPoolPersonal = "MC760-Personal-Pool"
+$WorkspaceName="MC760-Workspace"
 
 # Make sure User or SPN is contributor and user access administrator in Azure Subscriptions
 # We are using SPN here:
@@ -69,6 +72,7 @@ if (!(Get-AzResourceProvider -ProviderNamespace Microsoft.DesktopVirtualization 
     Write-Output "Registered"
 }
 ```
+> Note: metadata for AVD only supported in certain region: https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites?tabs=portal
 
 #### Step 2 - Check if your SPN account has correct Azure RBAC
 
@@ -293,6 +297,78 @@ You can also check on Azure Portal:
 ![Personal Host Pool](images/personal-host-pool.png)
 
 ### Task 2 - Create a Workspace
+
+Now let's create a workspace:
+
+```powershell
+$ResourceGroupName=""
+$Location="eastus" #make sure location is lowercase, metadata for AVD only supported in certain region
+$HostPoolPooled = "MC760-Pooled-Pool"
+$HostPoolPersonal = "MC760-Personal-Pool"
+$WorkspaceName="MC760-Workspace"
+
+New-AzWvdWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName -Location $Location
+
+# Check Workspace created in Azure
+Get-AzWvdWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName | FL *
+
+```
+
+#### Expected Result
+
+```
+PS C:\Windows\system32> $WorkspaceName="MC760-Workspace"
+PS C:\Windows\system32> New-AzWvdWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName -Location $Location
+
+Etag IdentityPrincipalId IdentityTenantId IdentityType Kind Location ManagedBy Name            PlanName PlanProduct PlanPromotionCode PlanPublisher PlanVersion SkuCapacity SkuFamily SkuName SkuSize SkuTier
+---- ------------------- ---------------- ------------ ---- -------- --------- ----            -------- ----------- ----------------- ------------- ----------- ----------- --------- ------- ------- -------
+                                                            eastus             MC760-Workspace
+
+PS C:\Windows\system32> Get-AzWvdWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName | FL *
+
+
+ApplicationGroupReference    : {}
+CloudPcResource              : False
+Description                  :
+Etag                         :
+FriendlyName                 :
+Id                           : /subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/rg-sg-mc760/providers/Microsoft.DesktopVirtualization/workspaces/MC760-Workspace
+Identity                     : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Identity
+IdentityPrincipalId          :
+IdentityTenantId             :
+IdentityType                 :
+Kind                         :
+Location                     : eastus
+ManagedBy                    :
+Name                         : MC760-Workspace
+ObjectId                     : 36b22e8c-7594-4287-8240-c3c7eae1c49f
+Plan                         : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Plan
+PlanName                     :
+PlanProduct                  :
+PlanPromotionCode            :
+PlanPublisher                :
+PlanVersion                  :
+PrivateEndpointConnection    : {}
+PublicNetworkAccess          : Enabled
+Sku                          : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Sku
+SkuCapacity                  :
+SkuFamily                    :
+SkuName                      :
+SkuSize                      :
+SkuTier                      :
+SystemDataCreatedAt          : 3/9/2024 12:53:39 AM
+SystemDataCreatedBy          : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataCreatedByType      : Application
+SystemDataLastModifiedAt     : 3/9/2024 12:53:39 AM
+SystemDataLastModifiedBy     : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataLastModifiedByType : Application
+Tag                          : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.ResourceModelWithAllowedPropertySetTags
+Type                         : Microsoft.DesktopVirtualization/workspaces
+```
+
+You can also check on Azure Portal:
+
+![AVD Workspace](images/avd-workspace.png)
 
 ### Task 3 - Create an Application Group
 
