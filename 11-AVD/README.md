@@ -9,6 +9,8 @@ Learn.microsoft.com [Deploy Azure Virtual Desktop](https://learn.microsoft.com/e
 https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-stack-hci-overview
 
 Please find AVD terminology here: https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology
+![AVD Components](images/AVD-components.png)
+
 
 ### Prerequisites
 
@@ -83,11 +85,10 @@ $SubscriptionID = $Subscription.Id
 $adminSPNObject = Get-AzADServicePrincipal -DisplayNameBeginsWith $AdminSPNName
 $adminSPNObjID = $adminSPNObject.Id
 
-# Check if the ROle should have Desktop Virtualization Contributor and Virtual Machine Contributor or just Contributor
+# Check if the Roles should have Desktop Virtualization Contributor and Virtual Machine Contributor or just Contributor
 
 $adminSPNRoles = Get-AzRoleAssignment -ObjectId $adminSPNObjID -Scope "/subscriptions/$SubscriptionID/resourceGroups/$ResourceGroupName" | Select-Object -Property RoleDefinitionName
-$prerequisiteRoles = @('Desktop Virtualization Contributor','Virtual Machine Contributor','Contributor')
-#$prerequisiteRoles = @('Desktop Virtualization Contributor','Virtual Machine Contributor')
+$prerequisiteRoles = @('Desktop Virtualization Contributor','Virtual Machine Contributor','Azure Stack HCI VM Contributor','Contributor')
 $sufficient = $adminSPNRoles| Where-Object RoleDefinitionName -in $prerequisiteRoles
 if (!($sufficient)){
     Write-Output "SPN has insufficient roles: $sufficient"
@@ -525,6 +526,24 @@ Type                         : Microsoft.DesktopVirtualization/workspaces
 You can also check on Azure Portal:
 ![AVD Workspace Updated](images/avd-workspace-updated.png)
 
-### Task 4 - Create Session Host Virtual Machines
+### Task 4 - Assign users or groups to the application group for users to get access
 
-### Task 5 - Assign users or groups to the application group for users to get access
+```powershell
+# Get the object ID of the user group that you want to assign to the application group
+$userGroupId = (Get-AzADGroup -DisplayName "<UserGroupName>").Id
+
+# Assign users to the application group
+$parameters = @{
+    ObjectId = $userGroupId
+    ResourceName = '<ApplicationGroupName>'
+    ResourceGroupName = '<ResourceGroupName>'
+    RoleDefinitionName = 'Desktop Virtualization User'
+    ResourceType = 'Microsoft.DesktopVirtualization/applicationGroups'
+}
+
+New-AzRoleAssignment @parameters
+```
+
+
+### Task 5 - Create Session Host Virtual Machines
+
