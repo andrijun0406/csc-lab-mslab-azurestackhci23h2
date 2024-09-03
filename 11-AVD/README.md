@@ -372,6 +372,159 @@ You can also check on Azure Portal:
 
 ### Task 3 - Create an Application Group
 
+#### Step 1 - Create Application Group
+Now let's create application group. Application group must be added to the Host Pool and Workspace. We will create first Application Group for a Host Pool.
+```powershell
+$DesktopAppGroup="MC760-DesktopAppGroup"
+$hostPoolArmPath = (Get-AzWvdHostPool -Name $HostPoolPooled -ResourceGroupName $ResourceGroupName).Id
+
+$parameters = @{
+     Name = $DesktopAppGroup
+     ResourceGroupName = $ResourceGroupName
+     ApplicationGroupType = 'Desktop'
+     HostPoolArmPath = $hostPoolArmPath
+     Location = $Location
+}
+
+New-AzWvdApplicationGroup @parameters
+
+# Check Application Group in Azure
+Get-AzWvdApplicationGroup -Name $DesktopAppGroup -ResourceGroupName $ResourceGroupName | FL *
+
+```
+#### Expected Result
+
+```
+PS C:\Windows\system32> New-AzWvdApplicationGroup @parameters
+
+Etag IdentityPrincipalId IdentityTenantId IdentityType Kind    Location ManagedBy Name                  PlanName PlanProduct PlanPromotionCode PlanPublisher PlanVersion SkuCapacity SkuFamily SkuName SkuSize SkuTier
+---- ------------------- ---------------- ------------ ----    -------- --------- ----                  -------- ----------- ----------------- ------------- ----------- ----------- --------- ------- ------- -------
+                                                       Desktop eastus             MC760-DesktopAppGroup
+
+
+PS C:\Windows\system32> # Check Application Group in Azure
+>> Get-AzWvdApplicationGroup -Name $DesktopAppGroup -ResourceGroupName $ResourceGroupName | FL *
+
+
+ApplicationGroupType         : Desktop
+CloudPcResource              : False
+Description                  :
+Etag                         :
+FriendlyName                 :
+HostPoolArmPath              : /subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/rg-sg-mc760/providers/Microsoft.DesktopVirtualization/hostpools/MC760-Pooled-Pool
+Id                           : /subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/rg-sg-mc760/providers/Microsoft.DesktopVirtualization/applicationgroups/MC760-DesktopAppGroup
+Identity                     : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Identity
+IdentityPrincipalId          :
+IdentityTenantId             :
+IdentityType                 :
+Kind                         : Desktop
+Location                     : eastus
+ManagedBy                    :
+Name                         : MC760-DesktopAppGroup
+ObjectId                     : c0182955-3b42-43aa-aa4c-71b6f90c8692
+Plan                         : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Plan
+PlanName                     :
+PlanProduct                  :
+PlanPromotionCode            :
+PlanPublisher                :
+PlanVersion                  :
+ShowInFeed                   :
+Sku                          : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Sku
+SkuCapacity                  :
+SkuFamily                    :
+SkuName                      :
+SkuSize                      :
+SkuTier                      :
+SystemDataCreatedAt          : 3/9/2024 1:09:14 AM
+SystemDataCreatedBy          : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataCreatedByType      : Application
+SystemDataLastModifiedAt     : 3/9/2024 1:09:14 AM
+SystemDataLastModifiedBy     : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataLastModifiedByType : Application
+Tag                          : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.ResourceModelWithAllowedPropertySetTags
+Type                         : Microsoft.DesktopVirtualization/applicationgroups
+WorkspaceArmPath             :
+```
+You can also check on Azure Portal:
+
+![AVD Application Group](images/avd-appgroup.png)
+
+> Note: Application Group type can be **Desktop** or **RemoteApp**
+
+#### Step 2 - Add Application Group to a Workspace
+
+Please note also the Application Group has not been assigned to a Workspace. let's add Application Group to a Workspace
+
+```powershell
+# Get the resource ID of the application group that you want to add to the workspace
+$appGroupPath = (Get-AzWvdApplicationGroup -Name $DesktopAppGroup -ResourceGroupName $ResourceGroupName).Id
+
+# Add the application group to the workspace
+Update-AzWvdWorkspace -Name $WorkspaceName -ResourceGroupName $resourceGroupName -ApplicationGroupReference $appGroupPath
+
+# Check Workspace updated Azure
+Get-AzWvdWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName | FL *
+```
+
+#### Expected Result
+```
+PS C:\Windows\system32> # Get the resource ID of the application group that you want to add to the workspace
+>> $appGroupPath = (Get-AzWvdApplicationGroup -Name $DesktopAppGroup -ResourceGroupName $ResourceGroupName).Id
+>>
+>> # Add the application group to the workspace
+>> Update-AzWvdWorkspace -Name $WorkspaceName -ResourceGroupName $resourceGroupName -ApplicationGroupReference $appGroupPath
+
+Etag IdentityPrincipalId IdentityTenantId IdentityType Kind Location ManagedBy Name            PlanName PlanProduct PlanPromotionCode PlanPublisher PlanVersion SkuCapacity SkuFamily SkuName SkuSize SkuTier
+---- ------------------- ---------------- ------------ ---- -------- --------- ----            -------- ----------- ----------------- ------------- ----------- ----------- --------- ------- ------- -------
+                                                            eastus             MC760-Workspace
+
+
+PS C:\Windows\system32> # Check Workspace updated Azure
+>> Get-AzWvdWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName | FL *
+
+
+ApplicationGroupReference    : {/subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/rg-sg-mc760/providers/Microsoft.DesktopVirtualization/applicationgroups/MC760-DesktopAppGroup}
+CloudPcResource              : False
+Description                  :
+Etag                         :
+FriendlyName                 :
+Id                           : /subscriptions/368ac09c-01c9-4b47-9142-a7581c6694a3/resourcegroups/rg-sg-mc760/providers/Microsoft.DesktopVirtualization/workspaces/MC760-Workspace
+Identity                     : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Identity
+IdentityPrincipalId          :
+IdentityTenantId             :
+IdentityType                 :
+Kind                         :
+Location                     : eastus
+ManagedBy                    :
+Name                         : MC760-Workspace
+ObjectId                     : 36b22e8c-7594-4287-8240-c3c7eae1c49f
+Plan                         : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Plan
+PlanName                     :
+PlanProduct                  :
+PlanPromotionCode            :
+PlanPublisher                :
+PlanVersion                  :
+PrivateEndpointConnection    : {}
+PublicNetworkAccess          : Enabled
+Sku                          : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.Sku
+SkuCapacity                  :
+SkuFamily                    :
+SkuName                      :
+SkuSize                      :
+SkuTier                      :
+SystemDataCreatedAt          : 3/9/2024 12:53:39 AM
+SystemDataCreatedBy          : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataCreatedByType      : Application
+SystemDataLastModifiedAt     : 3/9/2024 1:19:42 AM
+SystemDataLastModifiedBy     : d329535d-0cf4-473a-8646-8c612949142a
+SystemDataLastModifiedByType : Application
+Tag                          : Microsoft.Azure.PowerShell.Cmdlets.DesktopVirtualization.Models.Api10.ResourceModelWithAllowedPropertySetTags
+Type                         : Microsoft.DesktopVirtualization/workspaces
+```
+
+You can also check on Azure Portal:
+![AVD Workspace Updated](images/avd-workspace-updated.png)
+
 ### Task 4 - Create Session Host Virtual Machines
 
 ### Task 5 - Assign users or groups to the application group for users to get access
