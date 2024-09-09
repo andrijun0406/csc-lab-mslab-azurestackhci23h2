@@ -625,7 +625,7 @@ Use the following Parameter for Virtual Machines Section:
 
 ![Session Host Virtual Machines](images/session-host-virtual-machines.png)
 
-#### Step 4 - Click Next and then fill-out the Tags section
+#### Step 4 - Click Next and then fill-out the Tags section and then Click Review+Create
 
 Use the following Parameter for Tags Section:
 
@@ -639,3 +639,15 @@ Use the following Parameter for Tags Section:
 ```
 
 ![Session Host Tags](images/session-host-tags.png)
+
+> dont' forget to download the template for automation, since later we will use ARM template
+
+#### Expected Result
+
+![Session Host Deployment Status](images/session-host-deployment-status.png)
+
+
+
+
+
+
