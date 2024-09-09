@@ -666,9 +666,21 @@ Use the following Parameter for Tags Section:
 
 This is if you create VMs outside AVD host pool methode in Task 5
 
-#### Step 1 - Domain Join the VM and restart
+#### Step 1 - Domain Join each of the VM and restart
 
 ![Domain Join Desktops](images/domain-joined-desktops.png)
+
+#### Step 2 - Download and Install Azure Virtual Desktop Agent and Bootloader
+
+RDP to each VMs and sign-in as Administrator. Open Edge Browser and paste below link to download and install
+
+** Azure Virtual Desktop Agent:https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrmXv 
+** Azure Virtual Desktop Agent Bootloader: https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrxrH
+
+Input your registration key:
+![Install AVD Agent](images/install-avd-agent.png)
+
+
 
 
 
