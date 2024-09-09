@@ -561,47 +561,81 @@ In this Task, we will create multiple virtual machines for AVD session hosts usi
 
 > Download registration key for further use
 
+#### Step 2 - Go to Session Hosts and then Click Add and then fill-out the Basic Section
 
-#### Step 2 - Go to  Session Hosts
-
-Use the following Parameter:
+Use the following Parameter for Basic Section:
 
 ```
-Basics:
+Basics (has been filled out shown in grey):
     
     Project details
 
     Subscription:               <use-your-subscription>
     Resource Group:             <use-your-resource-group>
+    Host Pool name:             MC760-Pooled-Pool
+    Location:                   East US
+    Validation Environment      No
+    Preferred app group type:   Desktop
 
-    Instance details
+    Host Pool details
 
-    Virtual machine name:       test-win22azure-vm
-    Custom location:            <automatically populated and grayed out>
-    Virtual machine kind:       <automatically populated and grayed out>
-    Security type:              Standard (Choose Trusted launch VM if you want to enable secureboot and vTPM)
-    Storage path:               Choose manually (UserStorage2-<id> (TB of TB available))
-    Image:                      Win22DCAzure-Hotpatch
-    Virtual processor count:    4
-    Memory (MB):                8192 
-    Memory type:                static
+    Host Pool type:             Pooled
+```
+![Session Host Basic](images/session-host-basic.png)
 
-    VM extensions           
+
+#### Step 3 - Click Next and then fill-out the Virtual Machines section
+
+Use the following Parameter for Virtual Machines Section:
+
+```
+    Add Virtual Machines:       Yes <Greyed Out>
+    Resource Group:             <use-your-resource-group>
+    Name prefix:                mc760avd
+    Virtual Machine type:       Azure Stack HCI Virtual Machine
+    Custom Location             mc760-clus1-mocarb-cl
+    Image:                      win11-23h2-avd-01
+    Security Type:              Standard
+    Number of VMs               4
+    Virtual Processor Count     2
+    Memory Type                 Static
+    Memory (GB)                 4
+
+    Network and Security
+
+    Network:                    clus1-subnet137-dynamic
     
-    Enable guest management:    Yes
+    Domain to Join
 
-    Administrator account
+    Select which directory      : Active Directory (Microsoft Entra ID is grayed out for Azure Stack HCI)
+    AD domain join UPN          : <your domain admin user upn>
+    Password                    : <your domain admin password>
+    Confirm password            : <your domain admin password>
+    Specify domain or unit      : Yes
+    Domain to join              : <your domain name>
+    Organizational Unit path    : OU=Desktops,OU=ACPMC760,DC=apex,DC=csc
 
-    Username:                   <use-local-administrator>
-    Password:                   <use-local-administrator-password>
-    Confirm password:           <confirmed-your-password>
-    
-    Domain join
+    Virtual Machine administrator account
 
-    Enable domain join:         Leave this un-ticked (no need to have domain joined VM for now)
+    User name                   : <your VM admin user name>
+    Password                    : <your VM admin password>
+    Confirm password            : <your VM admin password>
+
 ```
 
+![Session Host Virtual Machines](images/session-host-virtual-machines.png)
 
+#### Step 4 - Click Next and then fill-out the Tags section
 
+Use the following Parameter for Tags Section:
 
+```
+   Tags
 
+    Name                        : apex
+    Value                       : mc760
+    Resource                    : All resources selected
+
+```
+
+![Session Host Tags](images/session-host-tags.png)
