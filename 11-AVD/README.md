@@ -545,7 +545,7 @@ New-AzRoleAssignment @parameters
 ```
 
 
-### Task 5 - Create Session Host Virtual Machines
+### Task 5 - Create Session Host Virtual Machines using Azure Portal
 
 In this Task, we will create multiple virtual machines for AVD session hosts using Azure Portal
 
@@ -554,6 +554,22 @@ In this Task, we will create multiple virtual machines for AVD session hosts usi
 ![Create registration Key](images/create-registration-key.png)
 
 > Choose the expiration date (1 hour - 27 days):
+
+you can also use Powershell to create registration key:
+
+```powershell
+$parameters = @{
+    HostPoolName = "MC760-Pooled-Pool"
+    ResourceGroupName = "rg-sg-mc760"
+    ExpirationTime = $((Get-Date).ToUniversalTime().AddHours(24).ToString('yyyy-MM-ddTHH:mm:ss.fffffffZ'))
+}
+
+New-AzWvdRegistrationInfo @parameters
+
+# Get the token for use later
+(Get-AzWvdHostPoolRegistrationToken @parameters).Token
+```
+
 
 #### Expected Result
 
@@ -645,6 +661,16 @@ Use the following Parameter for Tags Section:
 #### Expected Result
 
 ![Session Host Deployment Status](images/session-host-deployment-status.png)
+
+### Task 5a - Register Session Host Virtual Machines using PowerShell
+
+This is if you create VMs outside AVD host pool methode in Task 5
+
+#### Step 1 - Domain Join the VM and restart
+
+![Domain Join Desktops](images/domain-joined-desktops.png)
+
+
 
 
 
