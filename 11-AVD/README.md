@@ -547,3 +547,61 @@ New-AzRoleAssignment @parameters
 
 ### Task 5 - Create Session Host Virtual Machines
 
+In this Task, we will create multiple virtual machines for AVD session hosts using Azure Portal
+
+#### Step 1 - Go to Host Pool and Click Registration key and then Generate new Key
+
+![Create registration Key](images/create-registration-key.png)
+
+> Choose the expiration date (1 hour - 27 days):
+
+#### Expected Result
+
+![Create registration Key](images/registration-key-created.png)
+
+> Download registration key for further use
+
+
+#### Step 2 - Go to  Session Hosts
+
+Use the following Parameter:
+
+```
+Basics:
+    
+    Project details
+
+    Subscription:               <use-your-subscription>
+    Resource Group:             <use-your-resource-group>
+
+    Instance details
+
+    Virtual machine name:       test-win22azure-vm
+    Custom location:            <automatically populated and grayed out>
+    Virtual machine kind:       <automatically populated and grayed out>
+    Security type:              Standard (Choose Trusted launch VM if you want to enable secureboot and vTPM)
+    Storage path:               Choose manually (UserStorage2-<id> (TB of TB available))
+    Image:                      Win22DCAzure-Hotpatch
+    Virtual processor count:    4
+    Memory (MB):                8192 
+    Memory type:                static
+
+    VM extensions           
+    
+    Enable guest management:    Yes
+
+    Administrator account
+
+    Username:                   <use-local-administrator>
+    Password:                   <use-local-administrator-password>
+    Confirm password:           <confirmed-your-password>
+    
+    Domain join
+
+    Enable domain join:         Leave this un-ticked (no need to have domain joined VM for now)
+```
+
+
+
+
+
